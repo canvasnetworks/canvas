@@ -1,0 +1,103 @@
+/* Styles for the /about page. */
+#page {
+        width:1000px;
+        margin:0 auto;
+        padding:30px 10px 0 10px;
+        margin-top: inherit;
+        min-width: inherit;
+    }
+.gallery {
+    margin: 0 auto;
+    position: relative;
+    width: auto;
+}
+    
+        #sticker_column {
+            margin-right:25px;
+            padding-bottom:25px;
+        }
+    
+        .main_column {
+            position:relative;
+            width:980px;
+            margin:0 auto;
+        }
+        
+            .main_column .column {
+                width:250px;
+                height:100%;
+                margin-right:25px;
+                float:left;
+            }
+        
+            .gallery .column:last-child {
+                margin-right:0;
+            }
+            
+                .column .footer {
+                    content:"\00a0";
+                    text-align:center;
+                    font-size:1.6em;
+                    color:#fff;
+                    vertical-align:center;
+                }
+                
+        .image_tile {
+            width:250px;
+            margin-bottom:25px;
+        }
+        
+            .image_tile .image_container {
+                min-height:100px;
+            }
+            
+                .image_tile .top_sticker .sticker_count {
+                    bottom:4px;
+                    right:-3px;
+                }
+            
+            .image_tile .image_footer {
+                min-height:40px;
+            }
+            
+                .image_tile .image_caption {
+                    padding:10px 10px 5px 10px;
+                    font-size:1.6em;
+                }
+                
+                .image_tile .image_reply_count {
+                    padding:5px 10px 5px 10px;
+                    font-size:1.2em;
+                }
+        
+        #temp_gallery {
+            height:0;
+            overflow:hidden;
+        }
+    
+        .sticker_overlay .sticker_container {
+            width:25px;
+            height:25px;
+        }
+        
+    .about_content {
+        color:#444;
+        text-shadow: 0px -1px 0px #ebebeb;
+        filter: dropshadow(color=#ebebeb, offx=0, offy=-1);
+    }
+    
+    .about_content h1 {
+        font-size:2.4em;
+        margin-top:20px;
+        margin-bottom:5px;
+        color:#888;
+    }
+    
+    .about_content p {
+        font-size:1.4em;
+        margin-bottom:1.0em;
+    }
+    
+    .image_reply_count {
+        display:none !important;
+    }

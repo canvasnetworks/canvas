@@ -1,0 +1,30 @@
+{% extends "unsubscribe.html" %}
+
+{% block email_settings_snippet %}
+{# TODO allow modifying subscription settings #}
+{#
+    <div id="settings_wrapper"{% if unsubscribed_on_get %} style="display:none;"{% endif %}>
+        <h1>E-Mail Settings</h1>
+        <form id="settings" method="POST" class="unsubscribe" action="/unsubscribe">
+            {% csrf_token %}
+            {% include "email_settings_snippet.html" %}
+            <input type="hidden" name="token" value="{{ token }}">
+            {% if user_id %}
+                <input type="hidden" name="user_id" value="{{ user_id }}">
+            {% endif %}
+            <button type="submit" class="advance submit">Save Settings</button>
+        </form>
+    </div>
+#}
+{% endblock %}
+
+{% block user %}
+    {% block extra_javascript %}
+        <script>
+            jQuery(document).ready(function() {
+                console.log("user", {{ user|to_json }});
+            });
+        </script>
+    {% endblock %}
+{% endblock %}
+

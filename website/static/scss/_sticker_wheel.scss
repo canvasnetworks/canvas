@@ -1,0 +1,74 @@
+ul.sticker_wheel {
+    position:relative;
+    list-style-type:none;
+    margin-left:0;
+
+    $diameter:250px;
+    $inner_diameter:110px;
+
+    &:before {
+        /* Wheel background */
+        content:"\00a0";
+        position:absolute;
+        height:$inner_diameter;
+        width:$inner_diameter;
+        left:-$diameter/2 + 25;
+        top:-$diameter/2 + 25;
+        background:transparent;
+        border:($diameter - $inner_diameter)/2 solid rgba(#fff, 0.65);
+        @include border-radius($diameter/2);
+        @include box-shadow(0 0 1px #000);
+    }
+
+    &:after {
+        /* Inner border for wheel background */
+        content:"\00a0";
+        position:absolute;
+        height:$inner_diameter;
+        width:$inner_diameter;
+        left:-$inner_diameter/2 + 25 - 1;
+        top:-$inner_diameter/2 + 25 - 1;
+        background:transparent;
+        border:1px solid rgba(#000, 0.5);
+        @include border-radius($inner_diameter/2);
+    }
+
+    li {
+        cursor:pointer;
+    }
+
+    li span.count {
+        position:absolute;
+        color:#777;
+        font-size:1.2em;
+        font-weight:bold;
+        right:0;
+        bottom:0;
+    }
+
+    li.sticker_wheel_action {
+        $diameter:50px;
+        width:$diameter;
+        height:$diameter;
+        background:#fff;
+        border:1px solid #aaa;
+        color:#aaa;
+        font-size:1.4em;
+        font-weight:bold;
+        text-align:center;
+        line-height:$diameter;
+        @include border-radius($diameter/2);
+
+        &.epic:before {
+            content:"MORE";
+        }
+
+        &.back:before {
+            content:"BACK";
+        }
+
+        &.shop:before {
+            content:"SHOP";
+        }
+    }
+}

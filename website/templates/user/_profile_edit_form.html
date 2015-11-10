@@ -1,0 +1,36 @@
+<div id="postwidget" class="pw_container">
+    <div class="animated_spinner" style="display: block;"></div>
+    <form id="form_widget">
+        <h1>Edit your profile:</h1>
+        <div class="widget">
+            <div class="image_wrapper">
+
+                <!-- Make sure it doesn't matter that we don't have pw_existed -->
+
+                {% if show_start_options %}
+                    <label for="remix">Start with an image or from scratch:</label>
+
+                    {% include "content/image_chooser.html" %}
+                {% endif %}
+
+                {% include "remix/remix_widget.html" %}
+            </div>
+            <div class="form_inputs">
+                <div class="input_wrapper caption">
+                    <label for="postwidget_caption">About you:</label>
+                    <textarea id="postwidget_caption" class="pw_text" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="submit form_submission">
+            <input type="submit" class="advance upload_submit_button" value="Update Profile" disabled="true">
+            <div class="code_of_conduct">
+                <div class="input_wrapper code_of_conduct">
+                    <input id="postwidget_conduct" class="pw_conduct" type="checkbox" checked="true">
+                    <label for="postwidget_conduct">I agree to the <a href="/code_of_conduct" target="_new">Code of Conduct</a></label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

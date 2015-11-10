@@ -1,0 +1,124 @@
+#!/usr/bin/env python
+# AMIs from http://uec-images.ubuntu.com/releases/maverick/release/
+import sys; sys.path += ['/var/canvas/common', '../../common']
+
+import configuration
+import ec2
+
+"""
+respin_web --spin-up-new
+Pause AutoScaling Activities
+Tag all instances as to-be-deleted
+Double cluster size
+WARN USER ABOUT RISKS (autoscale is paused)
+
+***
+User waits 30 minutes to see the new instances spun up and are in load balancer
+***
+
+
+respin_web --spin-down-old
+Assert that count(to-be-deleted instances) <= new instances managed by autoscale group
+Terminate to-be-deleted instances, indicating that the desired pool size should drop
+Unpause AutoScaling Activities
+
+"""
+
+
+suspended_processes = ['ReplaceUnhealthy', 'AZRebalance', 'AlarmNotification', 'ScheduledActions']
+as_group = configuration.Config['autoscale_group']
+
+conn = ec2.connection()
+as_conn = ec2.autoscale_connection()
+
+
+def spin_up():
+    print "WARNING: Suspending AutoScale actions. You MUST re-enable them (via --down-old or --abort)"
+    as_conn.suspend_processes(as_group, suspended_processes)
+    spin_down_instances = [instance.id for instance in ec2.get_instances(conn, filters={'tag:aws:autoscaling:groupName':as_group})]
+    
+    print "Marking old instances."
+    conn.create_tags(spin_down_instances, {'respin_web': 'MarkedForSpinDown'})
+    
+    print "Spawning new instances."
+    as_conn.execute_policy('double_capacity', as_group)
+    
+    print "It takes ~30s for the aws console to show the new instances spinning up."
+    print "WARNING (again): Suspended AutoScale actions. You MUST re-enable them (via --down-old or --abort)"
+
+def get_marked_for_spin_down():
+    return [i.id for i in ec2.get_instances(conn, filters={'tag:aws:autoscaling:groupName':as_group, 'tag:respin_web': 'MarkedForSpinDown', 'instance-state-name': 'running'})]
+    
+def resume():
+    print "Resumed AutoScale actions."
+    as_conn.resume_processes(as_group, suspended_processes)
+
+def spin_down():
+    # Check that there are enough new hosts in the ELB.
+    elb_conn = ec2.elb_connection()
+    
+    spin_down = get_marked_for_spin_down()
+    health = elb_conn.describe_instance_health(configuration.Config['elb'])
+    
+    
+    hold, hnew = 0,0
+    for inst_state in health:
+        old = inst_state.instance_id in spin_down
+        if inst_state.state == 'InService':
+            if old:
+                hold += 1
+            else:
+                hnew += 1
+        print inst_state.instance_id, "old" if old else "new", inst_state.state
+        
+    print hold, "healthy old instances"
+    print hnew, "healthy new instances"
+    
+    if hnew == 0:
+        print "ERROR: NO HEALTHY NEW INSTANCES, BAILING"
+        return
+    elif hnew < hold:
+        print "WARNING: There are less new healthy instances than old healthy instances; there may not be enough capacity to spin down the old instances."
+        
+    ans = raw_input("Spin down all old instances and resume autoscale? (y/N)")
+    if not ans.strip().upper() in ['Y', 'YES']:
+        print "Okay, doing nothing then. WARNING: AutoScale actions are still suspended. You still need to --abort or --down-old later."
+        return
+    
+    print "Spinning down old instances."
+
+    for instance_id in spin_down:
+        print "Terminating", instance_id
+        as_conn.terminate_instance(instance_id, "true")
+
+    resume()
+    
+def abort():
+    resume()
+    
+    print "Untagging MarkedForSpinDown instances."
+    conn.delete_tags(get_marked_for_spin_down(), {'tag:respin_web': 'MarkedForSpinDown'})
+
+def main(args):
+    import argparse
+    parser = argparse.ArgumentParser(description="Respin web instances managed by EC2 AutoScale")
+    parser.add_argument('-u', '--up-new', default=False, dest='up', action='store_true', help='Spin up new instances')
+    parser.add_argument('-d', '--down-old', default=False, dest='down', action='store_true', help='Terminate old instances')    
+    parser.add_argument('-a', '--abort', default=False, dest='abort', action='store_true', help="Abort a spin up process, resuming autoscale. Do nothing with existing instances.")
+    args = parser.parse_args()
+    
+    if sum([args.up, args.down, args.abort]) > 1:
+        print "ERROR: Cannot spin up and spin down at the exact same time without removing all instances :("
+        parser.print_help()
+    elif args.up:
+        spin_up()
+    elif args.down:
+        spin_down()
+    elif args.abort:
+        abort()
+    else:
+        print "ERROR: Missing required --up-new or --down-old argument."
+        parser.print_help()
+    
+if __name__ == "__main__":
+    main(sys.argv)

@@ -1,0 +1,14 @@
+{% extends "mobile/base.html" %}
+
+{% block body %}
+    <div id="header">
+        <a href="/">Popular</a>
+        <a href="/new">New</a>
+    </div>
+    {% for tile in tiles %}
+        {{ mobile_tile(tile.comment) }}
+    {% endfor %}
+    <div id="footer">
+        <a href="?offset={{ nav_data.offset + 7 }}">More</a>
+    </div>
+{% endblock %}

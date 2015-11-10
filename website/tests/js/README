@@ -1,0 +1,5 @@
+In case the test API usage is confusing to you, here's the API reference which explains things like "expect":
+    http://docs.jquery.com/QUnit
+
+All test files must be added to `templates/js_testing.html` for them to be ran.
+

@@ -1,0 +1,120 @@
+{% set stickered_by_viewer = True if viewer_sticker %}
+{% set my_post = True if comment.is_author(context.request.user) %}
+{% set sticker_name = comment.top_sticker().name if comment.top_sticker() %}
+{% set stickered_by_viewer = stickered_by_viewer if sticker_name else False %}
+
+<div class="explore_tile dismissable {% if sticker_name %}stickered{% endif %} {% if stickered_by_viewer %}stickered_by_viewer{% elif my_post %}my_post{% else %}stickerable{% endif %}
+    visibility_{{ comment.visibility }}" data-details="{{ comment|to_escaped_comment_details_json }}"
+    data-comment_id="{{ comment.id }}"
+>
+    <div class="sticker_bg sticker_themed {{ sticker_name }}"></div>
+
+    <div class="content">
+        {% if sticky_text %}
+            <p class="sticky_text"><span class="ribbon_fold"></span>{{ sticky_text }}</p>
+        {% endif %}
+
+        {% if comment.reply_content_id %}
+            <div class="content_wrapper image_container" data-content-id="{{ comment.reply_content_id }}">
+                {% if tile.is_dismissable(viewer) %}
+                    <div class="close_options">
+                        ×
+                        <div class="close_dialog">
+                            <div class="hover_buffer"></div>
+                            <ul>
+                                <li><a class="hide_offensive">Flag post</a></li>
+                                <li><a class="hide_comment">Hide post</a></li>
+                            </ul>
+                            {% if context.request.user.is_staff %}
+                            <ul>
+                                <li><a class="sticky_post">Sticky post</a></li>
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                <a class="img_wrapper" href="{{ comment.linked_url }}">
+                    {% if comment.reply_content.original.animated %}
+                        <div class="animated_hint" onClick="canvas.animateGif('{{ comment.reply_content_id }}', $(this).parents('.content_wrapper'), 'explore_column');return false;"></div>
+                    {% endif %}
+                    {{ content(comment, "archive") }}
+                </a>
+            </div>
+        {% endif %}
+
+        {% if comment.thread.reply_count %}
+            <a href="{{ comment.linked_url }}" class="reply_count">
+                <strong>{{ comment.thread.reply_count }}</strong>
+                {{ comment.thread.reply_count|pluralize("reply,replies") }}
+            </a>
+        {% endif %}
+
+
+        {% if comment.get_user_url() %}
+            <a href="{{ comment.get_user_url() }}">
+                {{ tiny_avatar(comment.author_name) }}
+        {% endif %}
+            <p class="username">
+                {% if comment.get_user_url() %}
+                    {{ comment.author_name }}
+                {% else %}
+                    <span class="anon">Anonymous</span>
+                {% endif %}
+            </p>
+        {% if comment.get_user_url() %}
+            </a>
+        {% endif %}
+        <p class="timestamp">
+            {{ relative_timestamp(comment.timestamp) }}
+        </p>
+        <div class="clear"></div>
+
+        {% if comment.reply_text %}
+            <p class="caption">
+                {{ ugc_text(comment.reply_text) }}
+            </p>
+        {% endif %}
+        {% if comment.show_delete_option %}
+            <div class="post_options">
+                <p>
+                    <a class="delete_option" onClick="event.stopPropagation();canvas.Comment.remove('{{ comment.id }}', true);">
+                        <img src="/static/img/trash-can.png"> Delete
+                    </a>
+                </p>
+                {% if comment.show_claim_option %}
+                <p>
+                     <a class="claim_option" onClick="event.stopPropagation();canvas.Comment.claim('{{ comment.id }}', true);">
+                         <img src="/static/img/claim-post.png"> Claim
+                     </a>
+                </p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+
+        <div class="sticker_message_overlay"></div>
+        <div class="sticker_flavor sticker_themed {{ sticker_name }}">
+            {% if sticker_name %}
+                {{ sticker_image(sticker_name, 'medium', "shadow") }}
+                {% if comment.sorted_sticker_counts()[0].count > 1 %}
+                    <span class="sticker_count">
+                        <span>{{ comment.sorted_sticker_counts()[0].count }}</span>
+                    </span>
+                {% endif %}
+            {% endif %}
+            <div class="sticker_target"></div>
+            <div class="top_stickers">
+                {% for stick in comment.sorted_sticker_counts() %}
+                    {% if loop.index > 1 %}
+                        <span>
+                            {{ sticker_image(stick.type_id, 'medium', "shadow") }}
+                            <span class="sticker_count">
+                                <span>{{ stick.count }}</span>
+                            </span>
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

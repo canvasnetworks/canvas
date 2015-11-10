@@ -1,0 +1,239 @@
+#page {
+    width:100%;
+    min-width:1255px;
+    padding:0 5px;
+    margin-top:20px;
+}
+
+    #page.mobile {
+        min-width:700px;
+        width:700px;
+    }
+    
+    #page.thin {
+        min-width:980px;
+    }
+
+    #sticker_column {
+        padding-bottom:25px;
+        margin-right:20px;
+        min-height:100px;
+    }
+    
+    .gallery {
+        position:relative;
+        width:1255px;
+        margin:0 auto;
+    }    
+    
+        html.ie8 .gallery {
+            width:1272px;
+        }
+            #page.mobile .gallery {
+            width:700px;
+        }
+        
+        #page.thin .gallery {
+            width:980px;
+        }
+        
+        html.ie8 #page.thin .gallery {
+            width:1002px;
+        }
+    
+        .gallery .group_header {
+            float:left;
+            width:1075px;
+            border:1px solid #ccc;
+            padding-left:1px;
+            margin-bottom:20px;
+            font-size:1.4em;
+        }
+        
+            #page.mobile .gallery .group_header,
+            #page.thin .gallery .group_header {
+                width:800px;
+            }
+        
+            .gallery .group_title {
+                background:#29ABE2;
+                color:#fff;
+                padding:5px 15px;
+                line-height:2.0em;
+            }
+            
+            .gallery .group_short_description a {
+                white-space:nowrap;
+                color:#29ABE2;
+            }
+            
+                .gallery .group_short_description a:hover {
+                    text-decoration:underline;
+                }
+            
+            .gallery .group_short_description a.unfollow {
+                white-space:nowrap;
+                color:#FF0086;
+            }
+    
+        .gallery .column {
+            width:250px;
+            height:100%;
+            margin-right:25px;
+            float:left;
+        }
+        
+        .column:last-child {
+            margin-right:0;
+        }
+        
+        .column .footer {
+            content:"\00a0";
+            text-align:center;
+            font-size:1.6em;
+            color:#fff;
+            vertical-align:center;
+        }
+                
+        #loading_posts {
+            display:block;
+            font-size:2.2em;
+            color:#666;
+            text-align:center;
+            margin:40px 0 20px 0;
+        }
+        
+            #loading_posts strong {
+                color:#444;
+            }
+                
+    .image_tile {
+        width:250px;
+        margin-bottom:25px;
+    }
+    
+    /*
+        
+        .image_tile .image_stickers {
+            width:240px;
+            right:5px;
+            bottom:3px;
+        }
+        
+            .image_tile .top_sticker .sticker_count {
+                bottom:4px;
+                right:-3px;
+            }
+            
+    */
+        
+        .image_tile .image_footer {
+            min-height:40px;
+        }
+        
+            .image_tile .image_caption {
+                padding:10px 10px 5px 10px;
+                font-size:1.6em;
+            }
+            
+            .image_tile .image_reply_count {
+                padding:5px 10px 5px 10px;
+                font-size:1.2em;
+            }
+            
+    /* This CSS only goes here so that they show up on userpages */
+    .image_tile.downvoted .image_container,
+    .image_tile.downvoted .image_caption,
+    .image_tile.downvoted .image_reply_count {
+        display:none !important;
+    }
+    
+        .image_tile.downvoted .image_footer {
+            cursor:pointer !important;
+            background:#C4CECC !important;
+            -webkit-box-shadow:none !important;
+            -moz-box-shadow:none !important;
+            box-shadow:none !important;
+        }
+        
+        .image_tile.downvoted .image_stickers {
+            cursor:pointer !important;
+        }
+        
+        .image_tile.downvoted .collapsed_text {
+            display:block;
+        }
+    
+    #temp_gallery {
+        height:0;
+        overflow:hidden;
+    }
+
+.sticker_overlay .sticker_container {
+    width:25px;
+    height:25px;
+}
+
+header .header_margined {
+    width:1250px;
+}
+
+.timeperiods {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color:#ccc;
+}
+
+    .timeperiods .divider {
+        font-size: 1em;
+        color:#ccc;
+        margin:0 0.25em;
+    }
+
+    .timeperiods .period_selected {
+        border-bottom:2px solid #666;
+    }
+
+    .timeperiods strong {
+        color:#999;
+    }
+
+.userpage_header {
+    margin-bottom:20px;
+    color:#ccc;
+}
+
+    .userpage_header hr {
+        margin:0 0 0.75em 0;
+    }
+
+.userpage_header p.username {
+    font-size:1.8em;
+}
+
+    .userpage_header p.username a.active,
+    .userpage_header p.username strong {
+        font-weight:bold;
+        font-size:1.8em;
+        color:#222;
+    }
+    
+.userpage_header p.links {
+    font-size:1.8em;
+}
+    
+    .userpage_header p.links a.active {
+        border-bottom:2px solid #666;
+    }
+    
+    .userpage_header p.links .divider {
+        font-size: 1em;
+        color:#ccc;
+        margin:0 0.25em;
+    }
+    
+    .disabled_user {
+        font-size:1.4em;
+        margin-bottom: 0.5em;
+    }
+

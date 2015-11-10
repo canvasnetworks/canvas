@@ -1,0 +1,206 @@
+{% extends "base/headered_base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<!-- image_tile.css gives us useful things like the gif play button we don't need to duplicate -->
+<link rel="stylesheet" href="/static/css/image_tile.css"/>
+<style>
+#content {
+    width:100% !important;
+}
+#page {
+    width: 100% !important;
+    padding: 10px;
+}
+
+.fixed_width_wrapper {
+    width:1250px !important;
+}
+    
+.image_tile {
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 0px dotted;
+    width: 508px;
+    padding: 2px;
+    padding-bottom: 3px;
+    border: 2px solid white;
+    background:#ccc;
+}
+
+.image_tile.selected {
+    border: 2px solid red;
+}
+
+    .image_tile p.mod_action:first-letter {
+        text-decoration: underline;
+    }
+
+.image_container {
+    height: 438px;
+}
+.image_footer {
+    height: 125px;
+}
+
+    .image_footer > div {
+        font-size:1.4em;
+    }
+
+.image_caption {
+    margin-top: 5px;
+}
+
+.image_footer.text_only div.moderation_actions {
+    margin-top: 250px;
+}
+
+#page .submit_container {
+    margin: auto;
+    height: 30px;
+    width: 100px;
+}
+
+#page .submit_container input[type=submit] {
+    font-size: 2em;
+    height: 100%;
+    width: 100%;
+}
+
+#page #flagged_container .empty {
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+}
+
+div.moderation_actions {
+    margin-top: 3px;
+}
+    div.moderation_actions input {
+        margin-left: 5px;
+    }
+    div.moderation_actions label {
+        font-size: 0.75em;
+    }
+    
+#hover_image {
+    border: 1px black solid;
+    background-color: white;
+    position: absolute;
+    opacity: 0.9;
+    z-index: 100;
+    display: none;
+}
+
+label {
+    font-size:1em;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <img id="hover_image" />
+    <span class="moderation_result">{{ moderations|join:"<br/>" }}</span>
+    <form id="flagged_form" action="/admin/staff/flagged" method="POST">
+        {% csrf_token %}
+        <div class="submit_container"><input type="submit"/></div><br/><br/>
+        <div id="flagged_container">
+            {% if not comments %}<div class="empty">No flagged posts.</div><br/>{% endif %}
+        </div>
+        <div class="clear"></div>
+        <div class="submit_container"><input type="submit"/></div><br/>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+{% raw_html "jqt/drawquest_mod_flagged.html" %}
+<script>
+jQuery(document).ready(function () {
+    var comments = {{ comments|to_json }},
+        mod_actions = {{ mod_actions|to_json }},
+        hover_image = $('#hover_image'),
+        targeted_index = null,
+        targeted_comment = null;
+        
+    comments = $.map(comments, function (comment_data) { return new canvas.Comment(comment_data); });
+
+    function tile (comment) {
+        return $('.post_' + comment.id);
+    }
+
+    function target (offset) {
+        if (offset < 0) offset = 0;
+        $('.image_tile.selected, input.selected').removeClass('selected');        
+        if (comments.length > offset) {
+            targeted_comment = comments[offset];
+            tile(targeted_comment).addClass('selected');
+            targeted_index = offset;
+        } else {
+            $('#flagged_form input[type=submit]').addClass('selected').focus();
+        }
+    }
+
+    comments = $.map(comments, function (comment_data) { return new canvas.Comment(comment_data); });
+
+    $.each(comments, function(i, comment) {
+        $('#flagged_container').append(comment.render({template: 'mod_flagged', image_type: 'homepage_small', mod_actions: mod_actions}));
+        var comment_tile = tile(comment);
+        comment_tile
+            .hover(
+                function () { 
+                    if (comment.getContent()) {
+                        comment.getContent().bindToImage(hover_image, 'ugc_original');
+                        hover_image.css({top: $(this).bottom(), left: 0});
+                        hover_image.show();
+                    }
+                },
+                function () {
+                    hover_image.hide();
+                })
+            .bind('click', function (event) {
+                target(i);
+            });
+        $('input[type=radio]', comment_tile)
+            .bind('change', function (event) {
+                if ($(this).attr('checked')) {
+                    var value = $(this).val();
+                    var warn_user = $('input.warn_user', comment_tile);
+                    warn_user.attr('checked', (value == 'disabled' || value == 'blocked'));
+                    warn_user.toggleDisabled(value == 'curated' || value == 'public');
+                }
+            });
+    });
+
+    $(document).bind('keydown', function (event) {
+        if (event.keyCode == 37) { // Left
+            target(targeted_index-1);
+            event.preventDefault();
+            return;
+        } else if (event.keyCode == 39) { // Right
+            target(targeted_index+1);
+            event.preventDefault();
+            return;
+        }            
+        var c = String.fromCharCode(event.keyCode).toLowerCase();
+        for (var i = 0; i < mod_actions.length; ++i) {
+            var action = mod_actions[i];
+            if (action[0] == c) {
+                var radio = $('input:radio[value=' + action + ']', tile(targeted_comment));
+                radio.attr('checked', true);
+                radio.trigger('change');
+                target(targeted_index+1);
+                event.preventDefault();
+                return;
+            }
+        }
+        
+    })
+
+    target(0);
+});
+</script>
+{% endblock %}
+

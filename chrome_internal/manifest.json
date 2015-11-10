@@ -1,0 +1,22 @@
+{
+    "name": "Canvas HQ",
+    "version": "0.0.9002",
+    "description": "Internal extension for Canvas staff",
+    "icons": {
+        "48": "icon-48.png",
+        "128": "icon-128.png"
+    },
+    "permissions": [
+        "tabs", "http://*/*", "https://*/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["*://scrumy.com/canvas", "*://scrumy.com/canvas/*"],
+            "css": ["scrumy.css"],
+            "js": ["jquery-1.7.2.min.js", "scrumy.js"]
+        }
+    ],
+    "homepage_url": "http://example.com",
+    "update_url": "https://example.com/static/chrome_internal/updates.xml",
+    "manifest_version": 2
+}

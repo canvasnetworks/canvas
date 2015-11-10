@@ -1,0 +1,59 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style type="text/css">
+div.center {
+    font-size: 32px;
+    margin: 0 auto;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="charts" style="width: 800px; margin: 0 auto">    
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+<script type="text/javascript" src="/static/lib/highcharts.js"></script>
+<script type="text/javascript">
+$(function() {
+    var chart_count = 1;
+    function gen_chart(name, x_axis, data) {
+        var id = "chart_" + chart_count++;
+        $('#charts').append($('<div id="' + id + '" style="width: 800px; height: 400px; margin 0 auto"></div>'));
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: id,
+                defaultSeriesType: 'line',
+            },
+            title: {
+                text: name,
+                x: -20 //center,
+            },
+            xAxis: {
+                title: {
+                    text: x_axis,
+                },
+            },
+            yAxis: {
+                title: {
+                    text: 'Count',
+                },
+                min: 0,
+            },
+            series: data
+        });        
+    }
+
+    gen_chart('Unique views by vintage (Today)', 'Month', {{vintage_today|to_json}});    
+    gen_chart('Unique views by vintage (Yesterday)', 'Month', {{vintage_yesterday|to_json}});
+    gen_chart('Weekly Cohorts', 'Week', {{weekly_cohorts|to_json}});
+    gen_chart('Daily Cohorts', 'Day', {{daily_cohorts|to_json}});
+});
+</script>
+
+<!--aoeu {{ vintage_ranges|to_json }} -->
+<!--aoeu2 {{ uniques|to_json }} -->
+{% endblock %}

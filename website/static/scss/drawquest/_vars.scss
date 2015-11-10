@@ -1,0 +1,76 @@
+// Drawquest CSS Variables
+
+// Non-semantic (referenced by semantic vars, don't use directly)
+$_color_white:#fff;
+$_color_black:#333;
+$_color_light_gray:#f8f8f8;
+$_color_medium_gray:#d8d8d8;
+$_color_dark_gray:#9d9895;
+$_color_brown:#d0955b;
+$_color_dark_brown:$_color_brown*0.75;
+$_color_lime:#bcd04d;
+$_color_dark_lime:#869e20;
+$_color_turqoise:#5ec7d3;
+$_color_gold:#f4d316;
+
+$_gradient_brown:(90deg, $_color_brown*0.9 0%, $_color_brown*1.2 70%, $_color_brown*1.2 80%, $_color_brown 100%);
+$_gradient_lime:(90deg, $_color_lime*0.9 0%, $_color_lime*1.1 80%, $_color_lime 100%);
+
+$_bg_image_pebble_texture:url("/static/img/drawquest/pebble_texture.png");
+$_bg_image_pebble_texture_dark:url("/static/img/drawquest/pebble_texture_dark.png");
+$_bg_light_gray_pebble:$_color_light_gray $_bg_image_pebble_texture;
+$_bg_dark_gray_pebble:$_color_dark_gray $_bg_image_pebble_texture_dark;
+
+$_border_radius_dull:12px;
+
+$_silly_font:"VanillaRegular", sans-serif;
+$_normal_font:"Arial", sans-serif;
+
+// Semantic Variables (use these please)
+$default_light_font:$_color_white;
+$default_dark_font:$_color_black;
+$default_medium_font:$_color_dark_gray*0.8;
+
+$page_bg:$_bg_light_gray_pebble;
+$page_bg_dark:$_bg_dark_gray_pebble;
+$drawing_bg:$_color_light_gray;
+$page_header_gradient:$_gradient_brown;
+
+$drawing_header_gradient:$_gradient_lime;
+$drawing_header_border_color:$_color_dark_lime;
+
+$drawing_footer_gradient:$_gradient_lime;
+$drawing_footer_border_color:$_color_dark_lime;
+$drawing_footer_border:2px solid $drawing_footer_border_color;
+
+$drawing_outer_border:2px solid $_color_dark_gray;
+$drawing_inner_border:2px solid $_color_medium_gray;
+$drawing_bg_color:$_color_white;
+
+$quest_header_gradient:$_gradient_brown;
+$quest_header_border_color:$_color_dark_brown;
+$modal_border_radius:$_border_radius_dull;
+$page_font_family:$_normal_font;
+
+$header_font_family:$_silly_font;
+$header_font_color:$_color_white;
+
+$button_font_family:$_silly_font;
+$button_font_color:$_color_white;
+$button_inner_bg:$_color_turqoise;
+$button_outer_bg:$_color_white;
+$button_radius:8px;
+$button_border_color:$_color_dark_gray*1.2;
+
+$drawing_wrapper_border_color:$_color_dark_gray*1.2;
+$drawing_wrapper_bg_color:$_color_white;
+$drawing_bg_color:$_color_white;
+
+$link_color:$_color_turqoise*0.9;
+$link_hover_color:$_color_turqoise*0.6;
+
+$avatar_inner_border_color:$_color_medium_gray;
+$avatar_middle_border_color:$_color_white;
+$avatar_outer_border_color:$_color_dark_gray;
+
+$social_button_bg_color:$_color_lime;

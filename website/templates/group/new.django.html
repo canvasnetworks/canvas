@@ -1,0 +1,343 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+{% load compress %}
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/group_new.css"/>
+{% endcompress %}
+{% endblock %}
+
+
+{% block content %}
+<div class="group_new">
+    {% if found_limit_reached %}
+        <div class="max_founded_notice">
+            <p>
+                You've founded the maximum number of groups ({{ group_found_limit }}) and can't found any more.
+            </p>
+            <p>
+                If you'd like to deactivate an existing group of yours, email us at <a href="mailto:support@example.com">support@example.com</a>.
+            </p>
+        </div>
+    {% else %}
+        <form id="group_new" autocomplete="off">
+            <h1>Create a new group</h1>
+            <div class="input_wrapper">
+                <label for="group_name">Group name</label>
+                <input class="required" type="text" name="group_name" spellcheck="false">
+                <span class="alert" for="group_name"></span>
+            </div>
+            <div class="input_wrapper">
+                <label for="group_description">Group description</label>
+                <textarea class="required" name="group_description" rows="5"></textarea>
+                <span class="warning">
+                    Characters left: <span class="char_counter"></span> <span class="minimum"><em>(must be at least 10 characters)</em></span>
+                </span>
+            </div>
+            <div class="similar_groups">
+                <hr>
+                <div class="input_wrapper search">
+                    <label for="group_search"><span class="similar_results">Try other search terms</span><span class="no_similar_results">Search groups</span></label>
+                    <input type="text" name="group_search">
+                    <div class="search_clear">✖</div>
+                </div>
+                <p class="similar_results">Here are some groups that might be similar to the one you're making:</p>
+                <p class="no_similar_results">Take a moment to see if there is already a group that suits your needs:</p>
+                <div class="spinner group_search_spinner"></div>
+                <ul></ul>
+            </div>
+            <div class="group_terms">
+                <hr>
+                <p>
+                    As the founder of this group, you will be able to hide posts by marking them as off-topic.
+                    Please note that inactive or abandoned groups are subject to deletion or transfer.
+                </p>
+                <p class="important">
+                    Groups must respect the Canvas <a href="/code_of_conduct">Code of Conduct</a> and may not
+                    encourage posts that do not adhere to it.
+                </p>
+                <div class="checkbox_wrapper clearfix">
+                    <label for="group_terms">I agree to the above terms</label>
+                    <input type="checkbox" name="group_terms" id="group_terms">
+                </div>
+            </div>
+            <div class="spinner submit_spinner"></div>
+            <input type="submit" name="submitbutton" id="submitbutton" value="next step..." disabled />
+        </form>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+{% block extra_javascript %}
+{% if not found_limit_reached %}
+    <script>
+    var new_group = {
+        searching   : false,
+        spinner     : $("#group_new .group_search_spinner"),
+    };
+
+    new_group.group_search = function(query, callback, cap) {
+        new_group.searching = true;
+        new_group.spinner.show();
+        cap = (cap) ? cap : 20;
+        canvas.apiPOST(
+            '/group/search',
+            {query:query, debug: false},
+            function (response) {
+                // If we didn't already cancel the search, render results
+                if (new_group.searching) {
+                    new_group.searching = false;
+                    new_group.spinner.hide();
+                    for (var i = Math.min(cap, response.groups.length) - 1; i >= 0; i--) {
+                        var group = response.groups[i];
+                        $('<li class="group"><span class="group_name"><a href="/x/' + group.name + '">' + group.name + '</a></span>: <span class="group_description">' + group.description + '</span></li>')
+                            .prependTo("#group_new .similar_groups ul");
+                    }
+                    if (typeof callback === "function") {
+                        callback(response.groups.length);
+                    }
+                }
+            }
+        );
+    }
+
+    new_group.set_search_timer = function(e) {
+        var input = $("#group_new input[name=group_search]"),
+            clear_button = $("#group_new .search_clear"),
+            previous_matches = $("#group_new .similar_groups li.group"),
+            delay = 400;
+
+        // Clear any previous searches trying to happen
+        clearTimeout(new_group.search_timer);
+        new_group.searching = false;
+
+        if (input.val()) {
+            clear_button.show();
+            new_group.search_timer = setTimeout(function() {
+                // Do the search
+                previous_matches.remove();
+                new_group.group_search(input.val());
+            }, delay);
+        } else {
+            previous_matches.remove();
+            clear_button.hide();
+        }
+    }
+
+    new_group.check_if_submit_disabled = function() {
+        if (new_group.required_inputs.length === new_group.required_inputs.filter(".valid").length) {
+            $("#group_new input[type=submit]").attr("disabled", false);
+        } else {
+            $("#group_new input[type=submit]").attr("disabled", true);
+        }
+    }
+
+    jQuery(document).ready(function () {
+        new_group.required_inputs = $("#group_new .required");
+
+        // Set up textarea for group description
+        (function() {
+            // Character counter for description
+            var char_counter = new canvas.CharCounter().init({
+                min                 : 10,
+                max                 : 140,
+                input_field         : $("#group_new textarea"),
+                counter             : $("#group_new span.char_counter"),
+                deficit_class       : "too_few",
+                surplus_class       : "too_many",
+                valid_class         : "valid",
+                invalidated_event   : "invalid_input",
+                validated_event     : "valid_input",
+                count_down          : true,
+            });
+
+            $("textarea").bind("invalid_input", function() {
+                $(this).removeClass("valid");
+                new_group.check_if_submit_disabled();
+            }).bind("valid_input", function() {
+                $(this).addClass("valid");
+                new_group.check_if_submit_disabled();
+            });
+
+            // Resize description as needed
+            var prev = {},
+                max_rows = 15,
+                orig_rows = 0;
+            $("#group_new textarea").css("overflow", "hidden").bind("keyup keydown resize", function(e) {
+                if (!prev.final_rows) {
+                    prev.final_rows = 0;
+                    orig_rows = $(this).attr('rows');
+                    default_overflow = $(this).css("overflow");
+                }
+                var ta = $(this),
+                    inferred_rows = prev.final_rows,
+                    nl_rows = ta.val().split('\n').length;
+
+                while (ta[0].scrollHeight > prev.scrollHeight) {
+                    if (inferred_rows < orig_rows) { inferred_rows = orig_rows; }
+                    inferred_rows += 1;
+                    prev.scrollHeight += 18;
+                }
+                var final_rows = Math.max(nl_rows, inferred_rows);
+
+                if (final_rows >= max_rows) {
+                    ta.attr("rows", max_rows).css({"overflow": "scroll", "overflowX": "hidden"});
+                } else if (final_rows >= orig_rows) {
+                    ta.attr("rows", final_rows);
+                } else {
+                    ta.attr("rows", orig_rows);
+                }
+                prev.scrollHeight = ta[0].scrollHeight;
+                prev.final_rows = final_rows;
+                if (!$(this).val().length) {
+                    $(this).attr("rows", orig_rows);
+                    prev = {};
+                    ta.css("overflow", "hidden");
+                }
+            });
+        })();
+
+        // Show, fade, and hide all labels on inputs
+        $("input[type=text], textarea")
+            .bind("keyup", function() {
+                if ($(this).val()) {
+                    $(this).parent().find("label").hide();
+                } else {
+                    $(this).parent().find("label").show();
+                }
+            })
+            .bind("focus", function() {
+                $(this).parent().find("label").addClass("active");
+            })
+            .bind("blur", function() {
+                $(this).parent().find("label").removeClass("active");
+            })
+            .each(function() {
+                if ($(this).val()) {
+                    $(this).parent().find("label").hide();
+                } else {
+                    $(this).parent().find("label").show();
+                }
+            });
+        // Redirect label clicks
+        $("#group_new .input_wrapper label").bind("click", function() {
+            $("[name=" + $(this).attr('for') + "]").focus();
+        });
+
+        // Bind group search
+        $("#group_new input[name=group_search]")
+            .bind("keyup", new_group.set_search_timer)
+            .bind("keypress keydown", function(e) {
+            if (e.keyCode === $.ui.keyCode.ENTER) {
+                return false;
+            }
+        });
+        $("#group_new .search_clear").bind("click", function() {
+            $("#group_new input[name=group_search]").val("");
+            $(this).parent().children("label").show();
+            $("#group_new .similar_groups li.group").hide();
+            new_group.searching = false;
+            $(this).hide();
+        });
+
+        // Show warning for illegal group name characters
+        $("input[name=group_name]").bind("keyup", function() {
+            if ($(this).val().match(/^[a-z0-9_]*$/)) {
+                $(this).parent().children("span.alert").text("");
+                if ($(this).val().length >= 3 && $(this).val().length <= 20) {
+                    $(this).addClass("valid");
+                    new_group.check_if_submit_disabled();
+                } else {
+                    $(this).removeClass("valid");
+                    new_group.check_if_submit_disabled();
+                }
+            } else {
+                $(this).parent().children("span.alert").text("Name can only contain lowercase letters, numbers, and underscore");
+                $(this).removeClass("valid");
+                new_group.check_if_submit_disabled();
+            }
+            if (!$(this).val()) {
+                // Don't allow a blank group_name
+                $(this).removeClass("valid");
+                new_group.check_if_submit_disabled();
+            }
+        })
+        // Validate name on blur
+        .bind("blur", function() {
+            var that = this;
+            $(that).removeClass("valid");
+            new_group.check_if_submit_disabled();
+            canvas.apiPOST(
+                '/group/exists',
+                { name: $(this).val() },
+                function (response) {
+                    if (response.success && $(that).val().length >= 3 && $(that).val().length <= 20) {
+                        $(that).addClass("valid");
+                        new_group.check_if_submit_disabled();
+                    } else if (!response.success) {
+                        $(that).parent().children("span.alert").text(response.reason)
+                    } else if ($(that).val()) {
+                        $(that).parent().children("span.alert").text("Group names must be between 3 and 20 characters.");
+                    }
+                }
+            );
+        });
+
+
+        // Bind steps for submit button
+        $("#group_new input[type=submit]").bind("click", function(e) {
+            e.preventDefault();
+            var that = $(this);
+            that.attr("disabled", true);
+            // STEP 2: Check for similar group
+            new_group.group_search($(this.form).find('[name=group_name]').val(), function(group_length) {
+                if (group_length) {
+                    $("#group_new .similar_groups .similar_results").show();
+                } else {
+                    $("#group_new .similar_groups .no_similar_results").show();
+                }
+                $("#group_new .similar_groups").slideDown(200, function() {
+                    // Rebind to go to step 3
+                    that.unbind("click").attr("disabled", false).attr("value", "My group is different, continue...").bind("click", function(e) {
+                        e.preventDefault();
+                        that.attr("disabled", true);
+                        // STEP 3: Agree to terms
+                        $("#group_new .group_terms").slideDown(200, function() {
+                            // Rebind for submit
+                            that.unbind("click").attr("disabled", false).attr("value", "Found this group!").bind("click", function(e) {
+                                e.preventDefault();
+                                that.attr("disabled", true).css("color", "rgba(0,0,0,0.1)");
+                                $("#group_new .submit_spinner").show();
+                                var group_name = $(this.form).find('[name=group_name]').val(),
+                                    group_description = $(this.form).find('[name=group_description]').val(),
+                                    agreed = $(this.form).find('[name=group_terms]').is(':checked');
+
+                                if (!agreed) {
+                                    alert('Please agree to the stated terms in order to found your group.');
+                                    return false;
+                                }
+
+                                // Create the group.
+                                canvas.apiPOST(
+                                    '/group/new',
+                                    { group_name: group_name, group_description: group_description },
+                                    function (response) {
+                                        if (response.success) {
+                                            window.location = "/x/" + group_name + '/about';
+                                        } else if (response.reason) {
+                                            alert(response.reason);
+                                        }
+                                    }
+                                );
+                                return false;
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+    </script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "post_thread/popup_base.html" %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/post_thread.css">
+<link rel="stylesheet" href="/static/css/image_tile.css">
+{% endcompress %}
+{% endblock %}
+            
+{% block content %}
+<div id="thread_posted">
+    {# jinja_popup_image_tile tile #}
+    <div class="invite_wrapper">
+        <p class="notify_remix_points">
+            Get points every time someone you invited remixes your thread!
+        </p>
+        <div class="external_invites">
+            <a onClick="sticker_actions.share_comment(2001, {{ comment.id }}, null, 'popup_share_thread_dialog');return false;">
+                <img src="/static/img/share_facebook_large.png">
+                <span>Invite Friends</span> 
+            </a>
+            <a onClick="sticker_actions.share_comment(2002, {{ comment.id }}, null, 'popup_share_thread_dialog');return false;">
+                <img src="/static/img/share_twitter_large.png">
+                <span>Invite Followers</span> 
+            </a>
+            <a onClick="sticker_actions.share_comment(2006, {{ comment.id }}, null, 'popup_share_thread_dialog');return false;">
+                <img src="/static/img/share_email_large.png">
+                <span>Invite Penpals</span> 
+            </a>
+        </div>
+    </div>
+
+    <button id="view_thread" type="button">View Thread</button>
+    <button id="close" type="button">Close</button>
+</div>
+
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+    $(function () {
+        var comment = new canvas.Comment({{ comment|to_json }});
+
+        $('#view_thread').click(function () {
+            window.open('{{ comment.url }}', '_blank', 'resizable=yes,toolbar=yes,location=yes,scrollbars=yes,menubar=yes,status=yes');
+            window.close();
+        });
+        $('#close').click(function () {
+            window.close();
+        });
+
+        window.resizeTo(500, 250);
+    });
+</script>
+{% endblock %}
+

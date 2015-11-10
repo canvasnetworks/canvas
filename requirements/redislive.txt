@@ -1,0 +1,3 @@
+https://s3.amazonaws.com/canvas-public-artifacts/tornado-2.3.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/redis-2.4.13.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/python-dateutil-1.5.tar.gz

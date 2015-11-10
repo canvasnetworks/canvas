@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+import sys; sys.path += ['/var/canvas/common', '../../common']
+import ec2, argparse
+import random
+
+def find(args):
+    conn = ec2.connection()
+    filters = {}
+    
+    if args.group:
+        filters['group-name'] = args.group.title()
+        
+    if args.name:
+        filters['tag:Name'] = '*%s*' % args.name
+        
+    filters['instance-state-name'] = 'running'
+    
+    instances = list(ec2.get_instances(conn, filters=filters))
+    
+    if instances and args.random:
+        instances = [random.choice(instances)]
+        
+    for instance in instances:
+        if args.public:
+            ip = instance.public_dns_name
+        elif args.internal:
+            ip = instance.private_dns_name
+        else:
+            ip = instance.ip_address
+
+        if args.human:
+            print "%s: %s (%s)" % (instance.tags.get('Name', '[unnamed]'), ip, instance.id)
+        else:
+            print ip
+
+def main():
+    parser = argparse.ArgumentParser(description="Find the IP of machines", add_help=False)
+    parser.add_argument('-g', '--group', help="Find via security group")
+    parser.add_argument('-n', '--name', help="Find via substring in name")
+    parser.add_argument('-h', '--human', action='store_true', help="Show human readable long names")
+    parser.add_argument('-p', '--public', action='store_true', help="Show public domain names")
+    parser.add_argument('-i', '--internal', action='store_true', default=True, help="Show internal domain names")
+    parser.add_argument('-r', '--random', action='store_true', help="Return one server at random")
+    parser.add_argument('--help', action='help', help="show this help message and exit") 
+
+    find(parser.parse_args())
+
+if __name__ == "__main__":
+    main()

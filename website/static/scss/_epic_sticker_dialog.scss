@@ -1,0 +1,47 @@
+.alert .epic_sticker_dialog {
+    $form_width:90%;
+    input[type="text"] {
+        display:block;
+        width:$form_width;
+        margin:0 auto;
+        font-size:1.6em;
+        padding:8px 8px;
+        @extend .rounded_4px;
+        //outline:0;
+        //border:none;
+        padding-bottom:2em;
+    }
+    input[type="submit"] {
+        @extend .extend_wide_submit;
+        width:$form_width;
+        margin-left:0;
+        margin-right:0;
+    }
+    .from {
+        position:absolute;
+        bottom:.5em;
+        left:19px;
+        font-size:1.6em;
+        font-weight:bold;
+        color:#888;
+        width:$form_width;
+        margin:.5em auto 0 auto;
+        padding-left:12px;
+        text-align:left;
+        font-style:italic;
+    }
+    .skip {
+        margin-top:2em;
+        text-align:left;
+
+        a {
+            color:$canvas_blue;
+            font-size:1.2em;
+            font-weight:bold;
+        }
+    }
+    .input_wrapper {
+        position:relative;
+    }
+}
+

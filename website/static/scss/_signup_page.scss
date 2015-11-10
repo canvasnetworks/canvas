@@ -1,0 +1,18 @@
+#page.signup {
+    width:400px;
+    margin:0 auto;
+
+    .logo {
+        position:relative;
+        left:5px;
+        margin-top:20px;
+    }
+
+    .fixed_width_wrapper {
+        width:380px;
+        margin:30px auto;
+        padding:10px;
+        @extend .rounded_5px;
+        @include bg-linear-gradient((90deg, #a0e0ff 0%, #38a6d2 100%));
+    }
+}

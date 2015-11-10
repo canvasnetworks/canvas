@@ -1,0 +1,9 @@
+<script type="text/html" id="header_sticker_template">
+    Someone gave you a<a href="${ sticker.url }"><div class="sticker_wrapper">{{html tmpl.sticker(sticker.type_id) }}</div>{{html tmpl.relative_timestamp(sticker.timestamp) }}</a>
+    <a href="/activity">(view all notifications)</a>
+    <div class="progress_bar" data-remaining="${sticker.level_total - sticker.level_progress}" data-max="${sticker.level_total}">
+        <div class="progress_full {{if sticker.level_progress >= sticker.level_total}}level_up{{/if}}" style="width:${ Math.min(100, sticker.level_progress/sticker.level_total * 100) }%;"></div>
+        <span><span class="count">${sticker.level_progress}</span> of <span class="max">${sticker.level_total}</span> points</span>
+    </div>
+</script>
+

@@ -1,0 +1,35 @@
+{% djextends "base/full_base.django.html" %}
+
+{% block pageclass %}feed{% endblock %}
+
+{% block content_well %}
+    <ul class="user_feed">
+        {% for sticky_thread in sticky_threads %}
+            {{ feed_item(sticky_thread) }}
+        {% endfor %}
+        {% for item in items %}
+            {{ feed_item(item) }}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block content_footer %}
+    Loading more... <img src="/static/img/loading.gif">
+{% endblock %}
+
+{% block extra_javascript %}
+    {% compress js %}
+        <script src="/static/js/feed.js"></script>
+        <script src="/static/js/dismissal.js"></script>
+        <script src="/static/js/intro_tour.js"></script>
+        <script src="/static/js/smooth_scroll.js"></script>
+    {% endcompress %}
+    {% if show_feed_tutorial %}
+        <script>
+            $(function(){
+                intro_tour.wire();
+            });
+        </script>
+    {% endif %}
+{% endblock %}
+

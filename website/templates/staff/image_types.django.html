@@ -1,0 +1,18 @@
+<html>
+    <body>
+        {% if gotoreply %}
+            {% for cmt in replies %}
+                {% if cmt.id == gotoreply %}
+                    {% with cmt as comment %}
+                        {% include "staff/_image_type.django.html" %}
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% with op_comment as comment %}
+                {% include "staff/_image_type.django.html" %}
+            {% endwith %}
+        {% endif %}
+    </body>
+</html>
+

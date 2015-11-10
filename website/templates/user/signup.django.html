@@ -1,0 +1,114 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+{% load compress %}
+
+{% block title %} - Signup {% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/signup.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+
+<div class="clearfix">
+    <form id="signup_form" class="signup" method="POST">
+        <img class="logo" src="/static/img/canvas-beta-logo-medium.png"/>
+        {% if bypass_copy %}
+            <div class="custom_greeting">
+                {{bypass_copy|safe}}
+            </div>
+        {% endif %}
+        <div class="loading_spinner"></div>
+        {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <input type="hidden" name="next_params" value="{{ next_params }}">
+
+            <div class="input_wrapper">
+                <label for="form_username">desired Canvas username</label>
+                <input id="form_username" type="text" class="username" name="username" value="{{ username }}" spellcheck="false" autocomplete="off">
+            </div>
+            <div class="error_alert username_alert"><span></span></div>
+            <div class="input_wrapper">
+                <label for="form_email">email address</label>
+                <input id="form_email" type="text" name="email" class="email" value="{{ email }}" spellcheck="false" autocomplete="off">
+            </div>
+            <div class="error_alert email_alert"><span></span></div>
+            <div class="input_wrapper">
+                <label for="form_password">password</label>
+                <input id="form_password" type="password" class="password" name="password" value="{{ password }}" spellcheck="false" autocomplete="off">
+            </div>
+            <div class="error_alert password_alert"><span></span></div>
+            <input type="submit" class="advance" value="Signup for Canvas">
+            <p class="feedback_message">{{ message|safe }}</p>
+    </form>
+    <div class="canvas_info">
+        <img src="/static/img/attract-images.jpg">
+        <h1>What is Canvas?</h1>
+        <p>
+            Canvas is a place to share and play with images. <strong>Explore</strong> new content created by other users, <strong>vote</strong> on
+            your favorites, and even <strong>make</strong> your own image remixes with the in-browser editor.
+        </p>
+        <p>
+            Already have an account? <a href="{{ login_url }}">Log in here</a>.
+        </p>
+    </div>
+</div>
+
+{% endblock %}
+
+{% compress js %}
+    <script src="/static/lib/jquery-1.5.2.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/signup.js"></script>
+{% endcompress %}
+
+{% block extra_javascript %}
+<script>
+    jQuery(window).load(function () {
+        signup.container = $("#page form.signup");
+        
+        // Show feedback message if needed
+        if ($(".feedback_message").text()) {
+            $(".feedback_message").css("opacity", 1);
+        } else {
+            $(".feedback_message").hide().css("opacity", 1);
+        }
+        
+        // Remove loading spinner
+        $(".loading_spinner").remove();
+        
+        // Check input for fields already filled via back button
+        $("#page input[type=text], #page input[type=password]").each(function() {
+            if ($(this).val()) {
+                $(this).siblings("label").addClass("hidden");
+                var class_name = $(this)[0].className.split(" ").shift();
+                if (class_name == "username") {
+                    signup.validate_username(null, false, true);
+                } else if (class_name == "password" || class_name == "password_verify") {
+                    signup.validate_passwords();
+                } else if (class_name == "email") {
+                    signup.validate_email();
+                }
+            }
+        });
+        
+        signup.scoped('.fb_logout').bind('click', function (e) {
+            e.preventDefault();
+            FB.logout(function () {
+                window.location.reload(true);
+            });
+            return false; 
+        });
+        
+        signup.wire();
+    });
+</script>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+{% block base_ready %}{% endblock %}
+{% block base_onload %}{% endblock %}

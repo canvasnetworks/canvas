@@ -1,0 +1,16 @@
+--requirement=nginx.txt
+
+https://s3.amazonaws.com/canvas-public-artifacts/Django-1.2.7.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/South-0.7.3.tar.gz
+
+# When we're specifying URLs like this, the order of dependencies matters.
+# django-nose depends on nose, so keep nose first.
+#
+https://s3.amazonaws.com/canvas-public-artifacts/nose-1.1.2.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/django-nose-0.1.3.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/py-bcrypt-0.2.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/django-bcrypt.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/gunicorn-0.16.1.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/dnspython-1.9.4.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/pydkim-0.3.tar.gz
+

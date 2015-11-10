@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <logRotator>
+    <daysToKeep>14</daysToKeep>
+    <numToKeep>-1</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty>
+      <projectUrl>http://github.com/canvasnetworks/canvas/</projectUrl>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>origin</name>
+        <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
+        <url>git@github.com:canvasnetworks/canvas.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <recursiveSubmodules>false</recursiveSubmodules>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <authorOrCommitter>false</authorOrCommitter>
+    <clean>false</clean>
+    <wipeOutWorkspace>false</wipeOutWorkspace>
+    <pruneBranches>false</pruneBranches>
+    <remotePoll>false</remotePoll>
+    <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
+    <gitTool>Default</gitTool>
+    <submoduleCfg class="list"/>
+    <relativeTargetDir></relativeTargetDir>
+    <excludedRegions></excludedRegions>
+    <excludedUsers></excludedUsers>
+    <gitConfigName></gitConfigName>
+    <gitConfigEmail></gitConfigEmail>
+    <skipTag>true</skipTag>
+    <scmName></scmName>
+  </scm>
+  <assignedNode>testrunner</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>true</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <authToken>wlugithub</authToken>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>cd /var/canvas
+git pull origin master || git pull origin master
+git checkout $GIT_COMMIT</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+set -ex
+cd /var/canvas/website
+source ../.bashrc
+python manage.py compress
+python manage.py migrate --noinput # Migrate for purposes of the running server
+cpytest --noinput --with-xunit --xunit-file=run/results-nose.xml || true # we don&apos;t care about exit code, we use xml results.
+cjstest
+cp /var/canvas/website/run/results-*.xml $WORKSPACE
+mkdir -p $WORKSPACE/reports</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+# If this GIT_COMMIT has already been built, don&apos;t send a no-changes code review email.
+set -ex
+SENDTO=&quot;&quot;
+LAST_GIT_COMMIT=`cat last_tested_commit || echo None`
+if [ &quot;$GIT_COMMIT&quot; != &quot;$LAST_GIT_COMMIT&quot; ]; then
+  SENDTO=&quot;dev@example.com&quot;
+fi
+echo &quot;$GIT_COMMIT&quot; &gt; last_tested_commit
+echo -e &quot;SENDTO=$SENDTO\nLAST_GIT_COMMIT=$LAST_GIT_COMMIT&quot; &gt; receivers.properties
+</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.python.Python>
+      <command>import re
+xml = open(&quot;results-nose.xml&quot;).read()
+tests = re.findall(&apos;&lt;testcase classname=&quot;([^&quot;]+)&quot; name=&quot;([^&quot;]+)&quot; time=&quot;([^&quot;]+)&quot;&apos;, xml)
+result = &quot;&lt;html&gt;&lt;body&gt;&quot;
+for match in sorted(tests, key=lambda x: -float(x[2])):
+    result += &quot;{2}s {0}:{1}&lt;br/&gt;&quot;.format(*match)
+result += &quot;&lt;/body&gt;&lt;/html&gt;&quot;
+open(&quot;reports/index.html&quot;, &quot;w&quot;).write(result)</command>
+    </hudson.plugins.python.Python>
+    <org.jenkinsci.plugins.envinject.EnvInjectBuilder>
+      <info>
+        <propertiesFilePath>receivers.properties</propertiesFilePath>
+        <populateTriggerCause>false</populateTriggerCause>
+      </info>
+    </org.jenkinsci.plugins.envinject.EnvInjectBuilder>
+  </builders>
+  <publishers>
+    <htmlpublisher.HtmlPublisher>
+      <reportTargets>
+        <htmlpublisher.HtmlPublisherTarget>
+          <reportName>Timing Report</reportName>
+          <reportDir>reports</reportDir>
+          <reportFiles>index.html</reportFiles>
+          <keepAll>false</keepAll>
+          <wrapperName>htmlpublisher-wrapper.html</wrapperName>
+        </htmlpublisher.HtmlPublisherTarget>
+      </reportTargets>
+    </htmlpublisher.HtmlPublisher>
+    <hudson.tasks.junit.JUnitResultArchiver>
+      <testResults>results-*.xml</testResults>
+      <keepLongStdio>true</keepLongStdio>
+      <testDataPublishers/>
+    </hudson.tasks.junit.JUnitResultArchiver>
+    <hudson.plugins.cigame.GamePublisher/>
+    <hudson.tasks.Mailer>
+      <recipients>dev@example.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>true</sendToIndividuals>
+    </hudson.tasks.Mailer>
+    <hudson.plugins.emailext.ExtendedEmailPublisher>
+      <recipientList>${ENV, var=&quot;SENDTO&quot;}</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+          <email>
+            <recipientList>$PROJECT_DEFAULT_RECIPIENTS</recipientList>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <sendToDevelopers>false</sendToDevelopers>
+            <sendToRequester>false</sendToRequester>
+            <includeCulprits>false</includeCulprits>
+            <sendToRecipientList>true</sendToRecipientList>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+        <hudson.plugins.emailext.plugins.trigger.FixedTrigger>
+          <email>
+            <recipientList>$PROJECT_DEFAULT_RECIPIENTS</recipientList>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <sendToDevelopers>false</sendToDevelopers>
+            <sendToRequester>false</sendToRequester>
+            <includeCulprits>false</includeCulprits>
+            <sendToRecipientList>true</sendToRecipientList>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.FixedTrigger>
+      </configuredTriggers>
+      <contentType>text/html</contentType>
+      <defaultSubject>changes for ..${ENV, var=&quot;GIT_COMMIT&quot;}</defaultSubject>
+      <defaultContent>Hi Canvas!
+
+Commits up to ${ENV, var=&quot;GIT_COMMIT&quot;} are on their way to production:&lt;br/&gt;
+
+&lt;a href=&quot;https://github.com/canvasnetworks/canvas/compare/${ENV, var=&quot;LAST_GIT_COMMIT&quot;}...${ENV, var=&quot;GIT_COMMIT&quot;}&quot;&gt;View all changes&lt;/a&gt;&lt;br/&gt;
+
+&lt;br/&gt;
+
+${CHANGES_SINCE_LAST_SUCCESS, reverse=true, changesFormat=&quot;%a: %m [&lt;a href=&apos;https://github.com/canvasnetworks/canvas/commit/%r?w=1&apos;&gt;%r&lt;/a&gt;]&lt;br/&gt;%p&lt;br/&gt;&quot;, pathFormat=&quot;&amp;nbsp;%p&lt;br/&gt;&quot;}
+
+Pip pip,&lt;br/&gt;
+Mr. Jenkins&lt;br/&gt;
+${BUILD_URL}</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger>
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties>GIT_COMMIT=$GIT_COMMIT</properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <projects>deploy</projects>
+          <condition>SUCCESS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper>
+      <timeoutMinutes>15</timeoutMinutes>
+      <failBuild>true</failBuild>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+  </buildWrappers>
+</project>

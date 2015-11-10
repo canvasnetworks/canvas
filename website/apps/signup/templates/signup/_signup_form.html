@@ -1,0 +1,48 @@
+{% set uuid = uuid() %}
+
+<div class="signup_form">
+    <form method="POST" action="https://{{ DOMAIN }}/signup" autocomplete="off">{% csrf_token %}
+        <h1 class="almost_there" style="display:none;">
+            Almost there!
+        </h1>
+        <div class="facebook">
+            <div class="fb_signup_wrapper">
+                <button type="button" class="facebook facebook_login_button">Sign up with Facebook</button>
+            </div>
+            <a href="#" class="not_person"></a>
+            <p class="divider">OR</p>
+        </div>
+        <div class="email_signup_wrapper">
+            <p class="header_message">Sign up with your email account</p>
+            <div class="input_wrapper username">
+                <label for="signupusernameinput_{{ uuid }}" class="default">desired username</label>
+                <input  id="signupusernameinput_{{ uuid }}" name="username" type="text">
+                <p class="input_hint"></p>
+            </div>
+            <div class="input_wrapper email">
+                <label for="signupemailinput_{{ uuid }}" class="default">email address</label>
+                <input  id="signupemailinput_{{ uuid }}" name="email" type="text" {% if fb_authorized %}value="fake@email.com"{% endif %}>
+                <p class="input_hint"></p>
+            </div>
+            <div class="input_wrapper password">
+                <label for="signuppasswordinput_{{ uuid }}" class="default">create a password</label>
+                <input  id="signuppasswordinput_{{ uuid }}" name="password" type="password">
+                <p class="input_hint"></p>
+            </div>
+            <input type="hidden" class="fb_id" name="facebook_id">
+            <input type="hidden" class="signed_request" name="signed_request">
+            <button class="signup_button">
+                {% if signup_button_text %}
+                    {{ signup_button_text }}
+                {% else %}
+                    Sign up »
+                {% endif %}
+            </button>
+            {% if message %}
+            <p class="feedback">
+                {{ message|safe }}
+            </p>
+            {% endif %}
+        </div>
+    </form>
+</div>

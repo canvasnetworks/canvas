@@ -1,0 +1,613 @@
+@import "fonts", "mixins", "vars", "normalize", "defaults";
+
+body {
+    padding:30px;
+    font-size:1.2em;
+    color:$default_dark_font;
+}
+
+h1 {
+    font-size:1.8em;
+}
+
+.palette {
+    display:inline-block;
+    border:3px solid black;
+    @include clearfix();
+
+    .color {
+        float:left;
+        width:125px;
+        height:200px;
+        padding:10px;
+        font-weight:bold;
+        @include text-selection(text);
+
+        &:after {
+            @include text-selection(text);
+            white-space:pre;
+            z-index:1;
+        }
+
+        &.white {
+            $red:255;
+            $green:255;
+            $blue:255;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.gray {
+            $red:184;
+            $green:182;
+            $blue:181;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.slate {
+            $red:74;
+            $green:74;
+            $blue:74;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.light_blue {
+            $red:134;
+            $green:213;
+            $blue:255;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.deep_purple {
+            $red:124;
+            $green:130;
+            $blue:255;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.red {
+            $red:233;
+            $green:90;
+            $blue:92;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.orange {
+            $red:248;
+            $green:172;
+            $blue:85;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.yellow {
+            $red:255;
+            $green:228;
+            $blue:92;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.green {
+            $red:108;
+            $green:214;
+            $blue:116;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        /* Palette */
+        &.rustic_red {
+            $red:163;
+            $green:53;
+            $blue:14;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.classic_orange {
+            $red:242;
+            $green:136;
+            $blue:0;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.crayon_green {
+            $red:24;
+            $green:200;
+            $blue:38;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.retro_blue {
+            $red:44;
+            $green:154;
+            $blue:213;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.classic_purple {
+            $red:136;
+            $green:60;
+            $blue:237;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        /* Palette */
+        &.snow_blue {
+            $red:221;
+            $green:251;
+            $blue:253;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.snow_gray {
+            $red:239;
+            $green:239;
+            $blue:239;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.pale_green {
+            $red:206;
+            $green:225;
+            $blue:214;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.conifer_green {
+            $red:59;
+            $green:121;
+            $blue:77;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.cranberry_red {
+            $red:118;
+            $green:0;
+            $blue:0;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        /* Palette */
+        &.sweet_red {
+            $red:254;
+            $green:67;
+            $blue:101;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.bubblegum_pink {
+            $red:255;
+            $green:171;
+            $blue:187;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.ripe_yellow {
+            $red:150;
+            $green:255;
+            $blue:171;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.sweet_beige {
+            $red:255;
+            $green:228;
+            $blue:177;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.electric_blue {
+            $red:18;
+            $green:238;
+            $blue:255;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        /* Palette */
+        &.pale_beige {
+            $red:255;
+            $green:233;
+            $blue:215;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.pale_pink {
+            $red:255;
+            $green:224;
+            $blue:214;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.pale_salmon {
+            $red:241;
+            $green:189;
+            $blue:171;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.cinnamon_brown {
+            $red:156;
+            $green:103;
+            $blue:95;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.deep_brown {
+            $red:87;
+            $green:37;
+            $blue:30;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+
+        /* Palette */
+        &.dark_violet {
+            $red:91;
+            $green:35;
+            $blue:105;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.dark_fuscia {
+            $red:161;
+            $green:28;
+            $blue:71;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.painter_red {
+            $red:235;
+            $green:30;
+            $blue:37;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.dawn_orange {
+            $red:255;
+            $green:161;
+            $blue:0;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.dawn_yellow {
+            $red:255;
+            $green:227;
+            $blue:0;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+
+        /* Palette */
+        &.apex_blue {
+            $red:30;
+            $green:66;
+            $blue:176;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.classic_blue {
+            $red:36;
+            $green:113;
+            $blue:247;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.sky_blue {
+            $red:139;
+            $green:220;
+            $blue:255;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.horizon_blue {
+            $red:212;
+            $green:242;
+            $blue:255;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.overcast_blue {
+            $red:182;
+            $green:216;
+            $blue:230;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        /* Palette */
+        &.black {
+            $red:0;
+            $green:0;
+            $blue:0;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.midnight_blue {
+            $red:2;
+            $green:14;
+            $blue:106;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.midnight_purple {
+            $red:50;
+            $green:2;
+            $blue:85;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.midnight_green {
+            $red:8;
+            $green:51;
+            $blue:55;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+
+        &.starlight_yellow {
+            $red:255;
+            $green:254;
+            $blue:222;
+            $rgb_color:rgb($red, $green, $blue);
+            background:$rgb_color;
+            color:invert($rgb_color)*1.2;
+
+            &:after {
+                content:"\00000A #{$red}, #{$green}, #{$blue}";
+            }
+        }
+    }
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    {# This is a Jinja template!! #}
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;" name="viewport">
+        <meta name="description" content="{% block meta_description %}Canvas: Share and play with images.{% endblock %}" />
+        {% block extra_meta %}{% endblock %}
+
+        <link rel="shortcut icon" type="image/png" href="/favicon.ico">
+        
+        {{ compressed('css', 'mobile') }}
+
+        <title>Canvas{% block title %}{% endblock %}</title>
+        {% block head %}{% endblock %}
+        <script>
+
+            var _gaq = _gaq || [];
+             _gaq.push(['_setAccount', 'UA-16426630-1']);
+             _gaq.push(['_trackPageview']);
+             if (window.current && window.current.logged_in) {
+                 _gaq.push(['_setVar', 'logged_in']);
+             } else {
+                 _gaq.push(['_setVar', 'logged_out']);
+             }
+
+             (function() {
+               var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+               ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(ga, s);
+             })();
+        </script>
+        <script>
+          // Quantcast Tag, part 1 
+          var _qevents = _qevents || [];
+
+          (function() {
+           var elem = document.createElement('script');
+
+           elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+           elem.async = true;
+           elem.type = "text/javascript";
+           var scpt = document.getElementsByTagName('script')[0];
+           scpt.parentNode.insertBefore(elem, scpt);  
+          })();
+        </script>
+    </head>
+    <body class="{% block extra_body_classes %}{% endblock %}">
+        <div id="page_wrapper">
+            <img class="full_width" src="/static/img/mobile/canvas_logo.jpg">
+            {% block body %}
+            {% endblock %}
+            <div id="mobile_optout">
+                <a href="?m=no">View this page on regular Canvas</a> | <a href="?m=no&amp;permanent_no_mobile=yes">Permanently disable mobile site</a>
+            </div>
+        </div>
+    </body>
+</html>

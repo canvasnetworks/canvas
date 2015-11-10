@@ -1,0 +1,6 @@
+--requirement=canvas.txt
+
+https://s3.amazonaws.com/canvas-public-artifacts/goosemo-fabric-1.2a-multiprocessing-82b7dce2.zip
+https://s3.amazonaws.com/canvas-public-artifacts/PIL-1.1.7.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/lxml-2.3.tar.gz
+

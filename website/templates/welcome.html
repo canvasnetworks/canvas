@@ -1,0 +1,20 @@
+{% djextends 'base/headered_base.django.html' %}
+
+{% block pageclass %}
+    onboarding
+    welcome
+{% endblock %}
+
+{% block content %}
+    {% include "onboarding/finish.html" %}
+    <img src="/static/img/intro_steps.png">
+    <button class="onboarding_next primary_finish_button" data-onboarding_next="{{ onboarding_next }}">
+        Continue to Canvas Homepage
+    </button>
+{% endblock %}
+
+{% block extra_javascript %}
+{% compress js %}
+<script src="/static/js/onboarding/onboarding.js"></script>
+{% endcompress %}
+{% endblock %}

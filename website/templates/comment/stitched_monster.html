@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/canvas.css">
+    <link rel="stylesheet" href="/static/css/qt_footer.css">
+</head>
+<body>
+    <div id="image_tile">
+        <div class="stitched_monster image_container">
+            <div class="theme_bg sticker_themed {{ sticker }}"></div>
+            {{ top.get_img_tag('giant') }}
+            <div style="margin-top: -20px;">
+                {{ bottom.get_img_tag('giant') }}
+            </div>
+        </div>
+        <footer class="sticker_themed {{ sticker }} qt">
+            <div class="top_sticker">
+                <span class="sticker_container {{ sticker }}"></span>
+            </div>
+            <div class="sticker_float"></div>
+            {% if 0 %}
+                <div class="title">
+                    {{ top.title }}
+                </div>
+            {% endif %}
+            <div class="author">
+                <span class="deemph">
+                        made
+                        by
+                </span>
+                {% if top.author_name != "Anonymous" %}
+                    <span class="username">
+                        {% if top.staff %}
+                            <img src="/static/img/founder_badge.png" width="16" height="15" title="Canvas Staff">
+                        {% endif %}
+                        {{ top.author_name }}
+                    </span>
+                {% else %}
+                    <span class="deemph">Anonymous</span>
+                {% endif %}
+                <span class="deemph">&amp;</span>
+                {% if bottom.author_name != "Anonymous" %}
+                    <span class="username">
+                        {% if bottom.staff %}
+                            <img src="/static/img/founder_badge.png" width="16" height="15" title="Canvas Staff">
+                        {% endif %}
+                        {{ bottom.author_name }}
+                    </span>
+                {% else %}
+                    <span class="deemph">Anonymous</span>
+                {% endif %}
+            </div>
+            {% if bottom.reply_text %}
+                <p class="caption">
+                    {{ ugc_text(bottom.reply_text, knobs.POST_TEXT_TRUNCATION_LENGTH, False, False) }}
+                </p>
+            {% endif %}
+
+            <div class="clear"></div>
+            <span class="url"><a href="">example.com{{ url }}</a></span>
+            <div class="logo">
+                <span class="monster_logo"></span>
+                <img src="/static/img/footer/canvas-logo.png">
+            </div>
+        </footer>
+    </div>
+    <script>
+        window.onload = function() {
+            console.log("onload");
+            var min_width = 450;
+            var max_width = 600;
+            var img = document.getElementsByTagName("img")[0];
+            var p = document.getElementsByTagName("p")[0];
+            var image_tile = document.getElementById("image_tile");
+            var width = img.width;
+            if (width < 580) {
+                image_tile.className += " padded";
+            }
+
+            if (!p) return;
+            if (width > min_width) {
+                p.style.width = width - 20 + "px";
+            } else {
+                p.style.width = min_width - 20 + "px";
+            }
+        };
+    </script>
+</body>
+</html>
+

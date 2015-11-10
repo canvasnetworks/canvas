@@ -1,0 +1,585 @@
+.extend_dropdown_item {
+    display:block;
+    position:relative;
+    padding:0.3em 0.75em;
+    background:#fff;
+    font-size:1.4em;
+    text-align:left;
+    
+    &:hover {
+        background:$canvas_blue;
+        color:#fff;
+        text-decoration:none;
+    }
+}
+
+#header {
+    * {
+        @extend .text_selection_none;
+    }
+    
+    .placeholder {
+        height:3.8em;
+        &.tall {
+            height:13em;
+        }
+    }
+
+    .fixed_wrapper {
+        position:fixed;
+        height:0;
+        top:0;
+        left:0;
+        width:100%;
+        z-index:3;
+    }
+
+    .top_bar {
+        position:relative;
+        border-bottom:1px solid #999;
+        @include box-shadow(0 1px 3px rgba(#000, 0.3));
+        @include bg-linear-gradient((90deg, #eee 0%, #fff 100%));
+
+        > .wrapper {
+            position:relative;
+            width:1175px;
+            height:3.8em;
+            margin:0 auto;
+            text-align:center;
+            @extend .clearfix;
+        }
+    }
+
+    .logo,
+    .right_side {
+        position:absolute;
+    }
+
+    .logo {
+        left:10px;
+        padding:5px 0;
+        text-align:left;
+        @extend .clearfix;
+
+        > a {
+            float:left;
+            display:inline-block;
+            background:url(/static/img/canvas-logo-tiny.png) left center no-repeat;
+            background-size:auto 100%;
+            width:13em;
+            height:2.6em;
+        }
+
+        .fb_like_wrapper {
+            float:left;
+            position:relative;
+            top:0.7em;
+        }
+    }
+
+    .right_side {
+        right:10px;
+        text-align:right;
+
+        button.login {
+            font-size:1.4em;
+            margin:0.4em 0;
+            padding:0.4em 0.8em;
+            @extend .rounded_0_4em;
+        }
+    }
+
+    /* We have to separate out the progress bar because it's used in onboarding */
+    .progress_bar {
+        width:10em;
+        height:1.75em;
+        margin:0.4em 0;
+        border:1px solid #aaa;
+        line-height:1.8em;
+        color:#555;
+        overflow:hidden;
+        font-size:1.6em;
+        @extend .rounded_0_25em;
+        @include bg-linear-gradient-over-image((90deg, rgba(#bbb, 0.5) 0%, rgba(#fff, 0.5) 100%), url(/static/img/progress_bar_bg.png));
+        @extend .clearfix;
+
+        &.highlight {
+            @include box-shadow(0 0 1px 3px $canvas_highlight_yellow);
+        }
+
+        > span {
+            font-size:0.9em;
+            display:block;
+            position:absolute;
+            width:100%;
+            text-align:center;
+        }
+
+        .progress_fill {
+            float:left;
+            width:0%;
+            height:100%;
+            border-right:1px solid #85cd9d;
+            background:$canvas_green;
+            text-align:left;
+            font-size:0.75em;
+            color:#42845E;
+            @include bg-linear-gradient((90deg, #87dfa6 0%, #c0ecd0 8%, #94eaa5 24%, #abeeba 30%, #ddf7e6 100%));
+            @include transition(width 2s ease-in-out);
+        }
+
+        &.onboarding_progress {
+            margin:0.35em 0;
+            
+            .progress_fill:after {
+                content:"\00a0";
+            }
+        }
+
+        &.onboarding_progress .progress_fill,
+        &:hover .progress_fill,
+        &:active .progress_fill,
+        &.js_fake_hover .progress_fill {
+            @include bg-linear-gradient((90deg, #50de80 0%, #c0ecd0 8%, #5de978 24%, #73ed8e 30%, #d0fede 78%, #c7f6d9 100%));
+        }
+    }
+
+    /* New logged in user buttons */
+    ul.user_links {
+        float:right;
+        @extend .clearfix;
+
+        > li {
+            float:right;
+            position:relative;
+            margin-left:1em;
+
+            > a {
+                $size:1.75em;
+                display:block;
+                font-size:1.6em;
+                min-width:$size;
+                height:$size;
+                margin:0.4em 0;
+                border:1px solid #aaa;
+                padding:0;
+                overflow:hidden;
+                @extend .rounded_0_25em;
+
+                &:hover {
+                    border:1px solid #999;
+                    text-decoration:none;
+                    @include bg-linear-gradient((90deg, #ddd 0%, #fff 100%));
+                }
+
+                &:active {
+                    text-decoration:none;
+                    @include box-shadow(inset 1px 1px 2px rgba(#000, 0.3));
+                }
+            }
+
+            &.avatar a {
+                .user_avatar {
+                    float:left;
+                    margin:2px;
+                }
+
+                > span {
+                    float:right;
+                    text-align:right;
+                    font-size:0.7em;
+                    color:#555;
+                    line-height:2.6em;
+                    padding:0 0.5em;
+                }
+            }
+            &.avatar .dropdown {
+                li > a {
+                    @extend .extend_dropdown_item;
+                }
+            }
+
+            &.activity .progress_bar {
+                width:8em;
+
+                .notification_count {
+                    $size:1.5em;
+                    position:absolute;
+                    right:0.3em;
+                    top:0.7em;
+
+                    > span {
+                        display:block;
+                        height:$size;
+                        min-width:$size;
+                        line-height:$size;
+                        padding:0 0.3em;
+                        font-size:$size/2;
+                        background:#F33;
+                        text-align:center;
+                        color:#fff;
+                        @include text-shadow(dark);
+                        @include border-radius($size);
+                    }
+                }
+
+
+                > span {
+                    right:0.6em;
+                    text-align:right;
+                    font-size:0.7em;
+                }
+
+                .progress_fill {
+                    span {
+                        padding-left:0.5em;
+                    }
+
+                    &:after {
+                        content:"%"
+                    }
+                }
+
+                &:hover,
+                &:active,
+                &.js_fake_hover {
+                    @include bg-linear-gradient-over-image((90deg, rgba(#ddd, 0.5) 0%, rgba(#999, 0.5) 25%, rgba(#bbb, 0.5) 40%, rgba(#fff, 0.5) 100%), url(/static/img/progress_bar_bg.png));
+                }
+
+                &:active {
+                    .progress_fill {
+                        @include box-shadow(inset 1px 1px 2px rgba(#000, 0.3));
+                    }
+                }
+
+                &.level_up_ready {
+                    position:absolute;
+                    background:transparent;
+                    z-index:1;
+
+                    .progress_fill {
+                        border-right:0;
+                        background-color:#e8c55b;
+                        background-image:none;
+                        font-weight:bold;
+                        $gradient_opacity:0.75;
+                        @include bg-linear-gradient((-90deg, rgba(#f7c954, $gradient_opacity) 0%, rgba(#fceabb, $gradient_opacity) 18%, rgba(#fccd4d, $gradient_opacity) 50%, rgba(#f8b500, $gradient_opacity) 72%, rgba(#fceabb, $gradient_opacity) 84%, rgba(#fbdf93, $gradient_opacity) 100%));
+                        @extend .rounded_5px;
+                        @include animation(level_up_ready 2s infinite);
+                        @include text-shadow(light);
+
+                        span {
+                            color:#7C1F00;
+                        }
+
+                        &:after {
+                            content:"\00a0";
+                        }
+                    }
+
+                    .notification_count {
+                        display:none !important;
+                    }
+                }
+            }
+            &.activity {
+                li.loading {
+                    width:400px;
+                    text-align:center;
+                    padding:1em 0;
+                    @extend .extend_dropdown_item;
+                }
+                
+                .slide_in_container {
+                    position:absolute;
+                    width:400px;
+                    height:0;
+                    top:3.9em;
+                    right:0;
+                    overflow:hidden;
+                    border:1px solid #999;
+                    border-top:none;
+                    background:#fff;
+                    z-index:1;
+                    @extend .box_shadow_floating;
+                    @extend .box_sizing_content;
+
+                    > * {
+                        /* We need to make sure it looks like the notification is sliding down. */
+                        position:absolute;
+                        bottom:0;
+                        @extend .rounded_bottom;
+                    }
+
+                    .activity_item {
+                        a {
+                            background:#EAF3F9;
+                        }
+                    }
+
+                    .activity_item.epic_sticker {
+                        a {
+                            color:#3F200B;
+                            $opacity:0.4;
+                            background:rgba(#F4E158, $opacity);
+                            @include bg-linear-gradient((35deg, rgba(#E8B621, $opacity) 28%, rgba(#FAEB7B, $opacity) 60%, rgba(#FAEC6E, $opacity) 63%, rgba(#FAFAA8, $opacity) 71%, rgba(#FFFFA1, $opacity) 82%, rgba(#FAFAA8, $opacity) 96%));
+                            @include box-shadow(0 1px 0 #825108);
+                        }
+                    }
+                }
+            }
+
+            &.new_thread > a {
+                color:#777;
+                padding:0.35em 0.5em 0.25em 1.8em;
+
+                &:before {
+                    content:"\00a0";
+                    @extend .fullsize;
+                    background:url(/static/img/new_thread_icon.png) 0.5em center no-repeat;
+                }
+            }
+
+            &.flagged > a {
+                padding:0.2em 0.5em 0.25em 0.5em;
+
+                &:before {
+                    content:"\00a0";
+                    display:inline-block;
+                    width:11px;
+                    height:20px;
+                    background:url(/static/img/flagged-link-bg.png) 0 0 no-repeat;
+                    vertical-align:bottom;
+                }
+
+                &:hover:before {
+                    background-position:0 -20px;
+                }
+            }
+
+            /* USER DROPDOWNS */
+            .dropdown:hover {
+                display:block;
+            }
+
+            &.activity .dropdown {
+                ul {
+                    /* This is going to get large so cap the height */
+                    max-height:400px;
+                    overflow-y:scroll;
+                    @extend .rounded_none;
+                }
+            }
+            &.activity .dropdown,
+            &.activity .slide_in_container {
+                li.activity_item a {
+                    border-left:0;
+                }
+            }
+        }
+    }
+    
+
+    /* Header dropdown styling */
+
+    .dropdown {
+        $width:600px; /* arbitrary large number, max-width for dropdown. This isn't visible */
+        $hover_buffer:50px; /* How much padding around the item before we're no longer hovering. */
+        display:none;
+        position:absolute;
+        width:$width;
+        height:0;
+        left:50%;
+        top:3.8em;
+        text-align:center;
+        z-index:1;
+
+        &.right_aligned {
+            left:auto;
+            right:0;
+            text-align:right;
+
+            .hover_buffer {
+                left:auto;
+                right:-$hover_buffer;
+            }
+
+            .ul_wrapper > ul {
+                left:auto;
+            }
+        }
+
+        .hover_buffer {
+            position:absolute;
+            width:100%;
+            height:200%;
+            left:-$hover_buffer;
+            bottom:-$hover_buffer;
+            padding:$hover_buffer;
+            @extend .box_sizing_content;
+        }
+
+        .ul_wrapper {
+            display:inline-block;
+            position:relative;
+            text-align:left;
+
+            > ul {
+                position:relative;
+                z-index:1;
+                border:1px solid #aaa;
+                border-top:1px solid #999;
+                background:#fff;
+                @extend .rounded_bottom_5px;
+                @extend .box_shadow_floating;
+
+                > li {
+                    &:last-of-type {
+                        > a {
+                            @extend .rounded_bottom_5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .last_sticker {
+        float:right;
+        line-height:3.8em;
+
+        .sticker_container {
+            vertical-align:middle;
+            position:relative;
+            top:-3px;
+            width:25px;
+            height:25px;
+        }
+
+        a {
+            font-size:1.2em;
+        }
+    }
+}
+
+/* Signup Banner */
+
+#header .signup_banner {
+    position:relative;
+    z-index:1;
+    width:51em;
+    margin:0 auto;
+    border:1px solid #999;
+    border-top:0;
+    padding:0.5em;
+    padding-top:0;
+    background:#fff;
+    @include box-shadow(1px 2px 4px rgba(#000, 0.3));
+
+    .wrapper {
+        position:relative;
+        border:1px solid #ccc;
+        padding:1em;
+        @extend .clearfix;
+        @include bg-linear-gradient((90deg, #f2fdff 0%, #e2f1ff 100%));
+
+        &:before {
+            content:"\00a0";
+            background:url(/static/img/bg_transparent.png);
+            @extend .fullsize;
+        }
+
+        .signup_copy {
+            float:left;
+            position:relative;
+            top:-0.1em;
+            z-index:1;
+            padding-left:1em;
+
+            p {
+                width:17em;
+                font-size:1.4em;
+                @include text-shadow(light);
+            }
+        }
+
+        .signup_button_wrapper {
+            float:right;
+            position:relative;
+            z-index:1;
+            padding:1em;
+            background:rgba(#002560, 0.14);
+            @extend .rounded_0_6em;
+            @include box-shadow((inset 1px 1px 1px rgba(#002560, 0.2), 1px 1px 0 rgba(#fff, 0.7)));
+
+            button {
+                border:1px solid #555;
+                padding:0.6em 0.5em;
+                font-size:1.8em;
+                font-weight:bold;
+                color:#fff;
+                @include text-shadow(dark);
+                @include box-shadow((inset 1px 1px 0 rgba(#fff, 0.4), 1px 1px 0 rgba(#fff, 1)));
+                @include bg-linear-gradient((90deg, #3a82d0 0%, #9fdefe 100%));
+
+                &:hover {
+                    border-color:#222;
+                    @include bg-linear-gradient((90deg, #3a82d0*0.95 0%, #9fdefe*0.98 100%));
+                }
+
+                &:active {
+                    @include box-shadow((inset 1px 1px 0 rgba(#000, 0.3), 1px 1px 0 rgba(#fff, 1)));
+                    @include bg-linear-gradient((90deg, #3a82d0*0.95 0%, #9fdefe*0.98 100%));
+                }
+            }
+        }
+    }
+}
+
+$color_1:#cba32b;
+$color_2:#ffffff;
+
+@-webkit-keyframes level_up_ready {
+    0% {
+        background-color:$color_1;
+        -webkit-animation-timing-function:linear;
+    }
+    50% {
+        background-color:$color_2;
+        -webkit-animation-timing-function:linear;
+    }
+    100% {
+        background-color:$color_1;
+        -webkit-animation-timing-function:linear;
+    }
+}
+
+@-moz-keyframes level_up_ready {
+    0% {
+        background-color:$color_1;
+        -moz-animation-timing-function:linear;
+    }
+    50% {
+        background-color:$color_2;
+        -moz-animation-timing-function:linear;
+    }
+    100% {
+        background-color:$color_1;
+        -moz-animation-timing-function:linear;
+    }
+}
+
+@-o-keyframes level_up_ready {
+    0% {
+        background-color:$color_1;
+        -o-animation-timing-function:linear;
+    }
+    50% {
+        background-color:$color_2;
+        -o-animation-timing-function:linear;
+    }
+    100% {
+        background-color:$color_1;
+        -o-animation-timing-function:linear;
+    }
+}

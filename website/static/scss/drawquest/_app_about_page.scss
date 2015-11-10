@@ -1,0 +1,77 @@
+body.app_about {
+    padding:0;
+
+    .fixed_width_wrapper {
+        width:430px;
+        background:transparent;
+        border:0;
+    }
+
+    .modal {
+        padding:20px;
+        padding-top:5px;
+        padding-bottom:0;
+        background:#fff;
+        margin-bottom:2em;
+        border:3px solid $_color_dark_gray;
+        @include border-radius(10px);
+    }
+
+    .app_icon {
+        display:inline-block;
+        vertical-align:top;
+        width:40px;
+        height:40px;
+        margin-right:15px;
+        @include border-radius(7px);
+        @include box-shadow(2px 2px 2px rgba(#000, 0.2));
+    }
+
+    h1 {
+        text-align:center;
+    }
+
+    p {
+        position:relative;
+        font-size:1.4em;
+        line-height:1.4em;
+        color:$default_dark_font;
+        margin:1em 0;
+        z-index:1;
+    }
+
+    .logo {
+        display:block;
+        margin:0 auto 10px;
+    }
+
+    .boring {
+        position:relative;
+        top:30px;
+        width:200px;
+        margin:0 auto;
+        padding-top:14px;
+        text-align:center;
+        font-size:1.2em;
+        font-style:italic;
+    }
+
+    p.hiring {
+        padding-top:5px;
+        text-align:center;
+    }
+
+    img.hiring {
+        display:inline-block;
+        position:relative;
+        width:100px;
+        height:101px;
+    }
+
+    img.tools {
+        display:block;
+        width:390px;
+        height:auto;
+        margin-top:-90px;
+    }
+}

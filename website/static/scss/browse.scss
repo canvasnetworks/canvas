@@ -1,0 +1,321 @@
+@import "vars", "mixins";
+
+#page {
+    width:100%;
+    min-width:1255px;
+    padding:0 5px;
+    margin-top:20px;
+}
+
+#sticker_column {
+    padding-bottom:25px;
+    margin-right:20px;
+    min-height:150px;
+}
+
+.gallery {
+    position:relative;
+    width:1255px;
+    margin:0 auto;
+    
+    html.ie8 & {
+        width:1272px;
+    }
+    
+    .group_header {
+        float:left;
+        width:1075px;
+        border:1px solid #ccc;
+        padding-left:1px;
+        margin-bottom:20px;
+        font-size:1.4em;
+
+        button {
+            font-size:1.0em;
+        }
+
+        &.new {
+            border:1px solid #ddd;
+            .group_short_description {
+                display:block;
+                margin:.2em .5em;
+            }
+
+            button {
+                margin:0 .2em;
+            }
+        }
+
+        .timeperiods {
+            color:#ccc;
+            font-size:1em;
+
+            .divider {
+                font-size: 1em;
+                color:#ccc;
+                margin:0 0.25em;
+            }
+        }
+    }
+    
+    .group_title {
+        background:#29ABE2;
+        color:#fff;
+        padding:5px 15px;
+        line-height:2.0em;
+    }
+    
+    .group_short_description a {
+        white-space:nowrap;
+        color:$canvas_blue;
+        
+        &:hover {
+            color:$canvas_blue_hover;
+            text-decoration:underline;
+        }
+        
+        .unfollow {
+            white-space:nowrap;
+            color:$canvas_red;
+        }
+    }
+    
+    .timeperiods {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color:#ccc;
+        
+        .divider {
+            font-size: 1em;
+            color:#ccc;
+            margin:0 0.25em;
+        }
+        
+        .period_selected {
+            border-bottom:2px solid #666;
+        }
+        
+        strong {
+            color:#999;
+        }
+    }
+    
+    .userpage_header {
+        margin-bottom:20px;
+        color:#ccc;
+        
+        hr {
+            margin:0 0 0.75em 0;
+        }
+        
+        .username {
+            font-size:1.8em;
+            
+            a.active,
+            strong {
+                font-weight:bold;
+                font-size:1.8em;
+                color:#222;
+            }
+        }
+        
+        .links {
+            font-size:1.8em;
+            
+            a.active {
+                border-bottom:2px solid #666;
+            }
+            
+            .divider {
+                font-size: 1em;
+                color:#ccc;
+                margin:0 0.25em;
+            }
+        }
+
+        .follow_user_toggle {
+            margin:1em 0;
+        }
+    }
+    
+    .disabled_user {
+        font-size:1.4em;
+        margin-bottom: 0.5em;
+    }
+    
+    .column {
+        width:250px;
+        height:100%;
+        margin-right:25px;
+        float:left;
+        
+        &:last-child {
+            margin-right:0;
+        }
+        
+        .footer {
+            content:"\00a0";
+            text-align:center;
+            font-size:1.6em;
+            color:#fff;
+            vertical-align:center;
+            @include opacity(0.5);
+        }
+    }
+}
+
+.image_tile {
+    width:250px;
+    margin-bottom:25px;
+    
+    .image_footer {
+        min-height:40px;
+    }
+    
+    .image_caption {
+        padding:10px 10px 5px 10px;
+        font-size:1.6em;
+    }
+    
+    .image_reply_count {
+        padding:5px 10px 5px 10px;
+        font-size:1.2em;
+    }
+    
+    /* This needs to be very specific to override sticker styling */
+    #page &.downvoted {
+        .image_footer {
+            cursor:pointer;
+            background:#C4CECC;
+            @include box-shadow(none);
+        }
+        
+        .image_stickers {
+            cursor:pointer;
+        }
+        
+        .collapsed_text {
+            display:block;
+        }
+        
+        .image_container,
+        .image_caption,
+        .image_reply_count {
+            display:none;
+        }
+    }
+    
+    .sticker_overlay .sticker_container {
+        width:25px;
+        height:25px;
+    }
+}
+
+.image_tile.visibility_3 {
+    border: 1px solid red;
+}
+
+#loading_posts, #empty_posts_message {
+    display:block;
+    font-size:2.2em;
+    color:#666;
+    text-align:center;
+    margin:40px 0 20px 0;
+    
+    strong {
+        color:#444;
+    }
+}
+
+a.content_link {
+    text-decoration:none;
+}
+
+p.sticky_text {
+    position:absolute !important;
+    height:24px;
+    max-width:240px;
+    left:-15px;
+    top:10px;
+    border-left:0;
+    border-right:0;
+    padding:0 0.25em 0 0.5em;
+    background:$canvas_blue;
+    font-size:1.4em;
+    line-height:1.6em;
+    font-weight:bold;
+    color:#fff;
+    z-index:2;
+    @include text-shadow(dark);
+    @include arrow(right, 10px, 0, #fff, $canvas_blue);
+    @include box-shadow(1px 1px 3px rgba(#000, 0.6));
+
+    .ribbon_fold {
+        display:block;
+        position:absolute;
+        left:0;
+        top:100%;
+        width:0;
+        height:0;
+        border-top:15px solid $canvas_dark_blue; 
+        border-left:15px solid transparent;
+    }
+}
+
+/* This handles posts visible on page load before JS pretties it up */
+
+#preloaded_post_container {
+    float:left;
+    width:1075px;
+    @include opacity(0.35);
+    
+    .image_tile {
+        float:left;
+        margin-right:25px;
+        
+        &:nth-child(4n) {
+            margin-right:0;
+        }
+    }
+}
+
+@media screen and (max-width: 1265px) {
+    #page {
+        min-width:980px;
+        
+        .gallery {
+            width:980px;
+
+            .group_header {
+                width:800px;
+            }
+        }
+    }
+    
+    #preloaded_post_container {
+        width:550px;
+    }
+    
+    #column_4 {
+        display:none;
+    }
+    
+    #column_3 {
+        margin-right:0;
+    }
+}
+
+@media screen and (max-device-width: 480px) {
+    #page {
+        min-width:700px;
+        width:700px;
+
+        .gallery {
+            width:700px;
+
+            .group_header {
+                width:800px;
+            }
+        }
+    }
+}

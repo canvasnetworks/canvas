@@ -1,0 +1,20 @@
+<html>
+<body bgcolor="red">
+
+<div id="output"></div>
+
+<script src="/static/lib/jquery-1.5.2.js"></script>
+<script src="/static/lib/easyXDM.js"></script>
+<script type="text/javascript">
+$(function () {
+    var socket = new easyXDM.Socket({
+        onMessage: function(message, origin){
+            $('#output').text(message);
+            console.log('recv', message);
+        }
+    });
+});
+</script>
+
+</body>
+</html>

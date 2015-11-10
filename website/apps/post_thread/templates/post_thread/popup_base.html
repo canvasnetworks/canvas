@@ -1,0 +1,21 @@
+{% djextends "base/base.django.html" %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/post_thread.css" type="text/css">
+<link rel="stylesheet" href="/static/css/postwidget.css">
+{% endcompress %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block extra_body_classes %}popup{% endblock %}
+{% block pageclass %}post_thread{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block extra_javascript %}{% endblock %}
+
+{% block footer %}{% endblock %}
+

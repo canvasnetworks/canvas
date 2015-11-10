@@ -1,0 +1,153 @@
+@import "vars", "mixins";
+@import "normalize", "defaults", "sitewide", "thread_preview";
+
+#page {
+    width:800px;
+    margin:30px auto;
+}
+
+#add_thread_input {
+    width:15em;
+    margin:1em 0;
+}
+
+#publish {
+    display:block;
+    margin:1em 0;
+    padding:.6em 3em;
+    font-size:2.4em;
+}
+
+#add_thread_form {
+    margin-bottom:1.5em;
+}
+
+#footer {
+    display:none;
+}
+
+.threads_container.highlighted {
+    background-color:rgba(190,224,250,.4);
+    @include border-radius(8px);
+    padding: .5em 1em;
+    position:relative;
+    left:-1em;
+    display:inline-block;
+}
+
+.ordinal {
+}
+
+input[type=number] {
+    width:6em;
+    margin-bottom:.5em;
+    font-size:1.3em;
+    font-weight:bold;
+    padding:.4em .6em;
+}
+
+.actions {
+    font-size:1.4em;
+    margin-left:.5em;
+    display:inline-block;
+}
+
+.details {
+    > span {
+        background-color:#eee;
+        padding:.2em .4em;
+    }
+    font-size:1.4em;
+    margin:.8em 0;
+}
+
+#thread_id_explanation {
+    display:block;
+    font-size:1.3em;
+
+    code {
+        font-size:1.2em;
+        background-color:rgba(250,250,250,.9);
+        padding:4px 6px;
+
+        .id {
+            font-weight:bold;
+        }
+    }
+}
+
+.threads_container {
+    h2 {
+        font-size:20px;
+        font-style:italic;
+        margin:.5em 0 .5em 0;
+    }
+
+    /*margin-top:.4em;*/
+    margin-top:1em;
+    width:690px;
+    display:inline-block;
+}
+
+.suggested_threads > ul {
+    margin:10px 0 !important;
+    padding:0 !important;
+}
+li {
+    list-style: none;    
+    margin:0;
+    padding:0;
+}
+
+.ellipse {
+    float: left;
+}
+
+.container {
+    width: 260px;
+    float: left;
+    margin: 50px 10px 10px;
+    padding: 20px;
+    background-color: white;
+}
+
+.page_navigation, .alt_page_navigation {
+    padding-bottom: 10px;
+}
+
+.page_navigation a, .alt_page_navigation a {
+    padding:3px 5px;
+    margin:2px;
+    color:white;
+    text-decoration:none;
+    float: left;
+    font-family: Tahoma;
+    font-size: 12px;
+    background-color:#DB5C04;
+}
+.active_page {
+    background-color:white !important;
+    color:black !important;
+}    
+
+.content, .alt_content {
+    color: black;
+}
+
+.content li, .alt_content li, .content > p {
+    padding: 5px
+}
+
+.save_message {
+    font-size: 2em;
+    padding: 10px;
+}
+
+p {
+    font-size:1.2em;
+    margin:.5em 0;
+}
+
+a.quest_of_the_day {
+}
+

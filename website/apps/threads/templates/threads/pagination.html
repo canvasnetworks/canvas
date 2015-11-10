@@ -1,0 +1,27 @@
+<button type="button" class="prev dismiss" onClick="window.location='/p/{{ short_id }}/{{ page_current - 1 }}'"{% if page_current <= 1 %} disabled{% endif %}>❮ &nbsp; prev</button>
+
+<button type="button" class="next dismiss" onClick="window.location='/p/{{ short_id }}/{{ page_current + 1 }}'"{% if page_current >= page_last %} disabled{% endif %}>next &nbsp; ❯</button>
+page
+
+{# show page numbers, links if not the current page #}
+<span class="page_numbers">
+{% for num in pages %}
+    {% if num == page_current %}
+        <span class="current_page">{{num}}</span>
+    {% else %}
+        {% if page_current != page_penultimate and num == page_last %}
+            <a href="/p/{{ short_id }}/current">{{ num }}</a>
+        {% else %}
+            <a href="/p/{{ short_id }}/{{num}}">{{ num }}</a>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+</span>
+
+{# show the (most recent), a link if not already there #}
+{% if page == "current" %}
+    <span class="current_page">(most recent)</span>
+{% else %}
+    <a href="/p/{{ short_id }}/current">(most recent)</a>
+{% endif %}
+

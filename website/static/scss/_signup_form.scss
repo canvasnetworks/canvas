@@ -1,0 +1,221 @@
+/* Special styling for modal */
+#signup_prompt {
+    h1 {
+        margin-bottom:1em;
+    }
+
+    .email_signup_wrapper h1 {
+        display:none;
+    }
+
+    .fb_signup_wrapper,
+    .email_signup_wrapper {
+        border:0;
+        padding:0;
+        background:transparent;
+        @include box-shadow(none);
+    }
+
+    .bottom_links {
+        position:relative;
+        top:1em;
+        padding:0.5em 0 0;
+        @include clearfix();
+
+        a {
+            color:$canvas_blue;
+            font-weight:bold;
+
+            &:hover {
+                color:$canvas_blue_hover;
+            }
+        }
+
+        .help {
+            float:left;
+            font-size:1.2em;
+
+            span {
+                display:inline-block;
+                width:15px;
+                height:15px;
+                background:$canvas_blue;
+                color:#fff;
+                text-align:center;
+                vertical-align:bottom;
+                @include border-radius();
+
+                &:hover {
+                    background:$canvas_blue_hover;
+                    color:#fff;
+                }
+            }
+        }
+
+        .login_link {
+            float:right;
+            font-size:1.2em;
+        }
+    }
+}
+
+.signup_form {
+    width:360px;
+
+    .fb-login-button {
+        /* Show an image while FB is loading in */
+        margin:0 auto;
+        background:transparent;
+        background-image:url(/static/img/loading.gif), url(/static/img/facebook_signup_fake.png);
+        background-position:center center;
+        background-repeat:no-repeat;
+        width:163px;
+        height:22px;
+        color:transparent;
+    }
+
+    .almost_there,
+    .email_signup_wrapper {
+        border:1px solid rgba(#000, 0.4);
+        padding:2em;
+        background:rgba(#fff, 0.7);
+        @include box-shadow(1px 1px 1px rgba(#fff, 0.5));
+    }
+
+    .fb_signup_wrapper,
+    .email_signup_wrapper {
+        @extend .rounded_5px;
+    }
+
+    .almost_there {
+        width:250px;
+        margin:0 auto;
+        margin-bottom:1em;
+        padding:0.25em 0.5em;
+        font-size:1.8em;
+        font-weight:bold;
+        text-align:center;
+        @extend .rounded_1_25em;
+    }
+
+    .facebook {
+        text-align: center;
+
+        .not_person {
+            position: relative;
+            top: 10px;
+            color: #111;
+        }
+    }
+
+    .fb_signup_wrapper {
+        text-align:center;
+    }
+
+    .email_signup_wrapper {
+        p {
+            font-size:1.8em;
+            font-weight:bold;
+        }
+
+        p,
+        .input_wrapper {
+            margin-bottom:1em;
+        }
+
+        button {
+            color:#fff !important;
+            border:1px solid #555;
+            @include text-shadow(dark);
+            @extend .box_shadow_none;
+            @include bg-linear-gradient((-90deg, $canvas_blue*1.2 0%, $canvas_blue 70%, $canvas_blue*0.8 100%));
+        }
+
+        .input_wrapper {
+            &.valid {
+                &:after {
+                    content:url("/static/img/valid-input.png");
+                    position:absolute;
+                    top:0.4em;
+                    right:0.3em;
+                }
+            }
+
+            &.invalid input {
+                border-color:$canvas_notice_red;
+            }
+        }
+
+        .input_hint {
+            $bg_color:$canvas_notice_red;
+            display:none;
+            position:absolute;
+            right:100%;
+            bottom:10px;
+            width:200px;
+            margin-right:1em;
+            background:$bg_color;
+            color:white;
+            padding:0.8em;
+            font-size:1.4em;
+            @include border-radius(4 4 0 4);
+            @include box-shadow(-3px 3px 5px rgba(#000, 0.3));
+
+            &:after {
+                content:"\00a0";
+                position:absolute;
+                width:0px;
+                height:0px;
+                left:100%;
+                bottom:0;
+                border-style:solid;
+                border-width:10px 0 0 10px;
+                border-color:transparent transparent transparent $bg_color;
+            }
+        }
+    }
+
+    p.divider {
+        position:relative;
+        width:30px;
+        margin:20px auto;
+        text-align:center;
+
+        &:before,
+        &:after {
+            content:"\00a0";
+            display:block;
+            position:absolute;
+            top:0.5em;
+            width:100px;
+            height:1px;
+            background:rgba(#000, 0.3);
+        }
+
+        &:before {
+            right:100%;
+        }
+        &:after {
+            left:100%;
+        }
+    }
+
+    p.feedback {
+        margin:1em 0 0;
+        padding:1em;
+        background:$canvas_notice_red;
+        color:#fff;
+        font-size:1.4em;
+        @extend .rounded_4px;
+
+        a {
+            font-weight:bold;
+            color:#fff;
+            text-decoration:underline;
+
+            &:hover {
+                color:#fff;
+            }
+        }
+    }
+}

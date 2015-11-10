@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>all stamps</title>
+    <style>
+        .image {
+            /*-webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            width:400px;
+            height:300px;*/
+            max-width:100%;
+        }
+        .image_container {
+            display:inline-block;
+            float:left;
+            width:360px;
+            padding:0;
+            margin:4px;
+        }
+    </style>
+</head>
+<body style="background-color:#eaeaea">
+
+{% for stamp in stamps %}
+    <a href="{{ stamp }}" download class="image_container">
+        <img class="image" src="{{ stamp }}">
+    </a>
+{% endfor %}
+</body>
+</html>
+

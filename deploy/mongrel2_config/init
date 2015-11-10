@@ -1,0 +1,6 @@
+#!/bin/bash
+
+git clone git@github.com:canvasnetworks/canvas.git
+cd /home/mongrel2/canvas/mongrel2_config
+m2sh init -db config.sqlite
+

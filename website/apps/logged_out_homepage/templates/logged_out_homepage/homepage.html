@@ -1,0 +1,30 @@
+<section class="content">
+    <div class="standard_remixes">
+        <h1>Popular Remixes:</h1>
+
+        {% for thread in threads %}
+            {{ jinja_thread_preview(thread) }}
+        {% endfor %}
+        <div class="explore_more">
+            <a href="/x/everything"><button>Explore more of Canvas »</button></a>
+        </div>
+    </div>
+    <div class="monster_promo">
+        <h1>Monster Mash</h1>
+        <div class="wrapper">
+            <img src="/static/img/monster_mascot_small.png">
+            <div class="chat_bubble">
+                <p>
+                    Fashion a Frankenstein with your Friends.
+                </p>
+                <p>
+                    <a href="/monster">Learn More</a>
+                </p>
+            </div>
+            <div class="monster">
+                <img src="/static/img/monster_example2.png">
+            </div>
+        </div>
+        <a href="/monster"><button>Make a Monster »</button></a>
+    </div>
+</section>

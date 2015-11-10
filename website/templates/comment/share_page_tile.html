@@ -1,0 +1,165 @@
+<div class="image_tile stickerable
+            {{ "reposted" if comment.repost_count }}
+            post_{{ comment.id }}
+            {{ "new_activity" if new_activity }}
+            {{ comment.get_mod_classes() }}
+            {% if render_options.show_pins %}
+                {{ "pinned" if tile.is_pinned(user) }}
+            {% endif %}
+            visibility_{{ comment.visibility }}
+            {% if render_options.image_tile_classes %}
+                {{ render_options.image_tile_classes }}
+            {% endif %}
+            "
+     data-details="{{ comment|to_escaped_comment_details_json }}"
+     data-comment_id="{{ comment.id }}"
+     data-category="{{ comment.category }}">
+
+    <div class="drop_target_border" onClick="void(0);"></div>
+
+    <div class="content_wrapper">
+        <a class="content_link" href="javascript:share_page.remix('{{ comment.reply_content_id }}');">
+            {% if comment.reply_content_id %}
+                <div class="image_container content_{{ comment.reply_content_id }}" data-content-id="{{ comment.reply_content_id }}">
+                    <div class="theme_bg sticker_themed"></div>
+                    <div class="remix_link_hover">
+                        <img src="/static/img/remix_button_white.png">
+                    </div>
+                    {% if comment.external_content %}
+                        <div class="audio_hint" onClick="canvas.play_audio_remix({{comment.id}});return false;"></div>
+                        <div class="audio_embed" id="audio_embed_{{comment.id}}"></div>
+                    {% else %}
+                        {% if comment.reply_content.original.animated %}
+                            <div class="animated_hint {{ "pause" if render_options.autoplay or comment.autoplay }}"{% if not render_options.disable_animate_in_place %} onClick="canvas.animateGif('{{ comment.reply_content_id }}', $(this).parent(), '{{ render_options.image_type }}');return false;"{% endif %}></div>
+                        {% endif %}
+                    {% endif %}
+                    {% if comment.reply_content.original.animated and (render_options.autoplay or comment.autoplay) %}
+                        {{ content(comment, "original") }}
+                    {% else %}
+                        {{ content(comment, render_options.image_type) }}
+                    {% endif %}
+                    <div class="loading_spinner"></div>
+                </div>
+            {% else %}
+                <div class="comment_container">
+                    <p>{% if comment.reply_text %}{{ ugc_text(comment.reply_text, 350, 0, 0) }}{% endif %}</p>
+                </div>
+            {% endif %}
+        </a>
+    </div>
+
+    <div class="image_footer sticker_themed {{ "text_only" if not comment.reply_content_id }}" onClick="if(!$(event.target).parents('.image_tile').hasClass('downvoted')){if (event.button === 1){window.open('{{ comment.url }}','_newtab');} else {window.location.href='{{ nav_aware(comment.url) }}';}}">
+        {% if render_options.show_stickers %}
+            <div class="image_stickers_wrapper">
+                <div class="image_stickers" onClick="void(0);">
+                    <div class="image_sticker_details invisible">
+                        <div class="sticker_overlay"></div>
+                    </div>
+                    <div class="top_sticker{% if render_options.sticker_classes %} {{render_options.sticker_clases}}{% endif %}"></div>
+                </div>
+            </div>
+            {% if float_sticker and render_options.show_caption %}
+                <div class="sticker_float"></div>
+            {% endif %}
+        {% endif %}
+
+        <p class="collapsed_text">{{ comment.get_collapsed_text() }}</p>
+        
+        {% if render_options.show_author %}
+            <div class="username">
+                <span>
+                    {% if comment.get_user_url() %}
+                        {{ "posted by " if not comment.reply_text or not render_options.show_caption }}
+                        {% if comment.staff %}
+                            <img src="/static/img/founder_badge.png" width="16" height="15" title="Canvas Staff">
+                        {% endif %}
+                        <a href="{{ comment.get_user_url() }}">{{ comment.author_name }}</a>
+                        {% if not render_options.show_thread_info %}
+                            {% if comment.category %}in <a href="/x/{{ comment.category }}">#{{ comment.category }}</a>{% endif %}
+                        {% endif %}
+                    {% else %}
+                        posted anonymously
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+        
+        {% if render_options.show_timestamp %}
+            <div class="timestamp">
+                <a href="{{ comment.url }}">{{ relative_timestamp(comment.timestamp) }}</a>
+                <a class="new_thread_link" href="{{ comment.url }}"><div class="icon_new_thread"></div></a>
+            </div>
+        {% endif %}
+        
+        {% if render_options.show_author_options and comment.show_delete_option %}
+            <div class="post_options">
+                <p>
+                    <a class="delete_option tooltipped" onClick="event.stopPropagation();canvas.Comment.remove('{{ comment.id }}', true);" title="Remove this post from Canvas.">
+                        <img src="/static/img/trash-can.png"> Delete
+                    </a>
+                </p>
+                {% if comment.show_claim_option %}
+                <p>
+                     <a class="claim_option tooltipped" onClick="event.stopPropagation();canvas.Comment.claim('{{ comment.id }}', true);" title="Make this post non-anonymous.">
+                         <img src="/static/img/claim-post.png"> Claim
+                     </a>
+                </p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if render_options.show_caption and comment.reply_text and comment.reply_content_id %}
+            <p class="image_caption">
+                {{ ugc_text(comment.reply_text) }}
+            </p>
+        {% endif %}
+        
+        {% if render_options.show_remix and comment.reply_content_id %}
+            <a class="remix_link logged_in" href="{{ nav_aware(comment.url) }}#remix"><div class="icon_remix tooltipped" title="Edit this picture to make your own version."></div></a>
+            <a class="remix_link logged_out" href="" onClick="javascript:canvas.encourage_signup('remix');event.stopPropagation();return false;"><div class="icon_remix tooltipped" title="Edit this picture to make your own version."></div></a>
+        {% endif %}
+
+        {% if render_options.show_thread_info %}
+            {% if tile.is_reply %}
+                <div class="op_wrapper">
+                    <span class="rel_timestamp">{{ relative_timestamp(comment.last_reply_time) }}</span>
+                    <span> in reply to:</span>
+                    <div class="op">
+                        <a class="op_thumb_link" href="{{ nav_aware(tile.op.url) }}">
+                            <div class="op_image">
+                                {% if tile.op.reply_content_id %}
+                                    <span style="{% if tile.op.reply_content.small_square %}background:url({{ tile.op.reply_content.small_square.name }}{% endif %});"></span>
+                                {% else %}
+                                    <img src="/static/img/text-op.png">
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="op_info">
+                            <p><span class="replies">{{ tile.op.reply_count }}</span> {{ tile.op.reply_count|pluralize("reply,replies") }}</p>
+                            {% if tile.op.category %}
+                                <p>in: <a href="{{ tile.op.category_url }}">{{ comment.category }}</a></p>
+                            {% endif %}
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="single_post_info">
+                    <p>
+                        {% if comment.thread.reply_count %}
+                            <span class="reply_num">{{ comment.thread.reply_count }}</span>
+                            {{ comment.thread.reply_count|pluralize("reply,replies") }}
+                            {% if comment.category and comment.category != nav_category.name %}|{% endif %}
+                        {% endif %}
+                        {% if render_options.show_timestamp %}
+                            <span class="rel_timestamp">{{ relative_timestamp(comment.timestamp) }}</span>
+                        {% endif %}
+                        {% if comment.category and comment.category != nav_category.name %}
+                            <span class="group_name">in: <a href="{{ comment.category_url }}">{{ comment.category }}</a></span>
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

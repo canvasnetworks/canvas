@@ -1,0 +1,39 @@
+{% extends "drawquest/dqbase.html" %}
+
+{% block viewport_meta %}
+    <meta name="viewport" content="width=450, user-scalable=no">
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/drawquest/password_reset.css">
+{% endblock %}
+
+{% block body %}
+    <div class="fixed_width_wrapper">
+        {% if validlink %}
+            <h1>Enter new password</h1>
+            <p>Please enter your new password twice so we can verify you typed it in correctly.</p>
+            <form action="" method="post">{% csrf_token %}
+                <ul class="errors">
+                    {% for error in form.new_password1.errors %}
+                        <li><strong>{{ error }}</strong></li>
+                    {% endfor %}
+                 </ul>
+                <label for="id_new_password1">New password:</label>
+                <input type="password" name="new_password1" id="id_new_password1">
+                <ul class="errors">
+                    {% for error in form.new_password2.errors %}
+                        <li><strong>{{ error }}</strong></li>
+                    {% endfor %}
+                 </ul>
+                <label for="id_new_password2">Confirm password:</label>
+                <input type="password" name="new_password2" id="id_new_password2">
+                <br>
+                <button type="submit">Change my password</button>
+            </form>
+        {% else %}
+            <h1>Password reset unsuccessful</h1>
+            <p>The password reset link was invalid, possibly because it has already been used.  Please request a new password reset.</p>
+        {% endif %}
+    </div>
+{% endblock %}

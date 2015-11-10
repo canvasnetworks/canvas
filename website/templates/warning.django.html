@@ -1,0 +1,198 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+
+{% block header %}{% endblock %}
+
+{% block extra_css %}
+<style>
+#page {
+    width:500px;
+    padding:20px 30px;
+    margin:20px auto;
+    background:#fff;
+    border:1px solid #ccc;
+    color:#333;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomright: 7px;
+    -moz-border-radius-bottomleft: 7px;
+    -webkit-border-radius: 0px 0px 7px 7px;
+    border-radius: 0px 0px 7px 7px;
+}
+
+    #page h1 {
+        font-size:2.6em;
+    }
+
+    #page hr {
+        margin:0.25em 0 0.5em 0;
+    }
+
+    #page  p {
+        font-size:1.4em;
+        margin-bottom:0.5em;
+    }
+
+    #page p,
+    #page span {
+        -webkit-user-select:none;
+        user-select:none;
+    }
+
+    p.disabled_notice {
+        color:red;
+    }
+
+    p.custom_message {
+        background:#eee;
+        padding:0.5em 1em;
+        border:1px solid #999;
+        font-style:italic;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow:inset 1px 1px 1px rgba(0,0,0,0.3);
+        -moz-box-shadow:inset 1px 1px 1px rgba(0,0,0,0.3);
+        box-shadow:inset 1px 1px 1px rgba(0,0,0,0.2);
+    }
+
+    .warned_comment {
+        width:200px;
+        padding:10px;
+        margin:0.25em auto;
+        background:#eee;
+        border:1px solid #999;
+        text-align:center;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow:inset 1px 1px 1px rgba(0,0,0,0.3);
+        -moz-box-shadow:inset 1px 1px 1px rgba(0,0,0,0.3);
+        box-shadow:inset 1px 1px 1px rgba(0,0,0,0.2);
+    }
+
+        #page .warned_comment p {
+            font-size:1.2em;
+            margin-bottom:0;
+            margin-top:0.5em;
+        }
+
+    span.timestamp {
+        display:block;
+        width:186px;
+        margin:0 auto;
+        margin-bottom:2em;
+        text-align:right;
+        font-style:italic;
+    }
+
+    div.submit {
+        margin-top:2em;
+        text-align:center;
+    }
+
+        #page div.submit p {
+            font-size:1.2em;
+        }
+
+    #page .contact {
+        -webkit-user-select:auto;
+        user-select:auto;
+        margin-bottom:0;
+    }
+
+    input.coc_footer {
+        margin-bottom:0.5em;
+        border: 1px solid #444;
+        background: #DCF7E6;
+        background: -moz-linear-gradient(top, #BFEDCF 0%, #DCF7E6 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFEDCF), color-stop(100%,#DCF7E6));
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFEDCF', endColorstr='#DCF7E6',GradientType=0 ),
+                dropshadow(color=#e5fff2, offx=0, offy=1);
+        -webkit-box-shadow: 0px 0px 2px #8c8c8c, 2px 2px 1px #fff inset, -1px -1px 1px #B2D1B9 inset;
+        -moz-box-shadow: 0px 0px 2px #8c8c8c, 2px 2px 1px #fff inset, -1px -1px 1px #B2D1B9 inset;
+        box-shadow: 0px 0px 2px #8c8c8c, 2px 2px 1px #fff inset, -1px -1px 1px #B2D1B9 inset;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        padding:5px 15px;
+        font-size:1.6em;
+        color:#098C44;
+        text-shadow: 0px 1px 0px #e5fff2;
+    }
+
+        input.coc_footer:hover {
+            color:#03441F;
+            background: #C6F2D6;
+            background: -moz-linear-gradient(top, #9DEAB6 0%, #C6F2D6 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9DEAB6), color-stop(100%,#C6F2D6));
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9DEAB6', endColorstr='#C6F2D6',GradientType=0 ),
+                dropshadow(color=#e5fff2, offx=0, offy=1);
+        }
+
+        input.coc_footer:active {
+            padding:6px 15px 4px;
+            color:#03441F;
+            background: #C6F2D6;
+            background: -moz-linear-gradient(top, #9DEAB6 0%, #C6F2D6 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9DEAB6), color-stop(100%,#C6F2D6));
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9DEAB6', endColorstr='#C6F2D6',GradientType=0 ),
+                dropshadow(color=#e5fff2, offx=0, offy=1);
+            -webkit-box-shadow: 0px 0px 2px #8c8c8c, 1px 2px 2px #8BBC94 inset;
+            -moz-box-shadow: 0px 0px 2px #8c8c8c, 1px 2px 2px #8BBC94 inset;
+            box-shadow: 0px 0px 2px #8c8c8c, 1px 2px 2px #8BBC94 inset;
+        }
+
+</style>
+{% endblock %}
+
+{% block content %}
+{% if not warning.disable_user %}
+    <h1>Hi there!</h1>
+    <hr>
+{% endif %}
+<form action="/warning" method="POST">
+    {% for warning in warnings %}
+        {% if warning.warning_text %}
+            <p>{{ warning.warning_text }}:</p>
+        {% endif %}
+
+        {% if warning.disable_user %}
+            <p class="disabled_notice">Your Canvas account has been deactivated.</p>
+        {% endif %}
+
+        {% if warning.custom_message %}
+            {% if warning.disable_user %}
+                <p>Reason for account deactivation:</p>
+            {% else %}
+                <p>A Canvas Team member sent you a personal message:</p>
+            {% endif %}
+            <p class="custom_message">{{ warning.custom_message }}</p>
+        {% endif %}
+
+        <input type="hidden" name="confirm_{{ warning.id }}" value="confirmed" />
+        {% if warning.comment %}
+            <div class="warned_comment">
+                {% if warning.comment.reply_content %}
+                    <img src='{{ warning.comment.reply_content.details.thumbnail.name }}'>
+                {% endif %}
+                <p class="caption">"{{ warning.comment.reply_text }}"</p>
+            </div>
+            <span class="timestamp">Posted on {{ warning.comment.timestamp|pretty_unixtime }}</span>
+        {% endif %}
+    {% endfor %}
+    {% csrf_token %}
+    <div class="submit">
+        <p>
+            Please take a moment to read the Canvas Code of Conduct.
+        </p>
+        <input class="coc_footer" type="submit" value="Continue to the Code of Conduct">
+        <p class="contact">
+            Questions? <a href="mailto:nowiknow@example.com">nowiknow@example.com</a>
+        </p>
+    </div>
+</form>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+{% block base_ready %}{% endblock %}
+{% block base_onload %}{% endblock %}

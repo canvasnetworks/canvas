@@ -1,0 +1,223 @@
+/* =============================
+    Canvas Styling Defaults
+============================= */
+
+* {
+    margin:0;
+    padding:0;
+}
+
+iframe {
+    border:0;
+}
+
+/* Font Standardization */
+html {
+    font: 62.5% $default_font_family;
+    &.ie8 {
+        font:62.5% "Comic Sans MS";
+    }
+}
+body {
+    font-size:$default_font_size;
+    line-height:normal;
+}
+section.content {
+    > h1, > h2 {
+        margin:1.5em 0 1em 0;
+    }
+    font-size:1.2em;
+}
+#page {
+    width:700px;
+    margin:30px auto;
+}
+input,
+label,
+button,
+textarea,
+select {
+    font:$default_font_size $default_font_family;
+    line-height:normal;
+}
+
+
+/* Font Defaults */
+label,
+input[type=text],
+input[type=number],
+input[type=password],
+textarea,
+a.button {
+    font-size:1.6em;
+}
+
+
+/* Font-color Defaults */
+body {
+    color:#333;
+}
+
+
+/* Background */
+body {
+    background:#fff;
+}
+
+
+/* Text selection */
+body {
+    @extend text_selection_none;
+}
+h1, h2, h3, h4, h5, h6, p, blockquote,
+pre, span, label, textarea, li, td, th {
+    @extend .text_selection_auto;
+}
+
+
+/* Lists should not have any styling by default. They should be used more semantically. */
+ul {
+    margin:0;
+    padding:0;
+    list-style-type:none;
+}
+
+
+/* Border box setup */
+* {
+    @extend .box_sizing_border;
+}
+
+
+/* Link defaults */
+a,
+a:visited {
+    color:$canvas_blue;
+    text-decoration:none;
+    cursor:pointer;
+
+    &:hover,
+    &:active {
+        color:$canvas_dark_blue;
+        text-decoration:underline;
+    }
+}
+
+
+/* Vertical alignment */
+img {
+    vertical-align:baseline;
+}
+
+
+/* Button Styling */
+button,
+input[type=button],
+input[type=submit],
+a.button {
+    padding:0.45em 1.3em;
+    border:1px solid #888;
+    font-size:1.6em;
+    color:#006838;
+    cursor:pointer;
+    @include text-shadow(white);
+    @extend .rounded_0_35em;
+    @include box-shadow((inset 1px 1px 0 rgba(#fff, 0.85), 1px 1px 0 rgba(#fff, 1)));
+    @include bg-linear-gradient((90deg, #BFEDCF 0%, #DCF7E6 100%));
+
+    &:hover:not([disabled]) {
+        color:#006838;
+        border-color:#555;
+    }
+
+    &:active:not([disabled]) {
+        color:#004422;
+        @include box-shadow((inset 1px 1px 0 rgba(#000, 0.3), 1px 1px 0 rgba(#fff, 1)));
+        @include bg-linear-gradient((90deg, #BFEDCF*0.95 0%, #DCF7E6*0.98 100%));
+    }
+
+    &[disabled] {
+        color:#555;
+        @include opacity(0.5);
+        @include bg-linear-gradient((90deg, #ccc 0%, #eee 100%));
+
+        &.submitting {
+            position:relative;
+            @include opacity(0.5);
+            @include bg-linear-gradient((90deg, #ccc*0.95 0%, #eee*0.98 100%));
+            @include box-shadow((inset 1px 1px 0 rgba(#000, 0.3), 1px 1px 0 rgba(#fff, 1)));
+
+            &:before {
+                content:"\00a0";
+                @extend .fullsize;
+                background:url(/static/img/loading.gif) center center no-repeat;
+            }
+        }
+    }
+}
+button.dismiss,
+input[type=submit].dismiss,
+input[type=button].dismiss {
+    color:#555;
+    @include bg-linear-gradient((90deg, #ccc 0%, #eee 100%));
+
+    &:hover:not([disabled]) {
+        color:$canvas_blue;
+    }
+
+    &:active:not([disabled]) {
+        color:#333;
+        @include bg-linear-gradient((90deg, #ccc*0.95 0%, #eee*0.98 100%));
+    }
+}
+button.cancel {
+    @extend button.dismiss;
+    &:hover:not([disabled]) {
+        color:red;
+    }
+}
+input[disabled] {
+    @include opacity(0.5);
+}
+
+
+/* Input and Label Styling */
+input[type=text],
+input[type=number],
+input[type=password],
+textarea {
+    width:100%;
+    border:1px solid #bbb;
+    padding:0.45em 0.75em;
+    outline:0;
+    @extend .rounded_0_35em;
+    @include box-shadow(inset 1px 1px 4px rgba(#000, 0.2));
+
+    &:hover:not([disabled]) {
+        border-color:#999;
+    }
+
+    &:focus:not([disabled]) {
+        border-color:$canvas_blue;
+        @extend .box_shadow_none;
+    }
+}
+
+label {
+    font-weight:bold;
+
+    &.default {
+        position:absolute;
+        left:0.7em;
+        top:0.45em;
+        border:1px solid transparent;
+        border-width:1px 3px;
+        font-weight:normal;
+        color:#777;
+        cursor:text;
+
+        &.active {
+            color:#aaa;
+        }
+    }
+}

@@ -1,0 +1,33 @@
+{% extends "drawquest/dqbase.html" %}
+
+{% block viewport_meta %}
+    <meta name="viewport" content="width=450, user-scalable=no">
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/drawquest/password_reset.css">
+{% endblock %}
+
+{% block body %}
+    <div class="fixed_width_wrapper">
+        <h1>Password reset</h1>
+        <p>
+            Forgotten your username or password? Enter your e-mail address and we'll send
+            you directions for how to reset your password.
+        </p>
+        <p>
+            This will be the email address you signed up with. (If you signed up with Facebook,
+            enter your the email address associated with your Facebook account.)
+        </p>
+        <form action="" method="post">{% csrf_token %}
+            <ul class="errors">
+            {% for error in form.email.errors %}
+                <li><strong>{{ error }}</strong></li>
+            {% endfor %}
+            </ul>
+            <label for="id_email">E-mail address:</label>
+            <input id="id_email" type="text" name="email" maxlength="75">
+            <button type="submit">Reset my password</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "header/base.html" %}
+
+{% block header_nav %}{% endblock %}
+
+{% block header_right_side %}
+    {% set onboarding_current_step = onboarding_current_step if onboarding_current_step else -1 %}
+    {% set onboarding_total_steps = onboarding_total_steps if onboarding_total_steps else -1 %}
+    <div class="progress_bar onboarding_progress">
+        <div class="progress_fill" style="width:{{ onboarding_current_step / onboarding_total_steps * 100 }}%"></div>
+        <span>Step {{ onboarding_current_step}} of {{ onboarding_total_steps }}</span>
+    </div>
+{% endblock %}
+
+{% block signup_banner %}{% endblock %}
+

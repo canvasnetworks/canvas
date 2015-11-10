@@ -1,0 +1,82 @@
+<div id="sticker_pack" class="{{ 'minimized' if sticker_pack_minimized }}">
+    <div class="fixed_wrapper">
+        <div class="maximized">
+            <header>
+                <span>Sticker Pack</span>
+                <button>Buy More</button>
+                <div class="close" onClick="sticker_pack.toggle();">×</div>
+            </header>
+            <div class="wrapper">
+                <h1 class="logged_out">⇽ Drag stickers to vote</h1>
+                <section class="stickers_primary">
+                    {% for sticker in stickers_primary -%}
+                        {% include "sticker.django.html" -%}
+                    {% endfor %}
+                </section>
+                {% if stickers_seasonal %}
+                    <section class="stickers_seasonal{% if not request.seasonal_stickers %} logged_in{% endif %}">
+                        <span class="title">SEASONAL: <span class="timer"></span></span>
+                        {% for sticker in stickers_seasonal -%}
+                            {% include "sticker.django.html" -%}
+                        {% endfor %}
+                    </section>
+                {% endif %}
+                {% if stickers_inventory %}
+                    <section class="stickers_inventory">
+                        {% for sticker in stickers_inventory -%}
+                            {% include "inventory_sticker.django.html" -%}
+                        {% endfor %}
+                    </section>
+                {% endif %}
+            </div>
+            <footer>
+                <span>Sticker Pack</span>
+                <button>Get More</button>
+            </footer>
+        </div>
+        <div class="minimized" onClick="sticker_pack.toggle();">
+            <header>Show Stickers</header>
+        </div>
+    </div>
+</div>
+<div class="sticker_shop">
+    <div>
+        <div class="shop_header">
+            <div class="sticker_container num1"></div>
+            <span class="shop_banner">Sticker Shop</span>
+        </div>
+        <ul class="item_list">
+            {% for item in store_items %}
+            <li class="store_item">
+                <div class="item_panel">
+                    <span class="display">
+                        <div class="item_shelf sticker_themed {{ item.name }}">
+                            <div class="sticker_wrapper">
+                                <div class="sticker_container {{ item.name }} shadow"></div>
+                            </div>
+                        </div>
+                        <span class="title">{{ item.title }} <span class="chevron">»</span></span>
+                    </span>
+                    <span class="purchase">
+                        <span class="price">{{ item.cost }}<img src="/static/img/shop_num1.png"></span>
+                        <button class="buy" data-item-cost="{{ item.cost }}" data-item-id="{{ item.type_id }}" data-item-name="{{ item.name }}">BUY</button>
+                    </span>
+                </div>
+                <div class="description_panel sticker_themed {{ item.name }}">
+                    <p class="description">
+                        {{ item.shop_text|safe }}
+                    </p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="shop_footer">
+            <span class="balance">
+                Your balance:
+                <span class="sticker_currency_count">{{ num1_sticker.user_remaining }}</span>
+                <img src="/static/img/shop_num1.png"></span>
+            </span>
+            <button class="done">Done shopping</button>
+        </div>
+    </div>
+</div>

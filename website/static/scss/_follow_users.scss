@@ -1,0 +1,72 @@
+#page.follow_users {
+    .fixed_width_wrapper {
+        width:960px;
+    }
+
+    #content {
+        > section {
+            @extend .clearfix;
+        }
+
+        $width:450px;
+
+        .topics_column {
+            float:left;
+            width:$width;
+        }
+
+        .people_column {
+            float:right;
+            width:$width;
+        }
+
+        h1 {
+            font-size:1.8em;
+            margin-bottom:0.5em;
+        }
+
+        ul {
+            border:1px solid #aaa;
+            background:#fff;
+        }
+
+        li {
+            padding:5px;
+            @extend .clearfix;
+
+            &:not(:last-of-type) {
+                border-bottom:1px solid #aaa;
+            }
+
+            .thumbnail_wrapper {
+                width:50px;
+                height:50px;
+                margin-right:1em;
+                overflow:hidden;
+                border:1px solid #ccc;
+                float:left;
+            }
+
+            button {
+                float:right;
+                margin:10px;
+            }
+
+            span {
+                display:block;
+                font-size:1.6em;
+                font-weight:bold;
+            }
+
+            p {
+                margin-top:0.5em;
+                font-size:1.2em;
+
+                strong {
+                    font-size:1.2em;
+                    font-weight:bold;
+                }
+            }
+        }
+    }
+}

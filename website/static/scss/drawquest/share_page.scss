@@ -1,0 +1,350 @@
+@import "fonts", "mixins", "vars", "normalize", "defaults";
+
+/* Defaults targetted at landscape mobile */
+
+$drawing_ratio:4/3;
+
+body {
+    background:$page_bg;
+}
+
+.fixed_width_wrapper {
+    position:relative;
+    width:960px;
+    margin:0 auto;
+    padding:30px 20px;
+    z-index:1;
+    @include clearfix();
+}
+
+.bg_gradient {
+    @include fullsize();
+    position:fixed;
+    @include bg-radial-gradient(0deg, center, auto auto, circle cover, (rgba(#fff, 1) 20%, rgba(#fff, 0) 100%));
+}
+
+.quest_bar {
+    position:relative;
+    border-bottom:5px solid $quest_header_border_color;
+    font-size:0.75em;
+    z-index:1;
+    @include bg-linear-gradient($quest_header_gradient);
+
+    .fixed_width_wrapper {
+        padding:10px 20px 5px;
+    }
+
+    h1 {
+        display:inline-block;
+        margin:0;
+        margin-top:5px;
+        padding-left:10px;
+        vertical-align:top;
+        text-align:center;
+
+        & + span.ugc_text {
+            display:inline-block;
+            vertical-align:top;
+            font-size:3em;
+            font-weight:bold;
+            color:$default_light_font;
+            padding:0.1em 0 0 0.5em;
+        }
+    }
+
+    .app_store_link {
+        float:right;
+    }
+}
+
+/* Image area */
+.main {
+    float:left;
+}
+
+.drawing_info {
+    padding:0 5px;
+    @include clearfix();
+}
+
+.user {
+    float:left;
+
+    .avatar {
+        display:inline-block;
+        margin-right:1em;
+
+        img {
+            vertical-align:top;
+            width:4.8em;
+            height:auto;
+        }
+
+        + img {
+            height:5em;
+            width:auto;
+            margin-right:1em;
+            vertical-align:top;
+        }
+    }
+
+    p {
+        display:inline-block;
+        vertical-align:top;
+        margin:0;
+        font-size:1.6em;
+        line-height:1.7em;
+        color:$default_medium_font;
+
+        img.icon {
+            position:relative;
+            top:2px;
+            height:1em;
+            width:auto;
+
+            &:first-of-type {
+                margin-right:5px;
+            }
+        }
+    }
+}
+
+.social {
+    float:right;
+
+    button {
+        font-size:2.1em;
+        margin-left:0.5em;
+    }
+}
+
+.drawing_wrapper {
+    float:left;
+    position:relative;
+    margin-bottom:2em;
+    border:3px solid $drawing_wrapper_border_color;
+    padding:20px;
+    background:$drawing_wrapper_bg_color;
+}
+
+.drawing {
+    $drawing_size:530px;
+    width:$drawing_size;
+    height:$drawing_size/$drawing_ratio;
+    border:3px solid $drawing_wrapper_border_color;
+    background-position:center center;
+    background-size:100%;
+    @include box-sizing(content-box);
+}
+
+/* App marketing */
+.marketing {
+    float:right;
+    width:300px;
+
+    .logo {
+        width:100%;
+        height:auto;
+        margin-bottom:1em;
+    }
+
+    .cta {
+        display:block;
+        font-size:2em;
+        width:16em;
+        margin:2em auto;
+
+        img {
+            height:1.1em;
+            width:auto;
+            vertical-align:top;
+        }
+    }
+
+    p.about {
+        font-size:1.5em;
+        color:$default_dark_font;
+        @include clearfix();
+
+        img {
+            float:left;
+            width:6.25em;
+            height:6.25em;
+            margin-right:1em;
+        }
+    }
+}
+
+/* Tall layout for vertical devices */
+/* And very small desktop screens */
+@media
+only screen and (max-width:320px) and (orientation:portrait),
+only screen and (min-device-width:768px) and (max-device-width:1024px) and (orientation:portrait),
+only screen and (-webkit-min-device-pixel-ratio:1.5) and (orientation:portrait),
+only screen and (min-device-pixel-ratio:1.5) and (orientation:portrait),
+only screen and (max-width:999px)
+{
+    .bg_gradient {
+        display:none;
+    }
+    
+    .fixed_width_wrapper {
+        width:360px;
+        padding:20px 10px;
+    }
+
+    .quest_bar {
+        font-size:0.5em;
+
+        h1 {
+            display:block;
+            margin-top:0;
+            text-align:center;
+        }
+
+        .app_store_link {
+            display:none !important;
+
+            img {
+                display:none;
+            }
+        }
+    }
+
+    .main,
+    .marketing {
+        float:none;
+    }
+
+    .main {
+        margin-bottom:3em;
+    }
+
+    .drawing_wrapper {
+        padding:10px;
+    }
+
+    .drawing {
+        $drawing_size:315px;
+        width:$drawing_size;
+        height:$drawing_size/$drawing_ratio;
+    }
+
+    .drawing_info {
+        font-size:0.9em;
+    }
+
+    .marketing {
+        width:100%;
+
+        .logo {
+            display:block;
+            width:80%;
+            margin:5px auto;
+        }
+
+        p.about {
+            font-size:1.4em;
+
+            img {
+                width:60px;
+                height:60px;
+            }
+        }
+    }
+
+    .social {
+        display:none;
+        position:relative;
+        top:-40px;
+
+        button {
+            font-size:0.5em;
+        }
+    }
+}
+
+/* For medium desktop screens */
+@media only screen and (min-width:1000px) {
+    .fixed_width_wrapper {
+        width:1000px;
+    }
+
+    .quest_bar h1 {
+        width:600px;
+    }
+
+    .drawing {
+        $drawing_size:550px;
+        width:$drawing_size;
+        height:$drawing_size/$drawing_ratio;
+    }
+}
+
+/* For larger desktop screens */
+@media only screen and (min-width:1300px) {
+    $width:1300px;
+
+    .fixed_width_wrapper {
+        width:1300px;
+    }
+
+    .quest_bar h1 {
+        width:750px;
+    }
+
+    .drawing {
+        $drawing_size:700px;
+        width:$drawing_size;
+        height:$drawing_size/$drawing_ratio;
+    }
+
+    .drawing_info {
+        font-size:1.15em;
+    }
+
+    .marketing {
+        width:440px;
+
+        p.about {
+            font-size:1.8em;
+        }
+
+        .cta {
+            font-size:2.5em;
+        }
+    }
+}
+
+/* For very large desktop screens */
+@media only screen and (min-width:1700px) {
+    .fixed_width_wrapper {
+        width:1700px;
+    }
+
+    .quest_bar h1 {
+        width:1100px;
+    }
+
+    .drawing {
+        $drawing_size:1024px;
+        width:$drawing_size;
+        height:$drawing_size/$drawing_ratio;
+    }
+
+    .drawing_info {
+        font-size:1.25em;
+    }
+
+    .marketing {
+        width:516px;
+
+        p.about {
+            font-size:2em;
+        }
+
+        .cta {
+            font-size:3em;
+        }
+    }
+}

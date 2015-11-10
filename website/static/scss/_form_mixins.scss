@@ -1,0 +1,24 @@
+@mixin single_submittable_field_button($width: 100px) {
+    float:left;
+    width:$width;
+    height:33px;
+    font-size:1.9em;
+    padding-left:0;
+    padding-right:0;
+    text-align:center;
+    @include border-radius(0 7 7 0);
+}
+
+@mixin single_submittable_field() {
+    float:left;
+    font-size:1.8em;
+    padding:5px;
+    @include border-radius(3 0 0 3);
+}
+
+@mixin wide_submit($form_width) {
+    margin-top: 10px;
+    font-size: 2em;
+    width: $form_width;
+    @include border-radius(0 0 7 7);
+}

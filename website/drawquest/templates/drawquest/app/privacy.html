@@ -1,0 +1,8 @@
+{% extends "drawquest/app/base.html" %}
+
+{% block body_class %}app_legal{% endblock %}
+
+{% block body %}
+    <a href="/app/about"><button>Back</button></a>
+    {% include 'drawquest/_privacy.html' %}
+{% endblock %}

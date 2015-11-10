@@ -1,0 +1,401 @@
+$width_available:790px;
+$width:250px;
+$margin:($width_available - $width*3)/2;
+
+.explore_tile {
+    $shadow:0 0 3px rgba(#000, 0.25);
+    position:relative;
+    width:$width;
+    margin-bottom:$margin;
+    border:1px solid #888;
+    background:#fff;
+    @include box-shadow($shadow);
+
+    &.drop_target {
+        @include box-shadow(($shadow, 0 0 0 4px #DAFF00));
+    }
+
+    &.stickered {
+        .content {
+            padding-bottom:25px;
+        }
+
+        .sticker_bg,
+        .sticker_flavor {
+            display:block;
+        }
+    }
+
+    &:last-of-type {
+        margin-bottom:0;
+    }
+
+    .content {
+        position:relative;
+        z-index:1;
+        padding:10px;
+    }
+
+    .content_wrapper {
+        position:relative;
+        margin-bottom:10px;
+
+        .animated_hint {
+            position:absolute;
+            width:46px;
+            height:48px;
+            right:5px;
+            bottom:5px;
+            background:url(/static/img/gif-play-button.png);
+            background-position:0 0;
+
+            &:hover {
+                background-position:-46px 0;
+            }
+
+            &:active {
+                background-position:-92px 0;
+            }
+
+            &.pause {
+                background:none;
+            }
+        }
+
+        &:hover .animated_hint {
+            &.pause {
+                background:url(/static/img/gif-play-button.png) no-repeat;
+                background-position:0 -96px;
+
+                &:hover {
+                    background-position:-46px -96px;
+                }
+
+                &:active {
+                    background-position:-92px -96px;
+                }
+            }
+        }
+
+        &.loading .animated_hint {
+            z-index:4;
+            background-position:0 -48px;
+
+            &:hover {
+                background-position:-46px -48px;
+            }
+
+            &:active {
+                background-position:-92px -48px;
+            }
+        }
+
+        a.img_wrapper {
+            position:relative;
+            display:block;
+
+            img {
+                display:block;
+                margin:0 auto;
+            }
+        }
+
+        &:hover .close_options {
+            @include opacity(1);
+        }
+
+        .close_options {
+            position:absolute;
+            width:22px;
+            height:25px;
+            top:5px;
+            right:5px;
+            z-index:2;
+            padding:3px 4px 2px;
+            background:rgba(#222, 0.7);
+            cursor:pointer;
+            font-size:24px;
+            color:#ccc;
+            line-height:18px;
+            @extend .rounded_4px;
+            @include box-shadow(inset 1px 1px 1px rgba(#000, 0.2));
+            @include opacity(0);
+            @include transition(opacity 0.3s ease-in);
+
+            .hover_buffer {
+                position:absolute;
+                width:50%;
+                height:3em;
+                top:-3em;
+                right:0;
+            }
+
+            > span {
+                height:0.75em;
+                pointer-events:none;
+            }
+
+            .close_dialog {
+                display:none;
+                $border-color:#999;
+                position:absolute;
+                right:-0.5em;
+                top:2.75em;
+                margin-top:3px;
+                font-size:0.41em;
+                line-height:auto;
+                border:1px solid $border-color;
+                background:#fff;
+                @include border-radius(0 0 5 5);
+                @include box-shadow(2px 2px 5px rgba(#000, 0.3));
+
+                &:hover {
+                    display:block;
+                }
+
+                &:before,
+                &:after {
+                    content:"\00a0";
+                    position:absolute;
+                    width:0;
+                    height:0;
+                    pointer-events:none;
+                    bottom:100%;
+                    right:16px;
+                    top:auto;
+                    border:transparent solid;
+                }
+
+                &:before {
+                    border-width:11.414px;
+                    margin-right:-11.414px;
+                    border-bottom-color:$border-color;
+                }
+
+                &:after {
+                    border-width:10px;
+                    margin-right:-10px;
+                    border-bottom-color:#fff;
+                }
+
+                ul {
+                    margin:0 1em;
+
+                    & + ul {
+                        border-top:1px solid #ccc;
+                        margin-top:0.5em;
+                        padding-top:0.5em;
+                    }
+
+                    li {
+                        padding:0.75em 0;
+
+                        a {
+                            display:block;
+                            font-size:1.2em;
+                            white-space:nowrap;
+                        }
+                    }
+                }
+            }
+
+            &:hover {
+                color:red;
+            }
+
+            &:active {
+                .close_dialog {
+                    display:block;
+                }
+            }
+        }
+    }
+
+    a.reply_count {
+        float:right;
+        font-size:1.2em;
+        color:#777;
+    }
+
+    .user_avatar {
+        float:left;
+        display:block;
+        margin-right:0.5em;
+    }
+
+    .username {
+        display:inline-block;
+        font-size:1.4em;
+
+        span.anon {
+            color:#999;
+        }
+    }
+
+    .timestamp {
+        font-size:1.2em;
+        color:#777;
+    }
+
+    .caption {
+        margin-top:0.5em;
+        font-size:1.4em;
+
+        &:before {
+            content:"\00a0";
+            display:inline-block;
+            position:relative;
+            width:11px;
+            height:10px;
+            position:relative;
+            background:url(/static/img/feed_tile/quotation.png) no-repeat;
+            top:-3px;
+        }
+    }
+
+    > a {
+        text-decoration:none;
+    }
+    
+
+    /* Post options for profile page */
+    .post_options {
+        margin-top:1em;
+
+        p {
+            display:inline;
+            margin-right:10px;
+        }
+
+        img {
+            background:$canvas_blue;
+            border:1px solid $canvas_blue;
+        }
+    }
+
+
+
+    /* Sticker stuff */
+
+    .sticker_bg {
+        display:none;
+        @extend .fullsize;
+        @include opacity(0.15);
+    }
+
+    .sticker_message_overlay {
+        @extend .fullsize;
+        padding:1em 0.5em;
+        text-align:center;
+        font-size:1.4em;
+        color:$canvas_notice_red;
+        background:rgba(#fff, 0.8);
+        z-index:2;
+        @include opacity(0);
+        pointer-events:none;
+        @include transition(opacity 0.3s ease-in-out);
+        @extend .rounded_top;
+    }
+
+    .sticker_target {
+        /* Tells the Javascript where to place the sticker, and size */
+        position:absolute;
+        width:35px;
+        height:35px;
+        right:0;
+        bottom:0;
+        z-index:1;
+    }
+
+    .sticker_flavor {
+        display:none;
+        position:absolute;
+        left:0;
+        bottom:0;
+        width:100%;
+        height:15px;
+
+        > .sticker_container {
+            @extend .sticker_target;
+
+            & + .sticker_count {
+                display:block;
+                position:absolute;
+                right:1px;
+                bottom:1px;
+                max-height:1.3em;
+                padding:0.1em 0.3em;
+                background:#fff;
+                color:#333;
+                vertical-align:bottom;
+                overflow:hidden;
+                z-index:1;
+                @include text-shadow(none);
+                @include box-shadow(1px 1px 2px 1px rgba(#000, 0.3));
+                @extend .rounded_corners;
+
+                span {
+                    display:block;
+                    position:relative;
+                }
+            }
+        }
+
+        &.sticker_themed,
+        .sticker_themed {
+            @extend .box_shadow_none;
+        }
+
+        .top_stickers {
+            position:absolute;
+            right:35px;
+            bottom:2px;
+            max-width:215px;
+            vertical-align:bottom;
+            pointer-events:none;
+            @include opacity(0);
+            @include transition(opacity 0.3s);
+
+            > span {
+                white-space:nowrap;
+            }
+
+            .sticker_container {
+                width:25px;
+                height:25px;
+            }
+
+            .sticker_count {
+                position:relative;
+                display:inline-block;
+                max-height:1.3em;
+                left:-10px;
+                padding:0.1em 0.3em;
+                background:#fff;
+                color:#333;
+                vertical-align:bottom;
+                overflow:hidden;
+                @include text-shadow(none);
+                @include box-shadow(1px 1px 1px rgba(#000, 0.3));
+                @extend .rounded_corners;
+
+                span {
+                    display:block;
+                    position:relative;
+                }
+            }
+        }
+
+        &:hover,
+        &.js_fake_hover {
+            .top_stickers {
+                @include opacity(1);
+            }
+        }
+    }
+
+    &.visibility_3 {
+        /* Deleted items that only staff sees */
+        @include box-shadow(0 0 2px 2px red);
+    }
+}

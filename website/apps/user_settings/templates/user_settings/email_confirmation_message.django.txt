@@ -1,0 +1,10 @@
+Hi,
+
+Visit this link to confirm that this is your new email address for your Canvas account ({{ user.username }}):
+
+{{ activate_url }}
+
+Thanks,
+
+Canvas
+

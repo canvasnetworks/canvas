@@ -1,0 +1,15 @@
+{% if comment.reply_content %}
+    {% for image_type,data in comment.reply_content.all_images.items %}
+        {% if "name" in data %}
+        <h3>{{ image_type }}</h3>
+        <a href="{{ data.name }}" style="border:none"><img src="{{ data.name }}"></a>
+            <div style="color:#ccc">
+                <code>{{ data.name }}</code><br>
+                <code>{{ data.kb }}kB</code>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    No image for this post.
+{% endif %}
+

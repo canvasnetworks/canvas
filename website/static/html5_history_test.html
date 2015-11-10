@@ -1,0 +1,19 @@
+<html>
+<head>
+</head>
+<body>
+<script>
+window.addEventListener("popstate", function (e) {
+    console.log(e.state);
+    //document.write("state change: {" + e.state + "} <br/>");
+});
+</script>
+<script>
+document.write("state before: {" + window.history.state + "} <br/>");
+window.history.replaceState("STATESTATE", "TITLETITLE");
+document.write("state after: {" + window.history.state + "} <br/>");
+</script>
+<a href="http://google.com">google</a> | 
+<a href="http://yahoo.com">yahoo</a>
+</body>
+</html>

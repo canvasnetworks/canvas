@@ -1,0 +1,36 @@
+<div id="sidebar">
+    <nav>
+        <ul>
+            <li class="feed {% if current_nav == "feed" %}active{% endif %} hidden">
+                <a href="/admin/feed">
+                    <img src="/static/img/sidebar/icon_feed.png">
+                    Dashboard
+                    <span class="realtime_count">{{ feed_unseen if feed_unseen and feed_unseen > 0 }}</span>
+                </a>
+            </li>
+            <li {% if current_nav == "explore" %}class="active"{% endif %}>
+                <a href="/admin/x/everything">
+                    <img src="/static/img/sidebar/icon_explore.png">
+                    Quests
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <hr>
+    <div class="contact_legal hidden">
+        <a>Contact & Legal</a>
+        <div class="hidden_links">
+            <p class="more_links">
+            </p>
+            <p class="copyright">
+                Copyright © 2010-2012 Canvas Networks, Inc.
+                All rights reserved.
+            </p>
+        </div>
+    </div>
+    <div class="back_to_top" onClick="sidebar.back_to_top();">
+        Back to Top <img src="/static/img/sidebar/back_to_top.png">
+    </div>
+</div>
+
+

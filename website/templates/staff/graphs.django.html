@@ -1,0 +1,43 @@
+{% extends "base/headered_base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style>
+span.time_nav {
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    font-size: 2em;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<span class="time_nav"><a href="?view=weekly">weekly</a> | <a href="?view=monthly">monthly</a></span>
+<div id="charts" style="width: 1000px; margin: 0 auto">    
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+<script type="text/javascript" src="/static/lib/highcharts.js?cache_break=1"></script>
+<script type="text/javascript">
+$(function() {
+    var w = $(window).width() - 200;
+    $('#charts').css({width: w});
+    
+    var chart_count = 1;
+    function gen_chart(graph) {
+        var id = "chart_" + chart_count++;
+        $('#charts').append($('<div id="' + id + '" style="width: ' + w + 'px; height: 400px; margin 0 auto"></div>'));
+        graph.chart.renderTo = id
+        var chart = new Highcharts.Chart(graph);
+    }
+    
+    var graphs = {{graphs|to_json}};
+    
+    $.each(graphs, function (i, graph) {
+        gen_chart(graph);
+    });    
+});
+</script>
+{% endblock %}

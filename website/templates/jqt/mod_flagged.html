@@ -1,0 +1,56 @@
+<script type="text/html" id="mod_flagged_template">
+<div class="image_tile stickerable post_${comment.id}{{if comment.isDownvoted()}} downvoted{{/if}}">
+    <div class="drop_target_border" onClick="void(0);"></div>
+    <a class="content_link" href="${ comment.getCommentURL() }">
+    {{if comment.reply_content.id}}
+        <div class="image_container content_${comment.reply_content.id}">
+            {{if comment.reply_content.original.animated}}
+                <div class="animated_hint" onClick="canvas.animateGif('${comment.reply_content.id}', $(this).parent(), 'column');return false;"></div>
+            {{/if}}
+            {{html tmpl.content(comment.reply_content.id, options.image_type)}}
+            <div class="loading_spinner"></div>
+        </div>
+    {{else}}
+        <div style="color: red">(text only reply)</div>
+    {{/if}}
+    </a>
+    <div class="image_footer sticker_themed{{if !comment.reply_content.id}} text_only{{/if}}">
+        <div class="moderation_actions">
+        <b>Moderate</b>:
+            {{each(i, action) options.mod_actions}}
+                <input type="radio" id="${comment.id}_action_${action}" class="action_${action}" name="comment_${comment.id}_moderate" value="${action}" {{if action == 'blocked' && !comment.reply_content.id}}disabled{{/if}}/>
+                <label for="${comment.id}_action_${action}"><u>${action[0]}</u>${action.slice(1)}</label>
+            {{/each}}
+        </div>
+        <div class="moderation_extras">
+            <b>Extras</b>:
+            <input type="checkbox" id="${comment.id}_also_replies" name="comment_${comment.id}_also_replies"} {{if comment.parent_url}}disabled{{/if}}/><label for="${comment.id}_also_replies"> apply to ${"reply".pluralize(comment.reply_count, "replies")}</label>
+            <input type="checkbox" class='warn_user' id="${comment.id}_warn_user" name="comment_${comment.id}_warn_user"}/><label for="${comment.id}_warn_user"> warn user</label>
+        </div>
+        <div class="moderation_info">
+            <b>Info</b>:
+            ${comment.get_visibility_name()},
+            {{each(i, flag) tmpl.range(comment.flag_count)}}
+                <div style="display: inline-block; background: url('/static/img/flagged-link-bg.png'); width: 11px; height: 20px;"></div>
+            {{/each}}
+            first flagged {{html tmpl.relative_timestamp(comment.first_flag) }}
+        </div>
+        <p class="image_caption">
+            <b><a href="/staff/user/${comment.real_username}" target="_blank">${comment.real_username}
+            (${'warn'.pluralize(comment.user_warning_count)}, ${'ban'.pluralize(comment.user_ban_count)})</a>
+            said
+            {{if comment.real_username != comment.author_name}} anonymously{{/if}}
+            {{if comment.category}} in #${comment.category}{{/if}}
+            </b>:<br/>
+            {{if comment.reply_text}} <a href="${ comment.getCommentURL() }" title="${ comment.reply_text }">{{html tmpl.ugc_text(comment.reply_text, undefined, false, false) }}</a>{{/if}}
+        </p>
+    </div>
+    <div class="image_stickers" onClick="void(0);">
+        <div class="image_sticker_details invisible">
+            <div class="sticker_overlay"></div>
+        </div>
+        <div class="top_sticker"></div>
+    </div>
+</div>
+</script>
+

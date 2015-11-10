@@ -1,0 +1,66 @@
+#!/usr/bin/env python
+import sys; sys.path += ['/var/canvas/common', '../../common']
+
+import datetime
+import os
+import os.path
+import shutil
+import signal
+import time
+import urllib
+
+import ec2
+
+import configuration
+
+
+def read_pid(filename):
+    try:
+        pid = int(file(filename).read())
+        os.kill(pid, signal.SIG_DFL)
+    except (ValueError, IOError, OSError) as e:
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
+            
+        return None
+        
+    return pid
+
+def main():
+    for bucket_name, run_path in [('canvas-facts', '/var/canvas/website/run'),
+                                  ('drawquest-facts', '/var/canvas/website/drawquest/run'),]:
+        p = lambda filename: os.path.join(run_path, filename)
+
+        if not os.path.isfile(p('facts.log')):
+            continue
+
+        s3_conn = ec2.s3_connection()
+        bucket = s3_conn.get_bucket(bucket_name)
+
+        day = datetime.date.today().strftime("%Y.%m.%d")
+        instance_id = urllib.urlopen("http://169.254.169.254/latest/meta-data/instance-id").read()
+        timestamp = datetime.datetime.now().strftime("%H.%M.%S")
+        
+        filename = "%s-%s.log" % (timestamp, instance_id)
+        key_name = "%s/%s.gz" % (day, filename)
+        
+        shutil.move(p('facts.log'), p(filename))
+
+        nginx_pid = read_pid(os.path.join(run_path, 'nginx-factlog.pid'))
+
+        os.kill(nginx_pid, signal.SIGUSR1) # Tells nginx to reopen the factlog, stopping writes to the old factlog.
+
+        time.sleep(1) # Signals are provactive..err wait I meant racey.
+
+        os.system("gzip %s" % p(filename))
+
+        key = bucket.new_key(key_name)
+        key.set_contents_from_filename(p(filename + '.gz'))
+
+        os.remove(p(filename + '.gz'))
+
+if __name__ == '__main__':
+    main()
+

@@ -1,0 +1,74 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style type="text/css">
+div.center {
+    width: 1024px;
+    font-size: 32px;
+    margin: 1em auto;
+}
+
+.funnel {
+    font-size: 16px;
+}
+
+table {
+    font-size: 14px;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 2em;
+    margin-bottom: 0.25em;
+}
+
+tr {
+    border-bottom: #DDD solid 1px;
+}
+
+th, td {
+    padding: 1px 8px;
+    border-right: #DDD solid 1px;
+}
+
+
+tr td:first-of-type,
+tr th:first-of-type {
+    font-weight: bold;
+    text-align: right;
+}
+
+#data {
+    user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div id="data" class="center">
+<h1>Numbers</h1>
+    {% for header, data in sections %}
+        <h2>{{ header }}</h2>
+        <table>
+            {% for name, number in data %}
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>{{ number }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+{% endblock %}

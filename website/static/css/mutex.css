@@ -1,0 +1,7 @@
+.mutex {
+    display: none;
+}
+
+.mutex-shown {
+    display: inline;
+}

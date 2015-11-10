@@ -1,0 +1,8 @@
+{% extends "activity/types/base_activity_item.html" %}
+
+{% block icon %}
+    {{ sticker_image(activity.comment_sticker_type_id, "large") }}
+{% endblock %}
+{% block message %}
+    stickered your post
+{% endblock %}

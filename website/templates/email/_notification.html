@@ -1,0 +1,285 @@
+{% extends "email/_base.html" %}
+{% set width = 580 %}
+
+{% block extra_style %}
+    .header_message span {
+        font-size:21px;
+        color:#555555;
+    }
+
+        .header_message span strong {
+            color:#333333;
+            font-weight:bold;
+        }
+    
+    .hr {
+        border-bottom:1px solid #bbbdbd;
+    }
+
+        .hr table {
+            border-bottom:1px solid #bbbdbd;
+        }
+        
+    .reply_quote {
+        width:300px;
+    }
+    
+    .reply_quote span {
+        font-size:16px;
+    }
+
+        .quote.start {
+            width:36px;
+        }
+    
+        .quote.end {
+            width:26px;
+        }
+
+        .quote {
+            font-family:Arial, Helvetica, sans-serif;
+            color:#CAEADD;
+            font-size:84px;
+            height:0;
+            line-height:60px;
+        }
+        
+    .replied_post .reply_quote {
+        width:100px;
+    }
+    
+    .replied_post .text_reply span {
+        font-size:12px;
+    }
+
+    .notification_footer a {
+        color:#FFFFFF;
+        text-decoration:none;
+    }
+
+    .notification_footer span {
+        font-size:12px;
+        color:#FFFFFF;
+    
+        text-shadow:0 -1px 0 #99254C;
+    }
+
+    .anonymous_message {
+        width:100px;
+    }
+
+    .anonymous_message span {
+        font-size:12px;
+        color:#777777;
+    }
+
+    .button {
+        width:250px;
+        background:#CDF2DA;
+        border:1px solid #666666;
+    
+        -webkit-border-radius:7px;
+        -moz-border-radius:7px;
+        border-radius:7px;
+    }
+
+        .button a {
+            text-decoration:none;
+        }
+
+            .button_holder {
+                border-top:1px solid #F9FDFA;
+                border-left:1px solid #F9FDFA;
+                border-right:1px solid #BEDDC7;
+                border-bottom:1px solid #BEDDC7;
+            
+                -webkit-box-shadow:inset 1px 1px 3px #FFFFFF, inset -1px -1px 3px #BEDDC7;
+                -moz-box-shadow:inset 1px 1px 3px #FFFFFF, inset -1px -1px 3px #BEDDC7;
+                box-shadow:inset 1px 1px 3px #FFFFFF, inset -1px -1px 3px #BEDDC7;
+                -webkit-border-radius:7px;
+                -moz-border-radius:7px;
+                border-radius:7px;
+            }
+            
+        .button p {
+            text-align:center;
+        }
+
+        .button p span {
+            font-size:22px;
+            color:#445563;
+        
+            text-shadow:0 1px 0 #FFFFFF;
+        }
+{% endblock %}
+{% block body %}
+    <!-- Notification Body -->
+    <table class="notification" width="{{ width - 50 }}" bgcolor="transparent" cellpadding="0" cellspacing="0">
+
+        <!-- Message to user -->
+        <tr>
+            <td colspan="3" align="left">
+                <p class="header_message">
+                    {% block headline %}
+                        <span><strong>Your post</strong> received a <strong>{{ notification.action }}</strong> from
+                    {% endblock %}
+                    {% if notification.comment.anonymous %}
+                        someone
+                    {% else %}
+                        <a class="link_external" href="/user/{{ notification.actor.username }}?{{ tracking_query }}">{{ notification.actor.username }}</a>
+                    {% endif %}
+                    </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+
+            <!-- Horizontal rule -->
+            <td colspan="3" width="{{ width - 50 }}" align="center" valign="center">
+                <br/>
+                <table class="hr" width="{{ width - 60 }}" bgcolor="transparent" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>
+                            <table width="{{ width - 60 }}" bgcolor="transparent" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <br/><br/><br/>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td class="replied_post" width="100" align="center" valign="top">
+                <!-- User's post -->
+                {% if recipient_comment.reply_content %}
+                    {% set recipient_content = recipient_comment.reply_content %}
+                    <a href="{{ recipient_comment.url }}?{{ tracking_query }}"><img class="content thumbnail" src="{{ recipient_content.thumbnail.name }}" alt="PHOTO: Your post" width="{{ recipient_content.thumbnail.width }}" height="{{ recipient_content.thumbnail.height }}"/></a>
+                    <br/>
+                {% endif %}
+                {% if recipient_comment.reply_text %}
+                    <table class="text_reply" width="100" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="100" align="left" valign="top">
+                                <p class="ugc_text reply_quote">
+                                    <span>{{ ugc_text(recipient_comment.reply_text, 100, 0, 0) }}</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                {% if recipient_comment.reply_text|count > 100 %}
+                                    <p>
+                                        <span><a class="link_external" href="{{ recipient_comment.url }}?{{ tracking_query }}">(read more)</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                {% endif %}
+                {% if recipient_comment.is_anonymous %}
+                    <p class="anonymous_message">
+                        <span>(you posted this anonymously)</span>
+                    </p>
+                {% endif %}
+ 
+            </td>
+            <td width="70" align="center" valign="top">
+                <img src="/static/img/email/notifications/reply_arrow.png" alt="-&gt;" width="57" height="63"/>
+            </td>
+            <td width="360" valign="top">
+                <table class="reply" width="360" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="center">
+                            <!-- Reply from another user -->
+                            {% set comment = notification.comment.details() %}
+                            {% if notification.comment.reply_content %}
+                                {% set content = notification.comment.reply_content.details() %}
+                                {% set img = notification.comment.details().reply_content.column.name %}
+                                <a href="{{ comment.url }}?{{ tracking_query }}"><img class="content" src="{{ img }}" alt="PHOTO: Image reply" width="{{ content.column.width }}" height="{{ content.column.height }}"/></a>
+                                <br/>
+                            {% endif %}
+                            <span class="timestamp">{{ timestamp }}</span>
+                            {% if notification.comment.reply_text %}
+                                <table class="text_reply" width="360" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="34" height="0" align="left" valign="top">
+                                            <p class="quote start">
+                                                &#8220;
+                                            </p>
+                                       </td>
+                                        <td width="300" align="left" valign="top">
+                                            <br/>
+                                            <p class="ugc_text reply_quote">
+                                                <span>{{ ugc_text(notification.comment.reply_text, 150, false, true) }}</span>
+                                            </p>
+                                        </td>
+                                        <td width="26" height="0" align="right" valign="top">
+                                            <p class="quote end">
+                                                &#8221;
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="right">
+                                            {% if notification.comment.reply_text|count > 150 %}
+                                                <p>
+                                                    <span><a class="link_external" href="{{ comment.url }}?{{ tracking_query }}">(read more)</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </p>
+                                            {% endif %}
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            {% endif %}
+                            <!-- Reply bottom padding -->
+                            <br/><br/><br/><br/>
+             
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+
+                            <!-- Reply button -->
+                            <div class="button">
+                                <a href="{{ comment.url }}?{{ tracking_query }}{% if notification.comment.reply_content %}#remix{% else %}#reply{% endif %}">
+                                    <div class="button_holder">
+                                        <br/>
+                                        <p>
+                                            <span>
+                                                {% if notification.comment.reply_content %}
+                                                    Remix this post!
+                                                {% else %}
+                                                    Reply to this post!
+                                                {% endif %}
+                                            </span>
+                                        </p>
+                                        <br/>
+                                    </div>
+                                </a>
+                            </div>
+             
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+{% endblock %}
+{% block footer %}
+    <table class="notification_footer" width="{{ width + 2 }}" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="left">
+                <br/>
+                <p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="link_unsubscribe" href="{{ thread_unsubscribe_link }}"><span><strong>&#10005;</strong> Stop receiving notifications only for this post.</span></a>
+                </p>
+                <br/>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

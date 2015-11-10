@@ -1,0 +1,95 @@
+{% djextends "base/full_base.django.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/static/lib/jQuery-Timepicker-Addon/jquery-ui-timepicker-addon.css">
+<style>
+p {
+    font-size:1.2em;
+    margin:1em 0;
+}
+#comment_freeze_ts {
+    font-size:1.2em;
+    padding:.5em;
+}
+.ui-datepicker .ui-datepicker-buttonpane button {
+    opacity:1;
+    font-size:1.2em;
+    font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom:1em">Freeze Drawings</h1>
+
+<p>Click the input to set the timestamp after which no drawings will be shown in the app.</p>
+<p>To disable this, so that all drawings are visible as soon as they are posted, click Clear and Submit.</p>
+<p style="font-weight:bold;color:red;">Timezone is GMT.</p>
+
+<form action="/admin/staff/comment_freeze" method="post">{% csrf_token %}
+    <input id="comment_freeze_ts" name="comment_freeze_ts" value="{{ comment_freeze_ts }}">
+
+    <p id="human_readable_ts">{{ comment_freeze_ts }}</p>
+
+    <p><a id="clear_comment_freeze_ts">Clear</a></p>
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="/static/lib/jQuery-Timepicker-Addon/jquery-ui-sliderAccess.js"></script>
+<script src="/static/lib/jQuery-Timepicker-Addon/jquery-ui-timepicker-addon.js"></script>
+
+<script>
+$(function () {
+    var picker = $('#comment_freeze_ts');
+    var show_unix_time = function (dt) {
+        setTimeout(function () {
+            var ts = picker.datetimepicker('getDate');
+            if (!ts) {
+                picker.val('');
+                return;
+            }
+            picker.val(ts.getTime() / 1000);
+        }, 10);
+    };
+
+    var show_human_readable_ts = function () {
+        setTimeout(function () {
+            var ts = picker.val();
+            console.log(ts);
+            if (!ts) {
+                return;
+            }
+
+            var date = new Date();
+            date.setTime(ts * 1000);
+            $('#human_readable_ts').text(date.toUTCString());
+        }, 20);
+    };
+
+    show_human_readable_ts();
+
+    picker.datetimepicker({
+        onClose: function (dt) {
+            if (!dt) {
+                picker.val('');
+                return;
+            }
+            show_unix_time(dt);
+            show_human_readable_ts();
+        },
+        onSelect: function (dt) {
+            show_unix_time(dt);
+            show_human_readable_ts();
+        }
+    });
+
+    $('#clear_comment_freeze_ts').click(function () {
+        picker.val('');
+    });
+});
+</script>
+{% endblock %}
+

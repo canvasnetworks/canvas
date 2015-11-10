@@ -1,0 +1,90 @@
+Use cases
+=========
+
+New comments inside of thread
+New stickers added to content on frontpage & threads
+
+Wire semantics
+==============
+
+Assume we can usually maintain a push-oriented connection, but expect frequent short term (<1s) disconnects.
+
+Reliable message-based pubsub
+=============================
+
+Three redis keys:
+
+channel:id:msg_id, integer
+channel:id:msg_backlog, zset
+channel:id:pubsub, redis pubsub
+
+Pub:
+Increment integer. This is the messages id.
+Add message to backlog zset, with key id.
+Delete from zset where entry id < BACKLOG_LENGTH - current message id
+Pub json object {id: message_id, msg: message_blob}, all messages are valid json.
+
+Sub:
+Listen on redis pubsub
+Long poll requset includes pubsub id and last_seen message id.
+If last_seen >= channel:id:msg_backlog max key, long poll.
+else, immediately return all messages with id > last_seen.
+the initial last_seen is 0.
+
+
+For cases where a message backlog isn't appropriate (stickers, where you want final counts): 
+msg_backlog is always len(1), messages are collapsed by discarding all but the most recent in the event of a multi-message-send.
+
+Wire protocol:
+
+/rt?c=127&m=1&c=39&m=20&cachebreak=2394802
+
+(Channels are integers in this example, but they could be strings)
+
+means "Listen on channel 127, the last message I saw was message #1. Also listen on channel 389, the last message I saw was 20."
+
+When a rt request comes in, we check all backlogs in parallel (to avoid a high message rate channel starving out a slow message rate channel), and if there are any backlogs we send all of them. If there are none we subscribe to ever channel.
+
+Sample response:
+
+{ 
+    "127": { 
+        'status': 'ok', 
+        'msg': [{'id': 2, 'payload': ...}, {'id': 3, 'payload': ...}]
+    }, 
+    "389": { 
+        'status': 'reset', 
+        'msg': [{'id': 70, 'payload': ...}]
+    },
+}
+
+In this hypohtetical, channel 127 had a backlog of two messages, while channel 389 is high volume and the client's connection was broken; we tell the client to reset it's last seen id to 70 (the most recent id).
+
+
+How many channels can you listen to with this stateless protocol?
+Limited by URL size restrictions. 5000 chars on IE8+, >65k on FF/WebKit.
+
+For content URLs up to 10M and message ids up to 100k each channel will be 18 bytes in the url, which is 277 channels on IE8. 
+
+Realtime core TODO:
+
+Write js regression test coverage.
+Implement publish side.
+Implement backlog fetching.
+Implement multi-channel subscriptions.
+
+
+Sticker Integration:
+    Threadview:
+        On page load subscribe to RT for each content individually.
+        
+    Infinite scroll:
+        On page load, subscribe to all images.
+        Whenever scrolling, kick off a 1s timer.
+        Whenever you stop scrolling, subscribe to the 40 closest images.
+
+Comment Integration on threadview:
+    On page load, subscribe to thread.
+        
+
+

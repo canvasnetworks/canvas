@@ -1,0 +1,120 @@
+// Drawquest defaults and common elements
+* {
+    @include box-sizing(border-box);
+}
+
+html {
+    font-size:62.5%;
+    font-family:$page_font_family;
+}
+
+body {
+    font-size:1em;
+}
+
+a {
+    text-decoration:none;
+    color:$link_color;
+    cursor:pointer;
+
+    &:hover {
+        color:$link_hover_color;
+    }
+}
+
+ul {
+    list-style-type:none;
+    padding:0;
+}
+
+h1 {
+    color:$header_font_color;
+    font-family:$header_font_family;
+    font-size:3em;
+    line-height:1.4em;
+    $size:0.05em;
+    $size_neg:-$size;
+    $blur:0;
+    $color:rgba(#000, 0.4);
+    text-shadow:
+        $size_neg $size_neg $blur $color,
+        $size $size_neg $blur $color,
+        $size_neg $size $blur $color,
+        $size $size $blur $color,
+        2px 2px 1px rgba(#000, 0.3);
+
+    &.no_outline {
+        text-shadow:3px 3px 1px rgba(#000, 0.3);
+    }
+}
+
+button {
+    $outer_border_size:2px;
+    $inner_border_size:4px;
+    font-size:2em;
+    position:relative;
+    padding:0.35em;
+    background-color:$button_inner_bg;
+    font-family:$button_font_family;
+    color:$button_font_color;
+    border:$inner_border_size solid $button_outer_bg;
+    @include border-radius($button_radius);
+    text-shadow:0 0 5px $button_inner_bg*0.6;
+    -webkit-appearance:none;
+
+    &:after {
+        content:"\00a0";
+        position:absolute;
+        left:-($outer_border_size + $inner_border_size);
+        top:-($outer_border_size + $inner_border_size);
+        width:100%;
+        height:100%;
+        border:($outer_border_size + $inner_border_size) solid $button_border_color;
+        z-index:-1;
+        @include border-radius($button_radius);
+    }
+
+    &.share {
+        padding:1em;
+        @include border-radius(2em);
+
+        &:after {
+            @include border-radius(2em);
+        }
+
+        &.facebook {
+            background:$social_button_bg_color url(/static/img/drawquest/facebook_share.png) center bottom / 55% no-repeat;
+        }
+        &.twitter {
+            background:$social_button_bg_color url(/static/img/drawquest/twitter_share.png) center / 75% no-repeat;
+        }
+        &.tumblr {
+            background:$social_button_bg_color url(/static/img/drawquest/tumblr_share.png) center / 50% no-repeat;
+        }
+    }
+}
+
+.avatar {
+    $outer_border_size:2px;
+    $middle_border_size:4px;
+    $inner_border_size:3px;
+    $radius:0.5em;
+    font-size:1em;
+    position:relative;
+    padding:$inner_border_size;
+    background-color:$avatar_inner_border_color;
+    border:$middle_border_size solid $avatar_middle_border_color;
+    @include border-radius($radius);
+
+    &:after {
+        content:"\00a0";
+        position:absolute;
+        left:-($outer_border_size + $middle_border_size);
+        top:-($outer_border_size + $middle_border_size);
+        width:100%;
+        height:100%;
+        border:($outer_border_size + $middle_border_size) solid $avatar_outer_border_color;
+        z-index:-1;
+        @include border-radius($radius); 
+    }
+}

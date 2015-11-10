@@ -1,0 +1,7 @@
+<script type="text/html" id="sticker_progress_template">
+    <div class="progress_bar" data-remaining="${sticker.level_total - sticker.level_progress}" data-max="${sticker.level_total}">
+        <div class="progress_full {{if sticker.level_progress >= sticker.level_total}}level_up{{/if}}" style="width:${ Math.min(100, sticker.level_progress/sticker.level_total * 100) }%;"></div>
+        <span><span class="count">${sticker.level_progress}</span> of <span class="max">${sticker.level_total}</span> points</span>
+    </div>
+</script>
+

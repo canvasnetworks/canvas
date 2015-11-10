@@ -1,0 +1,103 @@
+{% extends "comment/explore.html" %}
+
+{% block pageclass %}
+    profile
+    explore
+{% endblock %}
+
+{% block extra_meta %}
+{% if hide_userpage_from_google %}
+    <meta name="robots" content="noindex">
+{% endif %}
+{% endblock %}
+
+{% block title %}
+| {{ username }}
+{% endblock %}
+
+
+{% block sticker_pack %}
+    {% if not user_is_self %}
+        {{ super() }}
+    {% endif %}
+{% endblock %}
+
+{% block more_posts_api %}canvas.api.user_more{% endblock more_posts_api%}
+
+{% block content_header %}
+    {% if not user.is_active and not viewer_is_staff %}
+        <div class="disabled"></div>
+    {% else %}
+        {% if user_is_self %}
+            <a class="edit" href="/user/{{ username }}/edit"><button class="dismiss">Edit Avatar & Bio</button></a>
+        {% endif %}
+
+        {% if not user.is_active and viewer_is_staff %}
+            <span class="staff_notice">This account is deactivated</span>
+        {% endif %}
+        <div class="avatar_button_wrapper">
+            {{ big_avatar(user.username) }}
+            {% if not user_is_self and user.username.lower() != "canvas" %}
+                <button class="follow_user_toggle" data-user_id="{{ user.id }}" data-initial_state="{% if viewer_is_following %}true{% else %}false{% endif %}"></button>
+            {% endif %}
+        </div>
+
+        <p class="username">{{ username }}</p>
+        {#
+        <a class="followers"><strong>X</strong> followers</a>
+        #}
+        {% if bio %}
+            <p class="bio">
+                {{ ugc_text(bio, max_length=500, linkify=True) }}
+            </p>
+        {% endif %}
+        <div class="clear"></div>
+        <ul class="badges">
+            {% if user_is_staff %}
+            <li><img class="badge staff tooltipped" src="/static/img/badges/staff.png" title="This user is part of the Canvas Team."></li>
+            {% endif %}
+
+            {% if user.kv.achievements.ten_followers.get() and user.kv.achievements.following_ten.get() %}
+                <li><img class="badge following_full tooltipped" src="/static/img/badges/follow-full.png" title="This user has at least 10 followers, and followed at least 10 people."></li>
+            {% elif user.kv.achievements.ten_followers.get() and not user.kv.achievements.following_ten.get() %}
+                <li><img class="badge ten_followers tooltipped" src="/static/img/badges/follow-followers.png" title="This user has at least 10 followers."></li>
+            {% elif not user.kv.achievements.ten_followers.get() and user.kv.achievements.following_ten.get() %}
+                <li><img class="badge following_ten tooltipped" src="/static/img/badges/follow-following.png" title="This user followed at least 10 people."></li>
+            {% endif %}
+
+            {% if user.kv.achievements.monster_top.get() and user.kv.achievements.monster_bottom.get() %}
+                <li><img class="badge monster_full tooltipped" src="/static/img/badges/monster-full.png" title="This user created and completed a monster."></li>
+            {% elif user.kv.achievements.monster_top.get() and not user.kv.achievements.monster_bottom.get() %}
+                <li><img class="badge monster_top tooltipped" src="/static/img/badges/monster-top.png" title="This user has created a monster."></li>
+            {% elif not user.kv.achievements.monster_top.get() and user.kv.achievements.monster_bottom.get() %}
+                <li><img class="badge monster_bottom tooltipped" src="/static/img/badges/monster-bottom.png" title="This user has completed a monster."></li>
+            {% endif %}
+
+            {% if not user_is_staff %}
+                {% if user.kv.achievements.audio_remixer.get() %}
+                <li><img class="badge audio_remixer tooltipped" src="/static/img/badges/audio-remixer.png" title="This user has made a remix combining image and audio."></li>
+                {% endif %}
+
+                {% if private_beta_member %}
+                    <li><img class="badge private_beta tooltipped" src="/static/img/badges/private-beta.png" title="This user was using Canvas when it was still underground during the private beta."></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+        <div class="clear"></div>
+
+        <nav>
+            <ul>
+                <li {% if sort_method == "top" %}class="active"{% endif %}>
+                    <a href="/user/{{ username }}">Most Popular</a>
+                </li>
+                <li {% if sort_method == "new" and not nav_data.userpage_type == "stickered" %}class="active"{% endif %}>
+                    <a href="/user/{{ username }}/new">Latest</a>
+                </li>
+                <li {% if nav_data.userpage_type == "stickered" %}class="active"{% endif %}>
+                    <a href="/user/{{ username }}/stickered">Stickered</a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
+

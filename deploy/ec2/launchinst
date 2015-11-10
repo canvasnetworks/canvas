@@ -1,0 +1,224 @@
+#!/usr/bin/env python
+# AMIs from http://uec-images.ubuntu.com/releases/natty/release/ #
+import sys; sys.path += ['/var/canvas/common', '../../common']
+import os, time
+
+from boto.ec2.autoscale import LaunchConfiguration, AutoScalingGroup, ScalingPolicy
+
+import ec2
+from molecular import Molecule
+
+def make_name(*namefiles):
+    m = Molecule()
+    for nf in namefiles:
+        m.load('/var/canvas/deploy/ec2/names/' + nf + '.nam')
+    return m.name()
+
+def make_name_from_role(role):
+    cat = ec2.get_category(role)
+    if cat == 'backend':
+        return make_name('items')
+    elif cat == 'utility':
+        return make_name('dragon')
+    else:
+        return make_name('american_names')
+
+def get_all_metrics(conn):
+    metrics = []
+    next_token = None
+    while True:
+        results = conn.list_metrics(next_token=next_token)
+        metrics += list(results)
+
+        next_token = results.next_token
+        if not next_token:
+            break
+    return metrics
+
+def spawn(role, wait, size, number, autoscale=False, config_only=False):
+    assert ec2.is_valid_role(role)
+    groups = ec2.get_groups(role)
+    requires_jenkins_update = role in ['testrunner', 'cron', 'factlog', 'drawquest_testrunner']
+
+    # NOTE: User data for web boxes is NOT updated from here. You must manually update it with the help of --autoscale --config.
+    yaml = open("/var/canvas/deploy/ec2/user-data.tmpl").read()
+    data = {
+        "__ROLE__": role,
+        "__BYOBU__": "" if role != "gateway" else "byobu_by_default: system",
+        "__LAUNCHED_BY__": "autoscale" if autoscale else os.environ["USER"],
+        "__RELEASE__": "natty",
+    }
+    for key, value in data.items():
+        yaml = yaml.replace(key, value)
+
+    conn = ec2.connection()
+
+    if size:
+        inst_type = size
+    else:
+        inst_type = ec2.get_role_size(role)
+
+    images = {
+        ('ebs', 64): 'ami-1aad5273',
+        ('instance', 64): 'ami-68ad5201',
+        ('ebs', 32): 'ami-06ad526f',
+        ('instance', 32): 'ami-e2af508b',
+    }
+
+    # m1.small needs 32-bit ami
+    # t1.micro needs ebs volume
+    image_name = {
+        "t1.micro": ('ebs', 64),
+        "m1.large": ('instance', 64),
+        "c1.xlarge": ('instance', 64),
+        "m2.xlarge": ('instance', 64),
+    }.get(inst_type, ('instance', 32))
+
+    # gateway exceptionally runs 12.04
+    if role == 'gateway':
+        image = conn.get_image('ami-a29943cb')
+    else:
+        image = conn.get_image(images[image_name])
+
+    common_config = {
+        'key_name': 'canvas',
+        'instance_type': inst_type,
+        'user_data': yaml,
+        'security_groups': groups,
+    }
+
+    az = 'us-east-1d'
+
+    if autoscale:
+        as_conn = ec2.autoscale_connection()
+
+        rand_suffix = "".join("%02x" % ord(c) for c in os.urandom(2))
+
+        lc_name = "%s-lc-%s" % (role, rand_suffix)
+
+        print "Creating LaunchConfiguration %s" % lc_name
+
+        lc = LaunchConfiguration(name=lc_name, image_id=images[image_name], **common_config)
+        as_conn.create_launch_configuration(lc)
+
+        sg_name = "%s-sg-%s" % (role, rand_suffix)
+
+        if config_only:
+            print "Config only, exiting."
+            print "MANUAL STEP: ./as-update-auto-scaling-group [%s-sg-####] --launch-configuration %s" % (role.lower(), lc_name)
+            return
+        elif not raw_input("You didn't pass --config, so this will create a new autoscaling group and fire up new instances to fill it. Is this what you want? (y/N): ").lower() == "y":
+            return
+
+        print "Creating AutoScalingGroup %s" % sg_name
+
+        #TODO add --grace-period
+        if role.lower() == 'web':
+            config = {
+                'min_size': 4,
+                'max_size': 30,
+                'availability_zones': [az],
+                'health_check_type': 'ELB',
+                'health_check_period': 900,
+            }
+            load_balancer = 'canvas-load-balancer-3'
+        elif role.lower() == 'drawquest_web':
+            config = {
+                'min_size': 50,
+                'max_size': 150,
+                'availability_zones': [az],
+                'health_check_type': 'ELB',
+                'health_check_period': 900,
+            }
+            load_balancer = 'drawquest-load-balancer'
+
+        sg = AutoScalingGroup(group_name=sg_name, launch_config=lc, load_balancers=[load_balancer], **config)
+        as_conn.create_auto_scaling_group(sg)
+
+        pol = lambda **kwargs: as_conn.create_scaling_policy(ScalingPolicy(**kwargs))
+
+        pol(adjustment_type='ChangeInCapacity', as_name=sg_name, scaling_adjustment=2, cooldown=60*15, name='add_two')
+        pol(adjustment_type='ChangeInCapacity', as_name=sg_name, scaling_adjustment=-1, cooldown=60*5, name='subtract_one')
+        pol(adjustment_type='PercentChangeInCapacity', as_name=sg_name, scaling_adjustment=100, cooldown=60*15, name='double_capacity')
+
+        cw_conn = ec2.cloudwatch_connection()
+
+        def find_cpu():
+            metrics = get_all_metrics(cw_conn)
+            found_metrics = [m for m in metrics if m.dimensions.get('AutoScalingGroupName') == sg_name and m.name == 'CPUUtilization']
+            if not found_metrics:
+                return None
+            sg_cpu, = found_metrics
+            return sg_cpu
+
+        print "Waiting for AutoScalingGroup metrics (can take 15m, seriously; dot every 15s)"
+        for n in range(15*4):
+            sys.stdout.write('.')
+            sys.stdout.flush()
+
+            time.sleep(15)
+            sg_cpu = find_cpu()
+            if sg_cpu:
+                break
+        else:
+            print "ERROR: Never found CPU metric"
+            return
+
+        print "Scaling group ready"
+        print "MANUAL STEP: Create CloudWatch alarms and connect them to add_two and subtract_one scaling policies."
+
+    else:
+        if config_only:
+            print "Role %s with groups %s, running on a %s (AMI %s) in %s:" % (role, groups, inst_type, images[image_name], az)
+            print ""
+            print "USER DATA:\n%s" % yaml
+            return
+
+
+        print "Launching %s ec2 instance%s on %s with role '%s', groups %s" % (number, 's'*(number>1), inst_type, role, groups)
+        WAIT_TIME = 300
+        POLL_FREQ = 5
+        instances = []
+        for i in range(number):
+            reservation = image.run(placement=az, **common_config)
+
+            instance, = reservation.instances
+            name = "%s (%s)" % (make_name_from_role(role), role)
+            instances.append((instance, name))
+
+        time.sleep(5) # Apparently necessary for tagging :(
+
+        for instance, name in instances:
+            print "Launched", instance.id, 'named', name
+            conn.create_tags([instance.id], {'Name': name})
+
+            if wait:
+                for n in range(0, WAIT_TIME, POLL_FREQ):
+                    time.sleep(POLL_FREQ)
+                    instance.update()
+                    if instance.state == 'running':
+                        print "Instance running!"
+                        break
+                else:
+                    print "Instance failed to start after %s seconds!" % WAIT_TIME
+                    print "Instance in state:", instances.state
+
+        if requires_jenkins_update:
+            print "==> This role requires updating the Jenkins node with the new internal IP, if you'd like this to be the canonical node for this role. <=="
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Launch an EC2 Instance")
+    parser.add_argument('role', help='The role of the new instance (e.g. web, cron, redis).')
+    parser.add_argument('-w', '--wait', default=False, action='store_true', help='Wait for the instance to finish spawning.')
+    parser.add_argument('-s', '--size', default=None, dest='size', help='Override the default instance size for this role.')
+    parser.add_argument('-n', '--number', default=1, type=int, dest='number', help='The number of instances of this type to spawn.')
+    parser.add_argument('-a', '--autoscale', default=False, action='store_true', help='Create an autoscale configuration and group instead of an instance.')
+    parser.add_argument('-c', '--config', default=False, action='store_true', help='If you pass --autoscale, create just the configuration, otherwise output only debug data.')
+
+    args = parser.parse_args()
+    spawn(args.role.lower(), args.wait, args.size, args.number, autoscale=args.autoscale, config_only=args.config)
+
+if __name__ == "__main__":
+    main()
+

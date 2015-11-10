@@ -1,0 +1,23 @@
+<div class="suggestion_widget">
+    <h2>Cool topics to follow:</h2>
+    <ul class="suggested_topics">
+        {% for tag in tags %}
+            <li>
+                <a href="/x/{{ tag.name }}">
+                    {% if tag.preview %}
+                        {{ content(tag.preview, "small_square") }}
+                    {% endif %}
+                    <p>{{ tag.name }}</p>
+                    <br>
+                </a>
+                <button class="follow_topic_toggle" data-topic_name="{{ tag.name }}" data-initial_state="false"></button>
+                <div class="close_options" data-type="tag" data-id="{{ user.id }}">
+                    ×
+                    <div class="close_dialog">
+                        <div class="hover_buffer"></div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

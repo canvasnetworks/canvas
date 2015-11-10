@@ -1,0 +1,12 @@
+{% extends "/activity/types/base_activity_item.html" %}
+
+{% block extra_activity_classes %}
+    level_up
+{% endblock %}
+
+{% block activity_item %}
+    <h1>You leveled up!</h1>
+    <p>
+        You received {{ activity.reward_stickers }} x {{ sticker_image('num1') }}
+    </p>
+{% endblock %}

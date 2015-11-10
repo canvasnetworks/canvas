@@ -1,0 +1,22 @@
+{% extends "base.django.html" %}
+
+{% load canvas_tags %}
+
+{% block header %}{% endblock %}
+
+{% block extra_css %}
+<style>
+</style>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+    window.top.location = '{{ redirect_url }}';
+</script>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+

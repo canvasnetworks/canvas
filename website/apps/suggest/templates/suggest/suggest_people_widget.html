@@ -1,0 +1,21 @@
+<div class="suggestion_widget">
+    <h2>People you sticker:</h2>
+    <ul class="suggested_users">
+        {% for user in users %}
+            <li>
+                <a href="/user/{{user.username}}">
+                    {{ small_avatar(user.username) }}
+                    <p>{{ user.username }}</p>
+                    <br>
+                </a>
+                <button class="follow_user_toggle" data-user_id="{{ user.id }}" data-initial_state="false"></button>
+                <div class="close_options" data-type="user" data-id="{{ user.id }}">
+                    ×
+                    <div class="close_dialog">
+                        <div class="hover_buffer"></div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

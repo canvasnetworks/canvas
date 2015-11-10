@@ -1,0 +1,23 @@
+{% extends "header/base.html" %}
+
+{% block header_classes %}
+logged_out
+{% endblock %}
+
+{% block signup_banner %}
+    <div class="signup_banner" style="display:none">
+        <div class="wrapper">
+            <div class="signup_copy">
+                <h1><img alt="Remix your world!" src="/static/img/remix-your-world-dark.png"></h1>
+                <p>
+                    Sign up to start sharing & remixing images. 
+                    It's free and takes a second!
+                </p>
+            </div>
+            <div class="signup_button_wrapper">
+                <a href="/signup" onClick="javascript:canvas.encourage_signup('remix');event.stopPropagation();return false;"><button>Sign up for Canvas »</button></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

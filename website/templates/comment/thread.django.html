@@ -1,0 +1,183 @@
+{% extends "base.django.html" %}
+
+{% load canvas_tags %}
+{% load jinja_tags %}
+{% load invite_remixer_tags %}
+{% load compress %}
+
+{% block title %}{% if op_comment.title %} | {{ op_comment.title }}{% else %}{% if meta_description %}{{ linked_comment.shareable_metadata.description|ellipsis_after:20 }}{% endif %}{% endif %}{% endblock %}
+
+{% block extra_body_classes %}group_{{ op_category.name }}{% endblock %}
+
+{% block content %}
+<div>
+    {% sticker_palette %}
+    <div id="thread_column">
+
+        {% if op_comment.title %}
+            <h1 id="title" class="ugc_text">
+                {{ op_comment.title }}
+            </h1>
+        {% endif %}
+
+        <div id="op">
+            {% jinja_thread_comment op_comment 1 %}
+
+            {% if viewer_is_thread_author and not is_in_invite_remixers_v2 %}
+                <div class="op_share_thread">
+                    <div class="wrapper">
+                        <h1>Invite people to remix with you:</h1>
+                        <div class="clearfix">
+                            <div class="external_invites">
+                                <a onClick="sticker_actions.share_comment(2001, {{ op_comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'share_thread_dialog');return false;">
+                                    <img src="/static/img/share_facebook_large.png">
+                                </a>
+                                <a onClick="sticker_actions.share_comment(2002, {{ op_comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'share_thread_dialog');return false;">
+                                    <img src="/static/img/share_twitter_large.png">
+                                </a>
+                                <a onClick="sticker_actions.share_comment(2006, {{ op_comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'share_thread_dialog');return false;">
+                                    <img src="/static/img/share_email_large.png">
+                                </a>
+                            </div>
+                            <span class="external_or_internal">or</span>
+                            <div class="invite_canvas_user">
+                                <div class="input_wrapper">
+                                    <input type="text" class="canvas_username" placeholder="canvas username"><button class="advance">Invite</button>
+                                </div>
+                                <div class="invite_status_message"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if request.user.is_staff %}
+            <div class="admin"></div>
+            <div>Tags: <i>{% for comment in op_comment.tags %}{{ comment }} {% endfor %}</i></div>
+        {% endif %}
+
+        <div id="replies">
+            <div id="top_replies" class="{% if not top_replies %}hidden{% endif %}">
+                <hgroup>
+                    <h1>Top replies:</h1>
+                </hgroup>
+                <div class="wrapper">
+                    {% jinja_thread_comments top_replies %}
+                </div>
+            </div>
+
+            <div id="comments" class="{% if not replies %}hidden{% endif %}">
+                <hgroup>
+                    {% if page_last > 1 %}
+                        <h2 class="pages">
+                            {% thread_pagination %}
+                        </h2>
+                    {% else %}
+                        <h1>Replies:</h1>
+                    {% endif %}
+                </hgroup>
+                <div class="wrapper{% if not recent_replies %} new_replies{% endif %}">
+                    {% jinja_thread_comments replies %}
+                </div>
+                {% if page_last > 1 %}
+                    <hgroup>
+                        <h2 class="pages">
+                            {% thread_pagination %}
+                        </h2>
+                    </hgroup>
+                {% endif %}
+            </div>
+        {% if recent_replies %}
+            <div id="recent_replies">
+                <hgroup>
+                    <h1>Most recent replies:</h1>
+                </hgroup>
+                <div class="wrapper new_replies">
+                    {% jinja_thread_comments recent_replies %}
+                </div>
+            </div>
+        {% endif %}
+        </div>
+        <button class="more_posts advance" type="button">
+            Click to show new post
+        </button>
+    </div>
+    <div id="related_column" class="small_col_view">
+        {% if viewer_is_thread_author and is_in_invite_remixers_v2 %}
+            {% invite_remixers request.user op_comment %}
+        {% endif %}
+        <div class="related_group group_op_sidebar hidden">
+            <span>Original:</span>
+            <hr>
+            {% if viewer_is_thread_author and is_in_invite_remixers_v2 %}
+                {% invite_remixers request.user op_comment %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<div id="post" class="post logged_in">
+    {% render_jinja "comment/reply_widget.html" %}
+</div>
+<div class="post logged_out">
+    <p>
+        Please <a href="/login">log in</a> or <a href="/join">register</a> to post.
+    </p>
+</div>
+
+{% endblock %}
+
+{% block meta_description %}{{ linked_comment.shareable_metadata.description }}{% endblock %}
+
+{% block head %}
+<meta property="og:title" content="{{ fb_metadata.title|escape }}">
+<meta property="og:description" content="{{ fb_metadata.description|escape }}">
+<meta property="og:image" content="{{ fb_metadata.image }}">
+<meta property="og:type" content="{% og_type %}">
+<link rel="image_src" href="{{ fb_metadata.image }}" />
+{% endblock %}
+
+{% block extra_javascript %}
+{% compress js %}
+<script src="/static/js/loading.js"></script>
+<script src="/static/js/thread.js"></script>
+<script src="/static/js/thread_comment.js"></script>
+{% endcompress %}
+
+<script>
+thread.op_comment = {{ op_comment|to_json }};
+thread.op_category = {{ op_category|to_json }};
+thread.user_infos = {{ user_infos|to_json }};
+thread.standard_replies = {{ replies|to_json }};
+thread.replied = {{ replied|to_json }};
+thread.recent_replies = {{ recent_replies|to_json }};
+thread.top_replies = {{ top_replies|to_json }};
+thread.reply_data = thread.standard_replies.concat(thread.replied).concat(thread.recent_replies).concat(thread.top_replies).concat([thread.op_comment]);
+
+{% if admin_infos %}
+    thread.admin_infos = {{ admin_infos|to_json }};
+{% endif %}
+
+$(function () {
+    thread.replies_to_handle = [];
+    thread.url_action;
+    thread.page_current = {{ page_current }};
+    thread.page_last = {{ page_last }};
+    thread.gotoreply = {{ gotoreply|to_json }};
+    thread.large_thread_view = {{ large_thread_view|to_json }};
+    thread.draw_from_scratch_content = canvas.storeContent({{ draw_from_scratch_content|to_json }});
+
+    thread.wire();
+
+    $(function() {
+        // Must be on load to prevent browser-forever-spinning bugs.
+        thread.replies_channel = {{ replies_channel|to_json }};
+        thread.on_load();
+    });
+});
+</script>
+{% endblock %}
+
+{% block base_onload %}{% endblock %}
+

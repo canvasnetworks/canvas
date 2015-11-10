@@ -1,0 +1,22 @@
+<script type="text/html" id="fact_template">
+<div class="fact hide_details" data-fact_name="${fact_name}">
+        <span class="fact_name">${ fact_name }</span>
+        <span class="expand">⊕</span>
+        <span class="contract">⊖</span>
+        <div class="clear"></div>
+        <ul>
+            {{each(key, value) fact}}
+                <li><span class="key">${ key }</span>: 
+                {{if Object.prototype.toString.call( value ) == "[object Object]"}}
+                    <ul>
+                    {{each(subkey, subvalue) value}}
+                        <li><span class="subkey">${ subkey }</span>: <span class="subvalue">${ subvalue }</span></li>
+                    {{/each}}
+                    </ul>
+                {{else}}
+                    <span class="value">${ value }</li>
+                {{/if}}
+            {{/each}}
+        </ul>
+    </div>
+</script>

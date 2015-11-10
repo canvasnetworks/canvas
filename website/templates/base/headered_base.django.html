@@ -1,0 +1,15 @@
+{% extends "base/base.django.html" %}
+
+{% load canvas_tags %}
+{% load jinja_tags %}
+
+{% block header %}
+    {% spaceless %}
+        {% if onboarding %}
+            {% render_jinja "header/onboarding.html" %}
+        {% else %}
+            {% jinja_site_header %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+

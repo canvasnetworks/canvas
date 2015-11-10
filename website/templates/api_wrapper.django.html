@@ -1,0 +1,149 @@
+{% load canvas_tags %}
+{% load compress %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+    <head>
+        <script type="text/javascript">
+        if (!location.hash.length){
+
+        }
+        </script>
+        <style type="text/css">
+            .tab{
+              padding: 5px;
+              border: 1px solid #cccccc;
+              float: left;
+              margin: 5px 10px 5px 0px;
+              text-decoration: none;
+            }
+            .tab:visited{
+              text-decoration: none;
+              color: #000000;
+            }
+            .tab.selected{
+              color: #ffffff;
+              background: #cc0055;
+              border: 1px solid #000000;
+            }
+            
+            .admin{
+                border: 1px solid #c3c3c3;
+                margin: 5px 5px 20px 5px;
+                text-align: left;
+                background: #ffffdd;
+            }
+            .admin .script_name{
+                color: #0088dd;
+                font-weight: bold;
+                font-size: 1.1em; 
+                padding: 5px;
+            }
+            .admin .inputs{
+                padding: 5px;
+            }
+            .admin .input label{
+                width: 120px;
+                float: left;
+            }
+            .admin .input{
+                padding: 2px;
+            }
+            .admin input[type=text]{
+                width: 250px;
+            }
+            .tabs{
+             margin-top: 20px;
+            }
+            .pages{
+             overflow: hidden;
+            }
+            .pages .tab_page{
+
+            }
+            .documentation{
+             margin: 5px 15px;
+             color: #222222;
+            }
+        </style>
+    </head>
+    <body>
+    <div class="main">
+    <div class="tabs" style="overflow: hidden; padding-right:10px;" id="tabs">
+        {%for api in apis%}
+           <a class="tab {{api.name}}" href="#{{api.name}}">{{api.name}}</a>
+        {%endfor%}
+    </div>
+    <p>current_user can be identified by key, email, facebook_id or name</p>
+    <div class="pages" id="pages">
+    {#Rather than shoe horn the following api calls into the ajax APIs, just hand code them here#}
+    {%for api in apis%}
+           <div class="tab_page {{api.name}}">
+               <h2>{{api.name}}</h2>
+               <a href="#{{api.name}}" id="{{api.name}}"></a>
+           {%for command in api.commands%}
+                <div class="admin">
+                
+                    <form id="{{command.name}}" enctype="multipart/form-data" action="{{api.path}}{{command.url}}" method="POST">
+                        {% csrf_token %}
+                        {#Yaml responses are much easier to read#}
+                        <input type="hidden" name="format" value="yaml" />
+                        <input type="hidden" name="force_mimetype" value="text" />
+                        <div class="inputs">
+                        <div class="script_name">{{command.name}}</div>
+                        <p class="documentation">{{command.doc}}</p>
+                        {% comment %}
+                        {% if not command.1.public %}
+                        <div class="input current_user">
+                            <label for="current_user">current_user</label>
+                            <input type="text" name="current_user"/>
+                        </div>
+                        {%endif%}
+                        {% endcomment %}                        
+                        {%for input in command.args%}
+                        <div class="input {{input}}">
+                            <label for="{{input}}">{{input}}: </label>
+                            <input type="text" name="{{input}}"/>
+                            {% comment %}
+                            {# Type hinting for inputs #}
+                            {%with command.1.types as types%}
+                                {%if types|get_value:input%}
+                                      {%with types|get_value:input as type%}
+                                      
+                                      {%if not type%}
+                                          <input type="text" name="{{input}}"/>
+                                         
+                                      {%else%}
+                                         {%ifequal type "file"%}
+                                         <input type="file" name="{{input}}"/> 
+                                          {% endifequal %}
+                                          {%ifequal type "games_with_no_cards"%}
+                                          {%with context.games_with_no_cards as games%}{%include "games_with_no_cards_snippet.html"%}{%endwith%}
+                                          {%endifequal%}
+                                          
+                                          {%ifequal type "rarity"%}
+                                          {%with context.rarity as rarity%}{%include "rarity_snippet.html"%}{%endwith%}
+                                          {%endifequal%}
+                                          {%ifequal type "currency"%}
+                                          {%include "currency_snippet.html"%}
+                                          {%endifequal%}
+                                      {%endif%}
+                                      {%endwith%}
+                                {%else%}
+                                    <input type="text" name="{{input}}"/>
+                                {%endif%}
+                            {%endwith%}
+                            {% endcomment %}
+                        </div>    
+                        {%endfor%}
+                        </div>
+                        <input type="submit" value="do"/>
+                    </form>
+                </div>
+            {%endfor%}
+           </div>
+    {%endfor%}
+    
+       </div>
+    </body>
+</html>

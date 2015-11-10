@@ -1,0 +1,63 @@
+{% djextends 'base/headered_base.django.html' %}
+
+{% block pageclass %}
+    follow_users
+    onboarding
+{% endblock %}
+
+{% block content %}
+    {% include "onboarding/follow.html" %}
+    <section>
+        <div class="topics_column">
+            <h1>Topics</h1>
+            <ul>
+                {% for topic in topics %}
+                    <li>
+                        <div class="thumbnail_wrapper">
+                            {% if topic.preview %}
+                                <img src="{{ topic.preview.small_square.name }}">
+                            {% endif %}
+                        </div>
+                        <button class="follow_topic_toggle" data-topic_name="{{ topic.name }}" data-initial_state="{% if topic.is_following %}true{% else %}false{% endif %}"></button>
+                        <span>{{ topic.name }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="people_column">
+            <h1>People</h1>
+            <ul>
+                {% for user in users %}
+                    <li>
+                        <div class="thumbnail_wrapper">
+                            {{ small_avatar(user.user.username) }}
+                        </div>
+                        {% if not user.is_self %}
+                            <button class="follow_user_toggle" data-user_id="{{ user.user.id }}" data-initial_state="{% if user.is_following %}true{% else %}false{% endif %}"></button>
+                        {% endif %}
+                        <span>{{ user.user.username }}</span>
+                        <p>{{ user.user.userinfo.profile_image.reply_text }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_javascript %}
+{% compress js %}
+<script src="/static/js/onboarding/onboarding.js"></script>
+{% endcompress %}
+<script>
+    var following_count = 0;
+
+    onboarding.quota_fulfillment = function () {
+        return following_count;
+    };
+
+    $('body').delegate('.follow_topic_toggle, .follow_user_toggle', 'on', function () {
+        following_count++;
+        setTimeout(onboarding.update_quota, 10);
+    });
+</script>
+{% endblock %}

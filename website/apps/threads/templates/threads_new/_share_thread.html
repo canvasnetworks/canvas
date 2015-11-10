@@ -1,0 +1,20 @@
+<div class="share_thread">
+    <div class="wrapper">
+        <h1>Invite people to remix with you!</h1>
+        <div class="external_invites">
+            <a onClick="sticker_actions.share_comment(2001, {{ comment.id }}, true, 'share_thread_dialog');return false;">
+                <img src="/static/img/share_facebook_large.png"></a>
+            <a onClick="sticker_actions.share_comment(2002, {{ comment.id }}, true, 'share_thread_dialog');return false;">
+                <img src="/static/img/share_twitter_large.png"></a>
+            <a onClick="sticker_actions.share_comment(2006, {{ comment.id }}, true, 'share_thread_dialog');return false;">
+                <img src="/static/img/share_email_large.png"></a>
+        </div>
+        <p class="divider">or</p>
+        <div class="internal_invite">
+            <div class="input_wrapper">
+                <input type="text" class="canvas_username" placeholder="canvas username"><button class="advance">Invite</button>
+            </div> 
+            <div class="invite_status_message"></div>
+        </div>
+    </div>
+</div>

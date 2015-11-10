@@ -1,0 +1,22 @@
+{% djextends "base/headered_base.django.html" %}
+
+{% block pageclass %}
+    post_thread
+{% endblock %}
+
+{% block content %}
+    {{ post_thread_form(True) }}
+{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+    var draw_from_scratch_content = canvas.storeContent({{ draw_from_scratch_content|to_json }});
+    $(function () {
+        post_thread.wire();
+    });
+</script>
+{% endblock %}
+

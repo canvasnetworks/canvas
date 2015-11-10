@@ -1,0 +1,34 @@
+{% set top_stick = comment.top_sticker() %}
+<div class="image_tile post_{{ comment.id }} {{ top_stick.name }}">
+
+    <a class="content_link" href="{{ comment.url }}">
+    {% if comment.reply_content %}
+        {{ content(comment, "mobile", "stream") }}
+    {% endif %}
+    </a>
+
+    <div class="tile_footer sticker_themed {{ top_stick.name }}">
+        <div class="sticker_wrapper">
+            {% if top_stick %}
+                {{ sticker_image(top_stick.name, "large") }}
+                <div class="sticker_count_wrapper">
+                    <span>x{{ top_stick.count }}</span>
+                </div>
+            {% endif %}
+        </div>
+        <span class="tile_metadata">
+            {% if comment.author_name != "Anonymous" %}
+                by <a href="/user/{{ comment.author_name }}">{{ comment.author_name }}</a>
+            {% endif %}
+            {% if comment.category %}
+                in #<a href="{{ comment.category_url }}">{{ comment.category }}</a>
+            {% endif %}
+        </span>
+        {% if comment.reply_text %}
+            <div class="image_caption">
+                {{ ugc_text(comment.reply_text, 2000) }}
+            </div>
+        {% endif %}
+    </div>
+
+</div>

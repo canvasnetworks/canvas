@@ -1,0 +1,31 @@
+<html>
+<body>
+
+<input name="username" placeholder="username" />
+<input name="password" placeholder="password" />
+<input name="email" placeholder="email address" />
+<button id="signup">Signup</button>
+
+<script src="/static/lib/jquery-1.5.2.js"></script>
+<script src="/static/lib/easyXDM.js"></script>
+
+<script type="text/javascript">
+$(function () {
+    $('#signup').bind('click', function () {
+        socket.postMessage("testing", '*');
+    });
+
+    var socket = new easyXDM.Socket({
+        remote: "https://savnac.com/static/html/_signup_xd.html",
+        onMessage: function(message, origin){
+            alert("Received '" + message + "' from '" + origin + "'");
+        },
+        onReady: function() {
+            console.log('ready');
+        }
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "base.django.html" %}
+
+{% load canvas_tags %}
+{% load jinja_tags %}
+{% load compress %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/invites.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block extra_javascript %}
+{% compress js %}
+    <script src="/static/js/invites.js"></script>
+    <script src="/static/js/onboarding/invites.js"></script>
+    <script src="/static/js/onboarding/onboarding.js"></script>
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+{% render_jinja "_invites.html" %}
+{% endblock %}
+

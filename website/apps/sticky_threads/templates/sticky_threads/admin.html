@@ -1,0 +1,36 @@
+{% djextends "base.django.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/logged_out_homepage.css?{{ timestamp() }}">
+<link rel="stylesheet" href="/static/css/logged_out_homepage_admin.css?{{ timestamp() }}">
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="/static/lib/jquery.pajinate.js?{{ timestamp() }}"></script>
+<script src="/static/js/logged_out_homepage_admin.js?{{ timestamp() }}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>Sticky Comments Admin</h1>
+
+<form method="POST" id="homepage_admin_form"> {% csrf_token %}
+    <input type="submit" value="Save & Publish" id="publish">
+
+    {% if page_updated %}
+        <div>
+            <p class="save_message">Saved.</p>
+        </div>
+    {% endif %}
+
+    <div class="spotlighted_threads_container">
+        <h2>Selected for Homepage</h2>
+        <div class="spotlighted_threads">
+            {% for thread in sticky_threads %}
+                {{ jinja_sticky_thread_preview(thread, True) }}
+            {% endfor %}
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+

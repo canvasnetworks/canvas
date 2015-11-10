@@ -1,0 +1,80 @@
+{% djextends "base/base.django.html" %}
+
+{% block base_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/logged_out_homepage.css">
+{% endcompress %}
+{% endblock %}
+
+{% block title %}
+- Remix your world!
+{% endblock %}
+
+{% block page_header %}
+    <header>
+        <div class="wrapper">
+            <hgroup class="logo">
+                <h1><img src="/static/img/canvas-logo-small.png"></h1>
+                <h2><img src="/static/img/remix-your-world.png"></h2>
+            </hgroup>
+            <div class="links">
+                <a class="log_in" href="/login"><button>Log in</button></a>
+            </div>
+        </div>
+    </header>
+    <section class="marketing">
+        <div class="bg_texture"></div>
+        <div class="wrapper">
+            <h1>How the magic happens:</h1>
+            <div class="explanation">
+                <div id="intro_animation">
+                    <div class="matte">
+                        <div class="animation_window">
+                            <ul>
+                                <li class="frame_1"></li>
+                                <li class="frame_2">
+                                    <div class="scribble"></div>
+                                </li>
+                                <li class="frame_3"></li>
+                                <li class="frame_4"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="signup">
+                {% set signup_button_text = "Get started »" %}
+                {% include "signup/_signup_form.html" %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+    {{ render_homepage() }}
+{% endblock %}
+
+{% block extra_javascript %}
+{% compress js %}
+<script src="/static/js/logged_out_homepage.js"></script>
+{% endcompress %}
+<script>
+    $(function() {
+        signup_new.wire($('#page .signup_form'));
+    });
+</script>
+<script>
+//<![CDATA[
+$(document).ready(function() {
+    logged_out_homepage.wire();
+});
+//]]>
+</script>
+<script type="text/javascript">
+setTimeout(function(){var a=document.createElement("script");
+var b=document.getElementsByTagName("script")[0];
+a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0012/9063.js?"+Math.floor(new Date().getTime()/3600000);
+a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+</script>
+{% endblock %}
+

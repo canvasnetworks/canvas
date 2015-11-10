@@ -1,0 +1,84 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style>
+#page {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.sticker_values {
+    margin: 20px auto;
+}
+
+.sticker_value {
+    float: left;
+    border: 2px solid #9BB;
+    width: 600px;
+    margin: 4px;
+    padding: 4px;
+    border-radius: 8px;
+}
+
+.sticker_value .details {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.sticker_value .detail {
+    font-size: 12px;
+    display: block;
+}
+
+.sticker_value .sort_key {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.explanation h1 {
+    font-size: 20px;
+}
+
+.explanation {
+    font-size: 12px;
+    margin: 20px auto;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="explanation">
+        <h1>Sticker Sorting</h1>
+        <p>This page lists stickers in the order they would be sorted, if a post had one of each. The "Sort Key" is a triple of values, consulted in order (the 2nd and 3rd values are tie breakers).</p>
+        <p>Currently the sort key is composed of: sticker cost, 1 if it's limited 0 otherwise, and the "preference" value.</p>
+        <p>The preference value defaults to the sticker's type_id * -1, but can be overridden on a per-sticker basis.</p>
+    </div>
+    <div class="sticker_values">
+        {% for sort_key, sticker in sorted_stickers %}
+            <div class="sticker_value">
+                <span class="sticker_container {{sticker.name}}"></span>
+                <ul class="details">
+                    <li class="detail sort_key">Sort Key: {{ sort_key }}</li>
+                    <li class="detail">Cost: {{ sticker.cost }}</li>
+                    <li class="detail">Value: {{ sticker.value }}</li>
+                    <li class="detail">type_id: {{ sticker.type_id }}</li>
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="clearfix"></div>
+
+{% endblock %}
+
+
+{% block extra_javascript %}
+<script>
+$(function () {
+    $.each(current.stickers, function (type_id, stick) {
+        stickers.check_for_animation(type_id, stick.name);
+    });
+});
+</script>
+{% endblock %}

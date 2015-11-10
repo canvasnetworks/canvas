@@ -1,0 +1,150 @@
+{% djextends "base/full_base.django.html" %}
+
+{% block pageclass %}
+    monster
+{% endblock %}
+
+{% block title %}
+    {% if monster_name %}| {{ monster_name }}{% endif %}
+{% endblock %}
+
+{% block extra_meta %}
+    <meta property="og:title" content="{{ monster_name|striptags }}">
+    <meta property="og:description" content="Monster Mash on Example.com">
+    <meta property="og:image" content="{{ og_image_url }}">
+    <meta property="og:type" content="{{ og_type('monster') }}">
+    <link rel="image_src" href="{{ og_image_url }}" />
+{% endblock %}
+
+{% block content %}
+    <div class="monster_viewer">
+        <div class="wrapper">
+            {% if can_make_bottom %}
+                <a class="skip_monster" href="/monster/random?skip"><button class="dismiss">skip</button></a>
+            {% endif %}
+            <div class="post_header">
+                <span class="home_link"><a href="/monster">All Monsters</a></span> > <span class="title"class="ugc_text">{{ monster_name|striptags }}</span>
+            </div>
+
+            <div class="main_column">
+            {% if replies and not can_make_bottom %}
+                <nav>
+                    <div class="prev" onClick="monster.previous();"></div>
+                    <div class="next" onClick="monster.next();"></div>
+                </nav>
+                <div class="replies">
+                    {% for reply in replies %}
+                        {% set display_monster = True if loop.index0 == current_monster_index else False %}
+                        {{ monster_image_tile(reply, {'image_type':'giant'}, {}, display_monster) }}
+                    {% endfor %}
+                </div>
+            {% elif made_top %}
+                {{ jinja_giant_monster_image_tile(main_comment) }}
+            {% endif %}
+
+            {% if can_invite %}
+                <div class="op_share_thread">
+                    <div class="wrapper">
+                        <h1>Invite people to complete your monster:</h1>
+                        <div class="clearfix">
+                            <div class="external_invites">
+                                <a onClick="monster.share_monster_invite(2001, '{{ short_id }}');">
+                                    <img src="/static/img/share_facebook_large.png">
+                                </a>
+                                <a onClick="monster.share_monster_invite(2002, '{{ short_id }}');">
+                                    <img src="/static/img/share_twitter_large.png">
+                                </a>
+                                <a onClick="monster.share_monster_invite(2006, '{{ short_id }}');">
+                                    <img src="/static/img/share_email_large.png">
+                                </a>
+                            </div>
+                            <span class="external_or_internal">or</span>
+                            <div class="invite_canvas_user">
+                                <div class="input_wrapper">
+                                    <input type="text" class="canvas_username" placeholder="canvas username"><button class="advance">Invite</button>
+                                </div>
+                                <div class="invite_status_message"></div>
+                            </div>
+                        </div>
+                        <h1>Or share the link directly:</h1>
+                        <input class="copypastalink ezselect" type="text" value="url goes here">
+                    </div>
+                </div>
+            {% elif can_make_bottom %}
+                <div class="remix_wrapper">
+                    <input id="post_category" type="hidden" class="category_free_select" value="{{ monster_group }}">
+                    {% include "monster/reply_widget.html" %}
+                </div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_javascript %}
+    <script>
+        monster.main_comment = {{ main_comment.comment|to_json }};
+        monster.monster_start_content = canvas.storeContent({{ start_content|to_json }});
+        monster.top_part = canvas.storeContent({{ monster_content|to_json }});
+        monster.current_index = {{ current_monster_index }};
+        monster.op_share_thread = new canvas.ShareThreadWidget($('.op_share_thread'), monster.main_comment.id, 'monster');
+        monster.monster_name = "{{ monster_name|striptags }}";
+
+        $(document).ready(function() {
+            monster.content_context_menu();
+
+            // Give the location for copy paste sharing
+            var copypasta = $('.op_share_thread .copypastalink');
+            if (copypasta.length) {
+                var url = "https://{{ domain }}/monster/{{ short_id }}/complete";
+                copypasta.attr("value", url);
+            }
+
+            {% if can_make_bottom %}
+                monster.wire();
+
+                var height = monster.top_part.giant.height;
+                var width = monster.top_part.giant.width;
+                var px = 0;
+                var py = -1 * (height - 20);
+
+                var show_preview_in_remixer = function (url) {
+                    var tp = $('.top_preview');
+                    tp.css('width', '600px');
+                    tp.css('height', '80px');
+                    tp.css('margin-left', '81px');
+                    tp.css('background-color', 'transparent');
+                    tp.css('background-image', 'url(' + url + ')');
+                    var height_offset = height - 100;
+                    tp.css('background-position', '0px -' + height_offset + 'px');
+                    tp.css('background-repeat', 'no-repeat no-repeat');
+
+                    $('.widget .right_bar').css('margin-top', '-80px');
+                    $('.widget .left_bar').css('margin-top', '-80px');
+                }
+
+                canvas.preload_image(monster.top_part.original.url, function (img) {
+                    var url = $(img).attr('src');
+                    show_preview_in_remixer(url);
+
+                    var easel = monster.remixer.easel;
+                    var ctx = easel.renderer;
+                    var tool = new remix.StampLibrary(ctx, function() { return {} });
+                    tool.easel = easel;
+                    tool.mode = 'new';
+                    tool.set_image(img, monster.top_part);
+                    tool.place();
+                    monster.remixer.pick_tool(tool, null, false);
+                    ctx.current_tool.rect = new remix.Rect({x: px, y: py}, {width: width, height: height});
+                    ctx.render();
+                    easel.merge();
+                    ctx.history.past = [];
+                });
+            {% endif %}
+
+            {% if replies and not can_make_bottom %}
+            monster.wire_keys();
+            {% endif %}
+        });
+    </script>
+{% endblock %}

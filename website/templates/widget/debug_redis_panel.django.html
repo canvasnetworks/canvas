@@ -1,0 +1,41 @@
+<table>
+    <thead>
+        <tr>
+            <th>Time (ms)</th>
+            <th>Stacktrace</th>
+            <th>Command</th>
+            <th>Result Size</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for host, port, db, time, stacktrace, command, size in redis_commands %}
+            <tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+                <td>{{ time|floatformat:"2" }}</td>
+                <td>
+                    {% if stacktrace %}
+                        <a href="#" onClick="$(this).parents('tr').find('.djSQLHideStacktraceDiv').toggle(); return false">Toggle</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ command }}
+                    <div class="djSQLHideStacktraceDiv" style="display:none;">
+                        <table>
+                            <tr>
+                                <th>Line</th>
+                                <th>Method</th>
+                                <th>File</th>
+                            </tr>
+                            {% for file, line, method in stacktrace %}
+                                <tr>
+                                    <td>{{ line }}</td>
+                                    <td><code>{{ method|escape }}</code></td>
+                                    <td><code>{{ file|escape }}</code></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </td>
+                <td>{{ size }}</td>
+        {% endfor %}
+    </tbody>
+</table>

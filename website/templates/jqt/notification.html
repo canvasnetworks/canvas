@@ -1,0 +1,29 @@
+<script type="text/html" id="notification_template">
+    <li class="notification">
+        {{if headline}}
+            <hgroup>
+                <a class="activity_link" href="/activity">see recent notifications</a>
+                <h1>${ headline }</h1>
+            </hgroup>
+            <hr>
+        {{/if}}
+        {{if points}}
+            <div class="points_bar_empty" data-points="${ points }">
+                <div class="points_bar_full">
+                    <p><span class="count">${ points }</span> point{{if points != 1}}s{{/if}}</p>
+                </div>
+                <p><span class="count">${ points }</span> point{{if points != 1}}s{{/if}}</p>
+            </div>
+        {{/if}}
+        {{if body_text}}
+            <p class="notification_message">
+                {{if !headline}}
+                    <a class="activity_link" href="/activity">see recent notifications</a>
+                {{/if}}
+            </p>
+        {{/if}}
+        {{if click_text}}
+            <p class="click_message"><img src="/static/img/notification-click-icon.png">${ click_text }</p>
+        {{/if}}
+    </li>
+</script>

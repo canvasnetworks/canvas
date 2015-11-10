@@ -1,0 +1,160 @@
+{% djextends "base/full_base.django.html" %}
+
+{% block content_header %}
+<!--
+<nav>
+    <ul>
+        <li class="active">
+            <a>Most Popular</a>
+        </li>
+        <li>
+            <a>Latest</a>
+        </li>
+        <li>
+            <a>Hall of Fame</a>
+        </li>
+    </ul>
+</nav>
+-->
+{% endblock %}
+
+{% block content_well %}
+<!--
+<ul class="user_feed">
+    <li class="feed_item">
+        <div class="user">
+            <img class="avatar" src="">
+            <br>
+            <a class="username">username</a>
+            <p class="timestamp">X hours ago</p>
+            <button class="dismiss">Follow</button>
+        </div>
+        <div class="wrapper stickerable">
+            <div class="sticker_flavor"></div>
+            <div class="close">
+                <span>×</span>
+                <div class="hover_buffer"></div>
+                <div class="close_dialog">
+                    <ul>
+                        <li><a>Flag post</a></li>
+                        <li><a>Hide post</a></li>
+                    </ul>
+                    <ul>
+                        <li><a>Hide all posts from this thread</a></li>
+                        <li><a>Hide all posts in #group_name</a></li>
+                        <li><a>Unfollow username</a></li>
+                    </ul>
+                </div>
+            </div>
+            <img class="preview" src="">
+            <hgroup>
+                <h1>Thread title here</h1>
+                <h2><strong>XX</strong> people in this thread</h2>
+            </hgroup>
+            <p class="tags">
+                <a class="tag_link">group name</a>
+            </p>
+            <p class="caption">
+                My caption is here and we get a little bit of
+                a preview before it finally gets cut off like
+                about so... <a class="more_link">(more)</a>
+            </p>
+            <div class="feed_reason">
+                <p>You follow username</p>
+            </div>
+        </div>
+    </li>
+</ul>
+-->
+
+<div class="activity_stream">
+    <h1>Day 1</h1>
+    <ul>
+        <li class="activity_item follow" onClick="alert('click');">
+            <button>Follow Back</button>
+            <img class="thumbnail" src="">
+            <p class="message">
+                <a class="username" onClick="event.stopPropagation();">dmaurolizer</a> followed you
+            </p>
+            <p class="timestamp">
+                3 hours ago
+            </p>
+        </li>
+        <li class="activity_item sticker" onClick="alert('click');">
+            <img class="icon" src="">
+            <img class="thumbnail" src="">
+            <p class="message">
+                <a class="username">dmaurolizer</a> stickered your post
+            </p>
+            <p class="timestamp">
+                4 hours ago
+            </p>
+        </li>
+    </ul>
+    <div class="clear"></div>
+    <h1>Day 2</h1>
+    <ul>
+        <li class="activity_item epic_sticker" onClick="alert('click');">
+            <img class="icon" src="">
+            <img class="thumbnail" src="">
+            <p class="message">
+                <a class="username">dmaurolizer</a> promoted your post with an epic sticker
+            </p>
+            <p class="timestamp">
+                22 hours ago
+            </p>
+        </li>
+        <li class="activity_item remix" onClick="alert('click');">
+            <img class="icon" src="">
+            <img class="thumbnail" src="">
+            <p class="message">
+                <a class="username">nsbarr</a> remixed your post
+            </p>
+            <p class="timestamp">
+                23 hours ago
+            </p>
+        </li>
+        <li class="activity_item level_up" onClick="alert('click');">
+            <h1>You leveled up!</h1>
+            <p>
+                You received 5 x {{ sticker_image('num1') }}
+            </p>
+        </li>
+        <li class="activity_item thread_reply" onClick="alert('click');">
+            <img class="icon" src="">
+            <img class="thumbnail" src="">
+            <p class="message">
+                <a class="username">Photocopier</a> posted in your thread
+            </p>
+            <p class="timestamp">
+                23 hours ago
+            </p>
+        </li>
+    </ul>
+    <div class="clear"></div>
+    <h1>Day 3</h1>
+    <ul>
+        <li class="activity_item monster_invite" onClick="alert('click');">
+            <button>Finish Monster</button>
+            <img class="thumbnail" src="">
+            <p class="message">
+                <a class="username">dmauro</a> invited you to finish a monster
+            </p>
+            <p class="timestamp">
+                2 days ago
+            </p>
+        </li>
+        <li class="activity_item thread_invite" onClick="alert('click');">
+            <button>Remix</button>
+            <img class="thumbnail" src="">
+            <p class="message">
+                <a class="username">dmauro</a> invited you to post a remix
+            </p>
+            <p class="timestamp">
+                2 days ago
+            </p>
+        </li>
+    </ul>
+    <div class="clear"></div>
+</div>
+{% endblock %}

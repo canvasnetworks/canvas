@@ -1,0 +1,23 @@
+<li data-id="{{ comment.id }}">
+    <a href="{{ quest_comment_share_page_url(comment) }}">
+        <img class="ugc_img" src="{{ comment.details().content.gallery.url }}" width="500" height="375">
+    </a>
+    <footer>
+        <div>
+            <button class="whitelist">whitelist (w)</button>
+            <button class="disable">disable (d)</button>
+            <button class="ban">ban & disable (b)</button>
+        </div>
+        <div>
+            <p>
+                {% set flag_count = comment.flag_count() %}
+                flagged <strong>{{ flag_count if flag_count else "0" }}</strong> time{% if flag_count == 0 or flag_count > 1 %}s{% endif %}
+            </p>
+            <p class="user">
+                {% set violation_count = comment.drawquest_author.violation_count() %}
+                posted by <strong>{{ comment.details().user.username }}</strong> &mdash; <strong>{{ violation_count if violation_count else "0" }}</strong> violation{% if violation_count == 0 or violation_count > 1 %}s{% endif %}
+            </div>
+        </div>
+    </footer>
+</li>
+

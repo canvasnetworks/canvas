@@ -1,0 +1,8 @@
+# Oh AWS and your ways.
+export JAVA_HOME=$(/usr/libexec/java_home)
+export AWS_CREDENTIALS_FILE=~/AWS/AWS_CREDENTIALS_FILE.txt
+export AWS_CREDENTIAL_FILE=$AWS_CREDENTIALS_FILE # Yup, this is a real inconsistency between AWS tools.
+export AWS_ELB_HOME=~/AWS/ElasticLoadBalancing-1.0.12.0
+export AWS_IAM_HOME=~/AWS/IAMCli-1.2.0
+export AWS_RDS_HOME=~/AWS/RDSCli-1.4.006
+export AWS_AUTO_SCALING_HOME=~/AWS/AutoScaling-1.0.39.0

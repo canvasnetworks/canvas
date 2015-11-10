@@ -1,0 +1,76 @@
+<div id="postwidget" class="pw_container">
+    <div class="animated_spinner" style="display: block;"></div>
+    <form id="form_widget">
+        <h1>Start a new quest:</h1>
+        <div class="widget">
+            <div class="image_wrapper">
+                <div class="pw_existed">
+                    <p>
+                        Oh, this image has already been uploaded:
+                        <a id="pw_existed_link"></a>
+                    </p>
+                    <p>
+                        What would you like to do?
+                    </p>
+                    <button id="pw_existed_newthread" class="advance" onClick="post_thread.newthread();">Start a new quest</button>
+                    <button id="pw_existed_start_over" class="advance" onClick="post_thread.start_over();">Post something else</button>
+                </div>
+
+                <div class="thumbnail_wrapper">
+                    <img class="pw_thumbnail_img" src="/static/img/0.gif">
+                </div>
+
+                {% if show_start_options %}
+                    <label for="remix">Add an image for the quest:</label>
+
+                    {% include "content/image_chooser.html" %}
+                {% endif %}
+
+                {% include "remix/remix_widget.html" %}
+            </div>
+            <div class="form_inputs">
+                <div class="input_wrapper title">
+                    <label for="post_thread_title">Quest goal <em>(required)</em>:</label>
+                    <input id="post_thread_title" name="post_thread_title" type="text" maxlength="50" value="" autocomplete="off">
+                </div>
+                <div class="input_wrapper caption hidden">
+                    <label for="postwidget_caption">Caption <em>(optional)</em>:</label>
+                    <textarea id="postwidget_caption" class="pw_text" rows="3"></textarea>
+                </div>
+                <div class="clearfix">
+                    <div class="input_wrapper tags hidden">
+                        <label for="tag_select_input">Choose tags:</label>
+                        <input id="tag_select_input" type="text" class="tag_free_select" value="{{ default_tag }}" />
+                    </div>
+                    <div class="input_wrapper identity">
+                        <label>Posting as:</label>
+                        <ul>
+                            <li>
+                                <img src="/static/img/identity_user.png">
+                                <span>{{ request.user.username }}</span>
+                            </li>
+                            <li>
+                                <img src="/static/img/identity_anonymous.png">
+                                <span>anonymous</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="input_wrapper fb_share_toggle hidden">
+                        <label>Share:</label>
+                        <button class="facebook tooltipped {% if not enable_timeline_posts %}disabled{% endif %}" type="button" title="Share this remix with your Facebook friends"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="submit form_submission">
+            <input type="submit" class="advance upload_submit_button" value="Create Quest" disabled="true">
+            <div class="code_of_conduct hidden">
+                <div class="input_wrapper code_of_conduct">
+                    <input id="postwidget_conduct" class="pw_conduct" type="checkbox" checked="true">
+                    <label for="postwidget_conduct">I agree to the <a href="/code_of_conduct" target="_new">Code of Conduct</a></label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

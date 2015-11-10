@@ -1,0 +1,48 @@
+#page.invites {
+    .invites {
+        width: 940px;
+        margin: 15px auto;
+        @extend .clearfix;
+
+        a {
+            float:left;
+            display:block;
+            margin-right:2.5em;
+            border:1px solid #ddd;
+            padding:0.75em 1.5em 0.75em 0.75em;
+            background:#eee;
+            font-weight:bold;
+            @extend .rounded_corners;
+
+            &:hover {
+                background:#e5e5e5;
+            }
+
+            span, img {
+                vertical-align:middle;
+            }
+
+            img {
+                margin-right:0.5em;
+            }
+        }
+
+        .facebook {
+            font-size:2.4em;
+        }
+
+        .twitter,
+        .email {
+            font-size:1.4em;
+        }
+
+        p {
+            margin:1em 0;
+            font-size:1.4em;
+        }
+    }
+
+    #footer {
+        display:none;
+    }
+}

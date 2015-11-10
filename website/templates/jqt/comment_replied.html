@@ -1,0 +1,25 @@
+<script type="text/html" id="comment_replied_template">
+    <div class="arrow"></div>
+    {{if !comment.isUnviewable()}}
+        <div class="image_tile ${comment.getModClasses()}">
+            {{if comment.reply_content.id}}
+                <div class="image_container">
+                    {{if comment.reply_content.original.animated}}
+                        {{html tmpl.content(comment.reply_content.id, "ugc_original") }}
+                    {{else}}
+                        {{html tmpl.content(comment.reply_content.id, options.image_type) }}
+                    {{/if}}
+                </div>        
+            {{else}}
+                <div class="comment_container">
+                    <p>{{if comment.reply_text}}{{html tmpl.ugc_text(comment.reply_text, 350, false, true) }}{{/if}}</p>
+                </div>
+            {{/if}}
+            <div class="image_footer sticker_themed ${options.sticker_theme}{{if !comment.reply_content.id}} text_only{{/if}}">
+                {{if (comment.reply_content.id && comment.reply_text) || (comment.reply_content && !comment.in_reply_to)}}<div class="sticker_float"></div>{{/if}}
+                {{if comment.reply_text && comment.reply_content.id}}<p class="image_caption">{{html tmpl.ugc_text(comment.reply_text, 140, false, true) }}</p>{{/if}}
+            </div>
+        </div>
+    {{/if}}
+    <p class="replied_collapsed_text ${comment.getModClasses()}">${comment.collapsedText()}</p>
+</script>

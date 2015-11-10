@@ -1,0 +1,89 @@
+{% extends "code_of_conduct.django.html" %}
+
+{% block header %}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+.coc_footer {
+    text-align:center;
+}
+
+    .deactivated_user {
+        border-top: 2px solid #aaa;
+        padding-top: 1em;
+        margin: 1em 0;
+        font-size: 20px;
+        font-weight: bold;
+        color: red;
+    }
+    
+    .reactivate {
+        font-size: 14px;
+    }
+    
+    input.coc_footer {
+        margin-bottom:0.5em;
+        border: 1px solid #444;
+        background: #DCF7E6;
+        background: -moz-linear-gradient(top, #BFEDCF 0%, #DCF7E6 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFEDCF), color-stop(100%,#DCF7E6));
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFEDCF', endColorstr='#DCF7E6',GradientType=0 ),
+                dropshadow(color=#e5fff2, offx=0, offy=1);
+        -webkit-box-shadow: 0px 0px 2px #8c8c8c, 2px 2px 1px #fff inset, -1px -1px 1px #B2D1B9 inset;
+        -moz-box-shadow: 0px 0px 2px #8c8c8c, 2px 2px 1px #fff inset, -1px -1px 1px #B2D1B9 inset;
+        box-shadow: 0px 0px 2px #8c8c8c, 2px 2px 1px #fff inset, -1px -1px 1px #B2D1B9 inset;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        padding:5px 15px;
+        font-size:1.6em;
+        color:#098C44;
+        text-shadow: 0px 1px 0px #e5fff2;
+    }
+    
+        input.coc_footer:hover {
+            color:#03441F;
+            background: #C6F2D6;
+            background: -moz-linear-gradient(top, #9DEAB6 0%, #C6F2D6 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9DEAB6), color-stop(100%,#C6F2D6));
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9DEAB6', endColorstr='#C6F2D6',GradientType=0 ),
+                dropshadow(color=#e5fff2, offx=0, offy=1);
+        }
+        
+        input.coc_footer:active {
+            padding:6px 15px 4px;
+            color:#03441F;
+            background: #C6F2D6;
+            background: -moz-linear-gradient(top, #9DEAB6 0%, #C6F2D6 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9DEAB6), color-stop(100%,#C6F2D6));
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9DEAB6', endColorstr='#C6F2D6',GradientType=0 ),
+                dropshadow(color=#e5fff2, offx=0, offy=1);
+            -webkit-box-shadow: 0px 0px 2px #8c8c8c, 1px 2px 2px #8BBC94 inset;
+            -moz-box-shadow: 0px 0px 2px #8c8c8c, 1px 2px 2px #8BBC94 inset;
+            box-shadow: 0px 0px 2px #8c8c8c, 1px 2px 2px #8BBC94 inset;
+        }
+    
+</style>
+{% endblock %}
+
+{% block coc_footer %}
+<div class="coc_footer">
+    {% if request.user.is_active %}
+        <form method="POST">
+            {% csrf_token %}
+            <input class="coc_footer" type="submit" value="I agree to follow the Code of Conduct">
+        </form>
+    {% else %}
+        <p class="deactivated_user">Your account is currently deactivated.</p>
+        <p class="reactivate">
+            <strong>We'd love to have you back.</strong> If you think you can adhere to the Code of Conduct,
+            please <a href="mailto:nowiknow@example.com">send an e-mail to nowiknow@example.com</a> letting us know that you have
+            read and plan to follow the Code of Conduct and we'll happily reactivate your account.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+{% block base_ready %}{% endblock %}
+{% block base_onload %}{% endblock %}

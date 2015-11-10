@@ -1,0 +1,17 @@
+--ignore-dir=CACHE
+--ignore-dir=migrations
+--ignore-dir=reports
+--ignore-dir=caja
+--ignore-dir=compressor
+--ignore-dir=static/bookmarklet
+--ignore-dir=static/lib
+--ignore-dir=run/email
+--ignore-dir=debug_toolbar
+--type-set
+pp=pp
+--type-set
+css=css,scss
+--type-set
+txt=txt
+-G^(?!.*static/(css/(new_thread|new_base_thread|temp_gallery_thread|group_directory|image_tile|logged_out_homepage_admin|mobile|signup|monster|qt_footer|logged_out_homepage|post_thread|postwidget|canvas|browse|activity|thread|dummy_testing)\.css)).*$
+

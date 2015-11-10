@@ -1,0 +1,249 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family:Arial, Helvetica, sans-serif;
+            font-size:62.5%;
+            text-shadow:0 1px 0 rgba(255,255,255, 0.7);
+        }
+        
+        a {
+            color:#29abe2;
+        }
+        
+        h1 {
+            font-size:2.2em;
+        }
+        
+        h2 {
+            font-size:1.8em;
+        }
+        
+        section > table {
+            position:relative;
+            font-size:1.6em;
+            margin-bottom:20px;
+        }
+        
+        table {
+            background:black;
+        }
+        
+        table caption {
+            text-align:left;
+        }
+        
+        .hidden {
+            display:none;
+        }
+        
+        span.not_confident {
+            color:#aaa;
+        }
+        
+        span.confident {
+            color:#0A0;
+        }
+        
+        thead, tbody {
+            margin:0;
+            border:0;
+        }
+        
+        th, td {
+            padding:3px 5px;
+            text-align:center;
+            cursor:default;
+        }
+        
+        td {
+            background:#fff;
+            position:relative;
+        }
+        
+        tbody th {
+            background:#F6F9EA;
+            text-align:left;
+        }
+        
+        thead th {
+            background:#56b492;
+            text-align:center;
+            min-width:100px;
+            color:#fff;
+            text-shadow:0 -1px 0 rgba(0,0,0,0.4);
+        }
+        
+        thead th:first-child {
+            min-width:250px;
+        }
+        
+        thead th:nth-child(2) {
+            min-width:0;
+        }
+        
+        td.has_metadata {
+            text-align:left;
+        }
+        
+        a {
+            color:#29abe2;
+            cursor:pointer;
+        }
+        
+        .confidence_check {
+            float:right;
+        }
+        
+        span.very_confident {
+            color:#0A0;
+        }
+        
+        span.confident {
+            color:#AA0;
+        }
+        
+        span.not_confident {
+            color:#555;
+        }
+        
+        span.very_not_confident {
+            color:#aaa;
+        }
+        
+        .metadata {
+            position:absolute;
+            left:100%;
+            top:0;
+            z-index: 5;
+        }
+        
+        .metadata th {
+            min-width:0 !important;
+        }
+        
+        .hidden {
+            visibility:hidden;
+        }
+        
+        .no_display {
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ experiment }} experiment</h1>
+    <h2>{{ start.strftime("%Y.%m.%d %I:%M:%S %p") }} - {{ stop.strftime("%Y.%m.%d %I:%M:%S %p") }}</h2>
+    {% for section_name, tables in sections %}
+        {% if section_name == "All Users" %}
+            <a onClick="toggle_all_users_display();return false;" href=""><h2>{{ section_name }}</h2></a>
+        {% else %}
+            <h2>{{ section_name }}</h2>
+        {% endif %}
+        <section{% if section_name == "All Users" %} class="all_users no_display"{% endif %}>
+            {% for result_name, results in tables %}
+                <table>
+                    <caption>{{ result_name }}</caption>
+                    <thead>
+                        <tr>
+                            <th>Fact Name</th>
+                            {% for cell in results[0] %}
+                                <th>{{ cell.branch }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                            <tr>
+                                <th>{{ result[0].fact }}</th>
+                                {% for cell in result %}
+                                    <td{% if not cell.control %} class="has_metadata"{% endif %}>
+                                        {{ cell.count }}
+                                        {% if not cell.control %}
+                                            <span class="confidence_check" data-confidence="{{ cell.confidence }}">(<span class="rounded">{{ cell.change }}</span>%)</span>
+                                            <div class="metadata hidden">
+                                                <table>
+                                                    <thead>
+                                                        <th>Confidence</th>
+                                                        <th>Z</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <td><span class="rounded">{{ cell.confidence }}</span></td>
+                                                        <td><span class="rounded">{{ cell.z }}</span></td>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        </section>
+    {% endfor %}
+    <script>
+        var round_num = function(num) {
+            return parseFloat(num).toFixed(2);
+        }
+        if (document.getElementsByClassName == undefined) {
+            document.getElementsByClassName = function(className) {
+                var hasClassName = new RegExp("(?:^|\\s)" + className + "(?:$|\\s)");
+                var allElements = document.getElementsByTagName("*");
+                var results = [];
+                var element;
+                for (var i = 0; (element = allElements[i]) != null; i++) {
+                    var elementClass = element.className;
+                    if (elementClass && elementClass.indexOf(className) != -1 && hasClassName.test(elementClass)) {
+                        results.push(element);
+                    }
+                }
+                return results;
+            }
+        }
+        var nums_to_round = document.getElementsByClassName("rounded");
+        for (var i = 0; i < nums_to_round.length; i++) {
+            var text_node = nums_to_round[i].childNodes[0];
+            text_node.nodeValue = round_num(text_node.nodeValue);
+        }
+        var shade_by_confidence = document.getElementsByClassName("confidence_check");
+        for (i = 0; i < shade_by_confidence.length; i++) {
+            var node = shade_by_confidence[i];
+            var confidence = parseFloat(node.getAttribute("data-confidence"));
+            if (confidence >= 97.5) {
+                node.className += " very_confident";
+            } else if (confidence >= 95) {
+                node.className += " confident";
+            } else if (confidence >= 92.5) {
+                node.className += " not_confident";
+            } else {
+                node.className += " very_not_confident";
+            }
+        }
+        var have_metadata = document.getElementsByClassName("has_metadata");
+        for (i = 0; i < have_metadata.length; i++) {
+            (function(node) {
+                node.onmouseover = function(e) {
+                    var data_table = node.getElementsByTagName("div")[0];
+                    data_table.className = "metadata";
+                }
+                node.onmouseout = function(e) {
+                    var data_table = node.getElementsByTagName("div")[0];
+                    data_table.className += " hidden";
+                }
+            })(have_metadata[i]);
+        }
+        var display_all = true;
+        var toggle_all_users_display = function() {
+            var all_users = document.getElementsByClassName("all_users")[0];
+            if (display_all) {
+                all_users.className = "all_users";
+            } else {
+                all_users.className = "all_users no_display";
+            }
+            display_all = !display_all;
+        }
+    </script>
+</body>
+</html>

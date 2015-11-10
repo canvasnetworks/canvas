@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0044)http://drop.io/DropioJSClientXDReceiver.html -->
+<HTML xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><HEAD><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"></HEAD><BODY><SCRIPT>
+res = unescape(window.location.hash);
+vals = res.split("&",3);
+id = vals[0].replace("#","");
+more = (vals[1] != "0");
+nextChunk = vals[1];
+js_watcher_href = vals[2];
+json = res.substring((id+nextChunk+js_watcher_href).length+4);
+if(more) {
+  parent.DropioApiClient.AIM.parseResult(id,json,true);
+  xd_path = window.location.href.split("#",1)[0]
+  window.location.href = js_watcher_href + "#" + xd_path + "&" + id + "&" + nextChunk
+}
+else
+    parent.DropioApiClient.AIM.parseResult(id,json,false);
+</SCRIPT>
+
+</BODY></HTML>

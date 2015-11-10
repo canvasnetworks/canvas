@@ -1,0 +1,139 @@
+#page.legal #content > .wrapper {
+    width:700px;
+    padding:20px 30px;
+    margin:20px auto;
+    background:#fff;
+    border:1px solid #ccc;
+    @extend .rounded_bottom;
+
+    ul {
+        margin-left:1.8em;
+        list-style-type:disc;
+    }
+
+    h1 {
+        font-size:2.6em;
+        text-align:center;
+    }
+
+    hr {
+        margin:0.5em 0;
+    }
+
+    p {
+        margin-bottom:1em;
+    }
+
+    > p {
+        font-size:1.4em;
+    }
+
+    .navigation {
+        text-align:left;
+        color:#aaa;
+        margin:1.5em 0;
+
+        span {
+            font-size:2em;
+        }
+
+        a {
+            color:#333;
+            font-weight:bold;
+            font-size:1.4em;
+        }
+    }
+
+    .code_navigation {
+        text-align:center;
+        font-size:2em;
+        color:#aaa;
+        margin:1.5em 0;
+
+        a {
+            color:#333;
+            font-weight:bold;
+            cursor:pointer;
+        }
+    }
+
+    section {
+        margin:15px;
+        border:1px solid #aaa;
+        @extend .rounded_bottom;
+
+        h2 {
+            padding:5px 10px;
+            background:#90a3b3;
+            font-size:1.8em;
+            text-transform:capitalize;
+            margin-bottom:0.9em;
+            color:#fff;
+            @include text-shadow(dark);
+
+            a {
+                color:#fff;
+            }
+        }
+
+        > p {
+            padding:0 1em;
+            font-size:1.6em;
+        }
+
+        > ol {
+            margin-left:4em;
+            margin-right:1em;
+
+            li {
+                font-size:1.4em;
+                list-style-type:lower-roman;
+                color:#777;
+
+                p {
+                    color:#222;
+                }
+            }
+        }
+
+        > ul {
+            margin-left:1em;
+            font-size:1.4em;
+            list-style-type:none;
+
+            > li {
+                line-height:1.3em;
+
+                span {
+                    float:left;
+                    margin-right:0.25em;
+                    padding:0 0.4em;
+                    background:#90a3b3;
+                    color:#fff;
+                    @include text-shadow(dark);
+                    @include box-shadow(inset 0 -1px 0 rgba(#000, 0.3));
+                    @include border-radius(4 0 0 4);
+
+                    &:after {
+                        content:":";
+                    }
+                }
+            }
+        }
+
+        li p {
+            padding-left:0.4em;
+        }
+
+        ul ul {
+            clear:left;
+            margin-bottom:1em;
+
+            li {
+                list-style-type:disc;
+                margin-right:0.5em;
+            }
+        }
+    }
+}
+        

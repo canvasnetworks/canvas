@@ -1,0 +1,76 @@
+{% djextends "base.django.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/logged_out_homepage.css?{{ timestamp() }}">
+<link rel="stylesheet" href="/static/css/logged_out_homepage_admin.css?{{ timestamp() }}">
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="/static/lib/jquery.pajinate.js?{{ timestamp() }}"></script>
+<script src="/static/js/drawquest/quest_schedule.js?{{ timestamp() }}"></script>
+
+<script>
+/* 
+    jQuery Illuminate v0.7 - http://www.tonylea.com/
+    Currently incompatible with FireFox v.4
+    Copyright Â© 2011 Tony Lea
+    All rights reserved. 
+*/
+
+(function($){$.fn.illuminate=function(options){var defaults={intensity:"0.05",color:"",blink:"true",blinkSpeed:"600",outerGlow:"true",outerGlowSize:"30px",outerGlowColor:""};var options=$.extend(defaults,options);var original_color="";var new_color="";var dead=false;$.fn.illuminateDie=function(){dead=true;options.intensity="0.05";options.color="";options.blink="true";options.blinkSpeed="600";options.outerGlow="true";options.outerGlowSize="30px";options.outerGlowColor="";$(this).css({"boxShadow":"0px 0px 0px","background-color":"#"+original_color});};function toggleIllumination(obj,original_color,new_color,outerGlow){if(rgb2hex(obj.css("background-color")).toUpperCase()==original_color.toUpperCase()){obj.animate({"background-color":"#"+new_color,"boxShadowBlur":outerGlow},parseInt(options.blinkSpeed),function(){if(!dead){toggleIllumination($(this),original_color,new_color,outerGlow);}});}if(rgb2hex(obj.css("background-color")).toUpperCase()==new_color.toUpperCase()){obj.animate({"background-color":"#"+original_color,"boxShadowBlur":"0px"},parseInt(options.blinkSpeed),function(){if(!dead){toggleIllumination($(this),original_color,new_color,outerGlow);}});}}function colorAdd(hex,percent){percentHex=parseInt(Math.round(parseFloat(percent)*16));return hexAdd(hex[0],percentHex)+hexAdd(hex[1],percentHex)+hexAdd(hex[2],percentHex)+hexAdd(hex[3],percentHex)+hexAdd(hex[4],percentHex)+hexAdd(hex[5],percentHex);}function hexAdd(val,val2){result=parseInt(val,16)+val2;if(result>15){return"F";}return result.toString(16).toUpperCase();}function rgb2hex(rgb){rgb=rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);function hex(x){return("0"+parseInt(x).toString(16)).slice(-2);}return hex(rgb[1])+hex(rgb[2])+hex(rgb[3]);}return this.each(function(){obj=$(this);if(obj.is("input")){if(obj.css("border")==""){obj.css("border","none");}}dead=false;original_color=rgb2hex(obj.css("background-color"));if(options.color==""){new_color=colorAdd(original_color,options.intensity);}else{new_color=options.color.replace("#","");}var BlurColor="";if(options.outerGlowColor==""){BlurColor=new_color;}else{BlurColor=options.outerGlowColor.replace("#","");}obj.css("boxShadow","0px 0px 0px #"+BlurColor);var firstColor="";var firstBlur="";if(options.blink=="true"){firstColor=original_color;firstBlur="0px";}else{firstColor=new_color;firstBlur=options.outerGlowSize;}var outerGlow="";if(options.outerGlow=="true"){outerGlow=options.outerGlowSize;}else{outerGlow="0px";}obj.animate({"background-color":"#"+firstColor,"boxShadowBlur":firstBlur},parseInt(options.blinkSpeed),function(){if(options.blink=="true"){toggleIllumination($(this),original_color,new_color,outerGlow);}});});};var div=document.createElement("div"),divStyle=div.style,support=$.support,rWhitespace=/\s/,rParenWhitespace=/\)\s/;support.boxShadow=divStyle.MozBoxShadow===""?"MozBoxShadow":(divStyle.MsBoxShadow===""?"MsBoxShadow":(divStyle.WebkitBoxShadow===""?"WebkitBoxShadow":(divStyle.OBoxShadow===""?"OBoxShadow":(divStyle.boxShadow===""?"BoxShadow":false))));div=null;function insert_into(string,value,index){var parts=string.split(rWhitespace);parts[index]=value;return parts.join(" ");}if(support.boxShadow){$.cssHooks.boxShadow={get:function(elem,computed,extra){return $.css(elem,support.boxShadow);},set:function(elem,value){elem.style[support.boxShadow]=value;}};$.cssHooks.boxShadowBlur={get:function(elem,computed,extra){return $.css(elem,support.boxShadow).split(rWhitespace)[5];},set:function(elem,value){elem.style[support.boxShadow]=insert_into($.css(elem,support.boxShadow),value,5);}};$.fx.step["boxShadowBlur"]=function(fx){$.cssHooks["boxShadowBlur"].set(fx.elem,fx.now+fx.unit);};}})(jQuery);
+</script>
+
+{% endblock %}
+
+{% block content %}
+<h1>Quest Schedule</h1>
+
+<div class="quest_of_the_day threads_container highlighted">
+    <h2>Quest of the Day</h2>
+    <p>
+        This is the current quest of the day.
+    </p>
+    <div class="">
+        {{ quest_preview(current_scheduled_quest) }}
+    </div>
+</div>
+
+<form method="POST" id="quest_schedule_form" class="threads_container highlighted"> {% csrf_token %}
+    {% if page_updated %}
+        <div>
+            <p class="save_message">Saved.</p>
+        </div>
+    {% endif %}
+
+    <div class="spotlighted_threads_container">
+        <h2>Scheduled</h2>
+        <p>
+            Every day, the top quest from this queue will be made the current quest of the day.
+        </p>
+
+        <input type="submit" value="Save" id="publish">
+
+        <div class="spotlighted_threads">
+            {% for quest in scheduled_quests %}
+                {{ quest_preview(quest, True, True) }}
+            {% endfor %}
+        </div>
+    </div>
+</form>
+
+<div class="suggested_threads_container threads_container">
+    <h2>Unscheduled</h2>
+    <p>
+        Click the up arrow to move one to the top of the scheduled quests queue.
+    </p>
+    <div class="suggested_threads">
+        <div class="page_navigation"></div>
+        <ul class="content">
+            {% for thread in suggested_quests %}
+                <li>{{ quest_preview(thread, True) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+

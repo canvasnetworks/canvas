@@ -1,0 +1,96 @@
+{% set stickered_by_viewer = True if viewer_sticker %}
+{% set my_post = True if bottom.is_author(context.request.user) %}
+{% set sticker_name = bottom.top_sticker().name if bottom.top_sticker() %}
+{% set stickered_by_viewer = stickered_by_viewer if sticker_name else False %}
+
+<div class="explore_tile dismissable {% if sticker_name %}stickered{% endif %} {% if stickered_by_viewer %}stickered_by_viewer{% elif my_post %}my_post{% else %}stickerable{% endif %}"
+    data-details="{{ bottom|to_escaped_json }}"
+    style="{% if not display_monster %}display: none;{% endif %}"
+    data-comment_id="{{ bottom.id }}"
+>
+    <div class="sticker_bg sticker_themed {{ sticker_name }}"></div>
+
+    <div class="content">
+
+        <div class="content_wrapper composite_image">
+                <div class="hover_options">
+                    <div class="close close_options">
+                        <span>×</span>
+                        <div class="close_dialog">
+                        <div class="hover_buffer"></div>
+                            <ul>
+                                <li><a class="hide_offensive">Flag post</a></li>
+                                <li><a class="hide_comment">Hide post</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <a class="img_wrapper" href="/monster/{{ top.short_id() }}/{{ bottom.id }}">
+                {{ content(top, render_options.image_type) }}
+                {{ content(bottom, render_options.image_type) }}
+            </a>
+        </div>
+
+        <div class="user_pair">
+            {% for comment in [top, bottom] %}
+                <div class="identity">
+                    {% if comment.author_name != "Anonymous" %}
+                        <a href="/user/{{ comment.author_name }}">
+                        {{ tiny_avatar(comment.author_name) }}
+                    {% endif %}
+                        <p class="username">
+                            {% if comment.author_name != "Anonymous" %}
+                                {{ comment.author_name }}
+                            {% else %}
+                                <span class="anon">Anonymous</span>
+                            {% endif %}
+                        </p>
+                    {% if comment.author_name != "Anonymous" %}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if render_options.image_type == "giant" %}
+            <div class="external_invites">
+                <a onClick="monster.share_monster(2001, '{{ short_id }}', '{{ bottom.id }}');">
+                    <img src="/static/img/share_facebook_icon.png">
+                </a>
+                <a onClick="monster.share_monster(2002, '{{ short_id }}', '{{ bottom.id }}');">
+                    <img src="/static/img/share_twitter_icon.png">
+                </a>
+                <a onClick="monster.share_monster(2006, '{{ short_id }}', '{{ bottom.id }}');">
+                    <img src="/static/img/share_email_icon.png">
+                </a>
+            </div>
+        {% endif %}
+
+
+        <div class="sticker_message_overlay"></div>
+        <div class="sticker_flavor sticker_themed {{ sticker_name }}">
+            {% if sticker_name %}
+                {{ sticker_image(sticker_name, 'medium', "shadow") }}
+                {% if bottom.sorted_sticker_counts()[0].count > 1 %}
+                    <span class="sticker_count">
+                        <span>{{ bottom.sorted_sticker_counts()[0].count }}</span>
+                    </span>
+                {% endif %}
+            {% endif %}
+            <div class="sticker_target"></div>
+            <div class="top_stickers">
+                {% for stick in bottom.sorted_sticker_counts() %}
+                    {% if loop.index > 1 %}
+                        <span>
+                            {{ sticker_image(stick.type_id, 'medium', "shadow") }}
+                            <span class="sticker_count">
+                                <span>{{ stick.count }}</span>
+                            </span>
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>

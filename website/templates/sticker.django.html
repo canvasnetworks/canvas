@@ -1,0 +1,14 @@
+<span class="
+    sticker_container
+    {{sticker.name}}
+    {% if request.user.is_authenticated and sticker.is_limited and sticker.user_remaining <= 0 %}
+        none_remaining
+    {% else %}
+        drag
+    {% endif %}
+    "
+    data-name="{{sticker.name}}" data-remaining="{{sticker.user_remaining}}" data-is_limited="{{sticker.is_limited}}" data-type_id="{{sticker.type_id}}">
+    {% if request.user.is_authenticated and sticker.is_limited %}
+        <span class="sticker_remaining"><span class="sticker_remaining_count">x<span class="sticker_remaining_number">{{sticker.user_remaining}}</span></span></span>
+    {% endif %}
+</span>

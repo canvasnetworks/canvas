@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="reset.css" type="text/css"> 
+        <link rel="stylesheet" href="popup.css" type="text/css"> 
+        <script src="jquery-1.7.2.min.js"></script>
+        <script src="jquery.whenall.js"></script>
+        <script src="jquery.imagesloaded.js"></script>
+        <script src="popup.js"></script>
+    </head>
+    <body width="480" height="480">
+        <div id="loading"><img src="loading.gif" id="spinner"></div>
+        <div id="images"></div>
+
+        <div style="clear:both"></div>
+
+        <div id="no_images">
+            <span>No suitable images found on this page.</span>
+        </div>
+
+        <div id="clippy">
+            <div class="container">
+                <div class="message">
+                    <p></p>
+                    <p>What would you like to post instead?</p>
+                    <form method="GET" action="http://images.google.com/images" target="_blank">
+                        <input type="text" name="q">
+                        <button class="cancel"><u>C</u>ancel</button>
+                        <button type="submit" class="submit"><u>S</u>earch</button>
+                        <div style="clear:both"></div>
+                    </form>
+                </div>
+                <img src="canvasaur.png" class="avatar">
+            </div>
+        </div>
+    </body>
+</html>
+

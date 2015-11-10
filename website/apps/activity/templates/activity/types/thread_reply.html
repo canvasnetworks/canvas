@@ -1,0 +1,8 @@
+{% extends "activity/types/base_activity_item.html" %}
+{% block icon_src %}/static/img/notifications/reply.png{% endblock %}
+{% block message %}
+    posted in your thread
+    {% if activity.thread_title %}
+        <span class="ugc_text"><strong>{{ activity.thread_title }}</strong></span>
+    {% endif %}
+{% endblock %}

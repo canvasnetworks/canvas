@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+{% block style %}
+    body {
+        background:#4a4a4a;
+        font-size:5px;
+        border-top:1px solid #333333;
+        border-right:1px solid #333333;
+        border-bottom:1px solid #333333;
+        border-left:1px solid #333333;
+        font-family:Arial, Helvetica, sans-serif;
+        color:#333333;
+    }
+
+    table, tr, td, p, span, a, img, br  {
+        margin-top:0;
+        margin-bottom:0;
+        margin-right:0;
+        margin-left:0;
+        padding-top:0;
+        padding-bottom:0;
+        padding-right:0;
+        padding-left:0;
+    }
+
+    td {
+        font-size:5px;
+    }
+
+    h1, h2, h3, h4, h5, h6,
+    p, span {
+        text-align:left;
+    }
+
+    .modal_wrapper {
+        border-top:3px solid #ccc5c2;
+        border-right:3px solid #ccc5c2;
+        border-bottom:3px solid #ccc5c2;
+        border-left:3px solid #ccc5c2;
+        -moz-border-radius-topleft:20px;
+        -moz-border-radius-topright:20px;
+        -moz-border-radius-bottomright:20px;
+        -moz-border-radius-bottomleft:20px;
+        -webkit-border-radius:20px 20px 20px 20px;
+        border-radius:20px 20px 20px 20px;
+        -webkit-box-shadow:10px 10px 0 rgba(0,0,0,0.1);
+        -moz-box-shadow:10px 10px 0 rgba(0,0,0,0.1);
+        box-shadow:10px 10px 0 rgba(0,0,0,0.1);
+    }
+
+    .modal {
+        border-top:3px solid #999999;
+        border-right:3px solid #999999;
+        border-bottom:3px solid #999999;
+        border-left:3px solid #999999;
+        -moz-border-radius-topleft:15px;
+        -moz-border-radius-topright:15px;
+        -moz-border-radius-bottomright:15px;
+        -moz-border-radius-bottomleft:15px;
+        -webkit-border-radius:15px 15px 15px 15px;
+        border-radius:15px 15px 15px 15px;
+        background-image:url(http://example.com/static/img/drawquest/pebble_texture.png);
+    }
+
+    .modal_inner {
+        border-top:3px solid #999999;
+        border-right:3px solid #999999;
+        border-bottom:3px solid #999999;
+        border-left:3px solid #999999;
+        -moz-border-radius-topleft:10px;
+        -moz-border-radius-topright:10px;
+        -moz-border-radius-bottomright:10px;
+        -moz-border-radius-bottomleft:10px;
+        -webkit-border-radius:10px 10px 10px 10px;
+        border-radius:10px 10px 10px 10px;
+        -webkit-box-shadow:0 3px 8px rgba(0,0,0,0.1);
+        -moz-box-shadow:0 3px 8px rgba(0,0,0,0.1);
+        box-shadow:0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .modal_inner img {
+        vertical-align:middle;
+    }
+
+    .coin_table {
+        border-bottom:3px solid #e8e8e8;
+    }
+
+    .modal_footer {
+        background-image:url(http://example.com/static/img/drawquest/pebble_texture_dark.png);
+        -webkit-box-shadow:inset 0 10px 0 rgba(0,0,0,0.05);
+        -moz-box-shadow:inset 0 10px 0 rgba(0,0,0,0.05);
+        box-shadow:inset 0 10px 0 rgba(0,0,0,0.05);
+        border-top:3px solid #999999;
+        -moz-border-radius-topleft:0;
+        -moz-border-radius-topright:0;
+        -moz-border-radius-bottomright:13px;
+        -moz-border-radius-bottomleft:13px;
+        -webkit-border-radius:0 0 13px 13px;
+        border-radius:0 0 13px 13px;
+    }
+
+    .footer {
+        color:#AAAAAA;
+    }
+
+    .footer a {
+        color:#AAAAAA;
+    }
+
+    .footer span {
+        font-size:12px;
+    }
+
+    .coin_table span {
+        font-size:20px;
+        color:#999999;
+    }
+
+    .drawing {
+        border-top:2px solid #ccc5c2;
+        border-right:2px solid #ccc5c2;
+        border-bottom:2px solid #ccc5c2;
+        border-left:2px solid #ccc5c2;
+    }
+
+    img {
+        font-size:14px;
+        color:#777777;
+        font-style:italic;
+    }
+
+{% endblock %}
+{% block extra_style %}{% endblock %}
+</style>
+</head>
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+    <table class="email_wrapper" width="100%" cellpadding="0" cellspacing="20" bgcolor="transparent">
+        <tr>
+            <td align="center">
+                <table class="modal_wrapper" width="650px" cellpadding="0" cellspacing="20" bgcolor="#FFFFFF">
+                    <tr>
+                        <td>
+                            <table class="modal" width="100%" cellpadding="0" cellspacing="0" bgcolor="#e4e4e4">
+                                <tr>
+                                    <td>
+                                        <table width="100%" cellpadding="0" cellspacing="30" bgcolor="transparent">
+                                            <tr>
+                                                <td align="center">
+                                                    <img alt="DrawQuest Icon" width="60" height="60" src="http://example.com/static/img/drawquest/app_icon_60.png">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <img alt="DrawQuest" width="350" src="http://example.com/static/img/drawquest/logo_share_page.png"/>
+                                                    <br/><br/><br/><br/>
+                                                    <table class="modal_inner" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+                                                        <tr>
+                                                            <td>
+                                                                <table class="coin_table" width="100%" cellpadding="0" cellspacing="0" bgcolor="transparent">
+                                                                    <tr>
+                                                                        <td width="70%">
+                                                                            <table width="100%" cellpadding="0" cellspacing="15" bgcolor="transparent">
+                                                                                <tr>
+                                                                                    <td width="60" valign="middle">
+                                                                                        <img alt="star" width="60" height="60" src="http://example.com/static/img/drawquest/star_icon.png" />
+                                                                                    </td>
+                                                                                    <td valign="middle">
+                                                                                        <span><strong>{{ notification.actor.username }}</strong> starred your drawing</span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                        <td width="30%" class="coin_cell">
+                                                                            <table width="100%" cellpadding="0" cellspacing="15" bgcolor="transparent">
+                                                                                <tr>
+                                                                                    <td align="center">
+                                                                                        <img width="42" height="34" alt="+1" src="http://example.com/static/img/drawquest/coin_plus_1.png" />
+                                                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                        <img width="64" height="65" alt="coin" src="http://example.com/static/img/drawquest/coin.png" />
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <table width="100%" cellpadding="0" cellspacing="15" bgcolor="transparent">
+                                                                    <tr>
+                                                                        <td align="center">
+                                                                            <table class="drawing" width="345" cellpadding="0" cellspacing="15" bgcolor="transparent">
+                                                                                <tr>
+                                                                                    <td align="center">
+                                                                                        <a href="{{ notification.comment_sticker.comment.get_share_page_url() }}"><img alt="Your drawing" width="315" height="236" src="{{ notification.comment_sticker.comment.reply_content.details().archive.url }}" /></a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="modal_footer" align="center" bgcolor="#bababa">
+                                        <table width="100%" cellpadding="0" cellspacing="30" bgcolor="transparent">
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="{{ notification.comment_sticker.comment.get_share_page_url() }}"><img width="350" height="54" alt="View Your Drawing" src="http://example.com/static/img/drawquest/button_view_drawing.png" /></a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table class="footer" width="650" cellpadding="0" cellspacing="15" bgcolor="transparent">
+                    <tr>
+                        <td align="center">
+                            <span><a href="{{ action_unsubscribe_link }}">Unsubscribe</a> from emails from DrawQuest.</span>
+                            <br/>
+                            <span>Copyright &copy; 2013 Canvas Networks, Inc.</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+

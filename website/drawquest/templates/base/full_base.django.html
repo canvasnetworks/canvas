@@ -1,0 +1,30 @@
+{% extends "base/headered_base.django.html" %}
+
+{% load canvas_tags %}
+{% load jinja_tags %}
+
+{% block extra_base_js %}
+var followed_tags = {{ followed_tags|to_json }};
+{% endblock %}
+
+{% block sidebar %}
+    {% jinja_sidebar %}
+{% endblock %}
+
+{% block sticker_pack %}
+    {% jinja_sticker_pack %}
+{% endblock %}
+
+
+{% block content %}
+    <header id="content_header">
+        {% block content_header %}{% endblock %}
+    </header>
+    <section id="content_well">
+        {% block content_well %}{% endblock %}
+    </section>
+    <footer>
+        {% block content_footer %}{% endblock %}
+    </footer>
+{% endblock %}
+

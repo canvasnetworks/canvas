@@ -1,0 +1,41 @@
+--requirement=bootstrap1.txt
+--requirement=bootstrap2.txt
+--requirement=django.txt
+
+# Old sentry client.
+# used to be --requirement=sentry.txt, but the sentry box is running a newer version for now.
+https://s3.amazonaws.com/canvas-public-artifacts/distribute-0.6.19.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/django-indexer-0.3.0.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/django-templatetag-sugar-0.1.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/django-paging-0.2.4.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/django-sentry-1.8.6.2.tar.gz
+
+
+https://s3.amazonaws.com/canvas-public-artifacts/BeautifulSoup-3.1.0.1.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/PyYAML-3.09.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/distribute-0.6.19.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/argparse-1.1.zip
+https://s3.amazonaws.com/canvas-public-artifacts/paramiko-1.7.6.zip
+https://s3.amazonaws.com/canvas-public-artifacts/pyOpenSSL-0.10.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/redis-2.4.13.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/txAWS-0.0.1.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/deldotdr-txRedis-11b6068.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/Epsilon-0.6.0.tar.gz
+
+https://s3.amazonaws.com/canvas-public-artifacts/html5lib-0.90.zip
+https://s3.amazonaws.com/canvas-public-artifacts/canvasnetworks-bleach-v1.0.4-14-gc8f5835.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/simplejson-2.2.1.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/python-cjson-1.0.5.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/python-memcached-1.47.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/factlib-1.0.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/faulthandler-2.1.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/django-redis-sessions-0.2.3.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/urbanairship-0.3.tar.gz
+
+https://s3.amazonaws.com/canvas-public-artifacts/requests-0.14.1.tar.gz
+https://s3.amazonaws.com/canvas-public-artifacts/rauth-0.4.16.tar.gz
+
+# Because this is under such active development, reuploading to S3 is a pain.
+# We already rely on GitHub for deployment and bootstrapping.
+https://github.com/aehlke/django-cachecow/archive/5457451e4c50ace00c8e07466654b828ae941632.zip
+

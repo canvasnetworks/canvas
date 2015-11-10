@@ -1,0 +1,67 @@
+{% extends "base.django.html" %}
+
+{% load canvas_tags %}
+{% load jinja_tags %}
+{% load compress %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/new_thread.css">
+{% endcompress %}
+{% endblock %}
+
+{% block title %}
+{% if title %}| {{ title|striptags }}{% endif %}
+{% endblock %}
+
+{% block head %}
+<meta property="og:title" content="{{ fb_metadata.title|escape }}">
+<meta property="og:description" content="{{ fb_metadata.description|escape }}">
+<meta property="og:image" content="{{ fb_metadata.image }}">
+<meta property="og:type" content="{% og_type %}">
+<link rel="image_src" href="{{ fb_metadata.image }}" />
+{% endblock %}
+
+{% block content %}
+{% render_jinja "threads/new_thread.html" %}
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra_javascript %}
+{% compress js %}
+<script src="/static/js/new_thread.js"></script>
+<script src="/static/js/thread_comment.js"></script>
+{% endcompress %}
+
+<script>
+current.share_page = true;
+new_thread.comment_to_expand = {{ comment_to_expand|to_json }};
+new_thread.op_comment = {{ op_comment|to_json }};
+new_thread.base_url = "{{ op_comment.url }}/";
+new_thread.page_current = {{ page_current }};
+new_thread.page_last = {{ page_last }};
+new_thread.reply_ids = [];
+
+new_thread.op_comment = {{ op_comment|to_json }};
+new_thread.op_category = {{ op_category|to_json }};
+
+{% if page_current == 1 %}
+    new_thread.reply_ids.push({{ op_comment.id }});
+{% endif %}
+
+{% for reply in replies %}
+    new_thread.reply_ids.push({{ reply.id }});
+{% endfor %}
+
+{% for tile in remixes %}
+    new_thread.top_replies.push({{ tile.comment|to_json }});
+{% endfor %}
+
+$(function () {
+    new_thread.wire();
+    canvas.record_fact('flow_page_ready');
+});
+</script>
+{% endblock %}
+

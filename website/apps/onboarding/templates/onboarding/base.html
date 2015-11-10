@@ -1,0 +1,17 @@
+<div class="onboarding {% block onboarding_class %}{% endblock %}">
+    <div class="guide">
+        <h1>{% block title %}{% endblock %}</h1>
+        <p>{% block message %}{% endblock %}</p>
+    </div>
+    <div class="advancement">
+        {% block next_button %}
+            <button class="onboarding_next" data-onboarding_next="{{ onboarding_next }}">
+                {% block next_cover %}<div class="button_overlay">{% block goal %}{% endblock %}</div>{% endblock %}
+                {% block next_button_text %}Continue to Next Step »{% endblock %}
+            </button>
+            {% block skip_step %}
+            <a href="{{ onboarding_next }}" class="skip_step">Skip this step</a>
+            {% endblock %}
+        {% endblock %}
+    </div>
+</div>

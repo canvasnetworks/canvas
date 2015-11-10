@@ -1,0 +1,40 @@
+{% djextends "base/base.django.html" %}
+
+{% block title %} - Log In {% endblock %}
+
+{% block pageclass %}
+    login
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <img class="logo" src="/static/img/canvas-beta-logo-large.png" width="478" height="127">
+    <form class="login" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <div class="input_wrapper">
+            <label for="loginusername" class="default">username</label>
+            <input  id="loginusername" type="text" name="username" class="username">
+        </div>
+        <div class="input_wrapper">
+            <label for="loginpassword" class="default">password</label>
+            <input  id="loginpassword" type="password" name="password" class="password">
+        </div><input type="submit" value="Log in">
+    </form>
+    <p class="feedback_message">{{ message }}</p>
+    <p><a href="/password_reset">Forgot your username/password?</a></p>
+</div>
+{% endblock %}
+
+
+{% block extra_javascript %}
+<script>
+    $(function() {
+        canvas.bind_label_to_input($('#content .input_wrapper input'));
+    });
+</script>
+{% endblock %}
+
+{% block base_ready %}{% endblock %}
+{% block base_onload %}{% endblock %}
+

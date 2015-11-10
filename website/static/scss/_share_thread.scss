@@ -1,0 +1,164 @@
+.share_thread {
+    @include arrow(top, 10px, 1px);
+    position:absolute;
+    visibility:hidden;
+    z-index:10;
+    border:1px solid #aaa;
+    padding:3px;
+    background:#fff;
+    @extend .rounded_corners;
+    @extend .box_shadow_floating;
+
+    > .wrapper {
+        width:300px;
+        border:1px solid rgba($canvas_blue, 0.5);
+        padding:1.5em;
+        @extend .rounded_6px;
+    }
+
+    h1 {
+        font-size:1.6em;
+        text-align:center;
+        margin-bottom:0.5em;
+    }
+
+    .external_invites {
+        text-align:center;
+    }
+
+    .divider {
+        position:relative;
+        width:2em;
+        margin:0.5em auto;
+        text-align:center;
+        font-size:1.2em;
+        font-weight:bold;
+        color:#999;
+
+        &:before,
+        &:after {
+            content:"\00a0";
+            display:block;
+            position:absolute;
+            width:110px;
+            height:1px;
+            top:0.5em;
+            background:#aaa;
+        }
+
+        &:before {
+            right:100%;
+        }
+        &:after {
+            left:100%;
+        }
+    }
+
+    .input_wrapper {
+        input {
+            width:70%;
+            @extend .hard_edge_right;
+        }
+
+        button {
+            width:30%;
+            padding-left:0;
+            padding-right:0;
+            text-align:center;
+            @extend .hard_edge_left;
+        }
+    }
+
+    .invite_status_message {
+        font-size:1.2em;
+        margin:0.5em 0 0;
+    }
+}
+
+
+/* Deprecated once we ship thread_new */
+.op_share_thread {
+    text-align:center;
+    
+    .wrapper {
+        display:inline-block;
+        text-align:left;
+        margin-top:30px;
+        border:1px solid #ccc;
+        padding:10px 15px;
+        background:#fff;
+        @extend .rounded_corners;
+    }
+
+    h1 {
+        display:inline-block;
+        font-size: 1.8em;
+        font-weight:normal;
+        padding-bottom: 0.5em;
+    }
+
+    .clearfix + h1 {
+        margin:0.6em 0 0.2em;
+        padding:0;
+    }
+
+    .external_invites {
+        float: left;
+
+        a {
+            display:block;
+            float:left;
+            cursor:pointer;
+
+            img {
+                display:block;
+            }
+        }
+    }
+
+    .input_wrapper {
+        input {
+            width:200px;
+            $speed:0.3s;
+            @include transition((border-top-color $speed, border-right-color $speed, border-bottom-color $speed, border-left-color $speed));
+            @extend .hard_edge_right;
+        }
+
+        button {
+            @extend .hard_edge_left;
+        }
+    }
+
+    .external_or_internal {
+        text-align: center;
+        padding-top: 15px;
+        padding-left: 7px;
+        padding-right: 10px;
+
+        font-size: 1.8em;
+        float: left;
+    }
+
+    .invite_canvas_user {
+        float: left;
+        margin-top: 6px;
+
+        span {
+            font-size:1.4em;
+            color:#666;
+        }
+
+        .invite_status_message {
+            position: relative;
+
+            p {
+                padding:0.25em 0;
+                color:$canvas_dark_green;
+            }
+        }
+    }
+
+    p {
+        font-size: 1.4em;
+    }
+}

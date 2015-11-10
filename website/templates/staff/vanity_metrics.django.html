@@ -1,0 +1,136 @@
+{% extends "base/headered_base.django.html" %}
+
+{% load canvas_tags %}
+{% load humanize %}
+
+{% block extra_css %}
+<style type="text/css">
+div.center {
+    font-size:32px;
+    margin:20px;
+}
+#charts_toc {
+    margin:20pnx;
+}
+#charts_toc li {
+    float:left;
+    list-style-type:none;
+    margin-right:1em;
+    font-size:16px;
+}
+#charts > a {
+    display:block;
+    padding-top:1.5em;
+}
+#charts > a:hover {
+    text-decoration:none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="center">
+Stickers: {{ stickers|intcomma }}<br />
+Posts: {{ posts|intcomma }}<br />
+Users: {{ users|intcomma }}<br />
+</div>
+<ol id="charts_toc"></ol>
+<div id="charts" style="width: 1000px; margin: 0 auto">
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+<script type="text/javascript" src="/static/lib/highcharts.js?cache_break=1"></script>
+<script type="text/javascript">
+$(function () {
+    var w = $(window).width() - 200;
+    $('#charts').css({width: w});
+    
+    var chart_count = 1;
+    function gen_chart (name, series, primary, primary_name) {
+        var id = "chart_" + chart_count++;
+        $('#charts').append($('<a name="#' + id + '"><div id="' + id + '" style="width: ' + w + 'px; height: 400px; margin 0 auto"></div></a>'));
+
+        if (primary) {
+            $('#charts_toc').append($('<li></li>').html($.format('<a href="#{0}">{1}</a>', id, primary_name)));
+        }
+
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: id,
+                defaultSeriesType: 'line',
+                zoomType: 'x,'
+            },
+            title: {
+                text: name,
+                x: -20 //center,
+            },
+            xAxis: {
+                 type: 'datetime',
+                 maxZoom: 48 * 3600 * 1000,
+                 // tickInterval: 24 * 3600 * 1000, // one day
+                 // tickWidth: 0,
+                 // gridLineWidth: 1,
+            },
+            yAxis: {
+                title: {
+                    text: 'Count',
+                },
+                min: 0,
+            },
+            series: $.map(series, function (line) {
+                var one_hour = 3600 * 1000;                
+                var one_day = 24 * one_hour;
+                var time_slice = (name.indexOf("hour") != -1) ? one_hour : one_day;
+                return { 
+                    name: line.name, 
+                    data: line.data,
+                    pointStart: new Date().getTime() - line.data.length * time_slice,
+                    pointInterval: time_slice,
+                };
+            }),
+            plotOptions: {
+                series: {
+                    events: {
+                        legendItemClick: function (event) {
+                            if (!this.visible) {
+                                return true;
+                            }
+
+                            var seriesIndex = this.index;
+                            var series = this.chart.series;
+
+                            var all_on = true;
+                            for (var i = 0; i < series.length; i++) {
+                                if (series[i].index != seriesIndex && !series[i].visible) {
+                                    all_on = false;
+                                    break;
+                                }
+                            }
+                            if (all_on) {
+                                for (var i = 0; i < series.length; i++) {
+                                    if (series[i].index != seriesIndex) {
+                                        series[i].hide();
+                                    } 
+                                }
+                            } else {
+                                this.hide();
+                            }
+
+                            return false;
+                        },
+                    },
+                },
+            },
+        });
+    };
+    
+    var graphs = {{ graphs|to_json }};
+    
+    $.each(graphs, function (i, graph) {
+        gen_chart(graph.name, graph.data, graph.primary, graph.primary_name);
+    });    
+});
+</script>
+{% endblock %}
+

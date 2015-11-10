@@ -1,0 +1,168 @@
+.sticker_shop {
+    display: none;
+    width: 600px;
+    overflow-y: auto;
+
+    .shop_header {
+        position: relative;
+        margin-bottom: 6px;
+        @extend .clearfix;
+
+        .num1 {
+            float: left;
+            position: relative;
+            margin-top: -15px;
+            margin-left: -10px;
+            z-index: +5;
+        }
+
+        .shop_banner {
+            position: absolute;
+            left: 0px;
+            width: 100%;
+            margin-top: -3px;
+            padding: 4px 0 2px 44px;
+            background: #feeb83;
+            font-size:1.8em;
+
+
+            font-weight: bold;
+            @extend .rounded_corners;
+            @include box-shadow(0 1px 0 #C48B38);
+            color: #562904;
+            @include text-shadow(white);
+            @include bg-linear-gradient((-30deg, #feeb83, #fee26f 20%, #fef2a0 35%, #fcd861 55%, #feeb83));
+        }
+    }
+
+
+    .display {
+        float: left;
+
+        .title {
+            display: inline-block;
+            position: relative;
+            left: 10px;
+            top: 20px;
+            font-size:1.6em;
+            font-weight:bold;
+        }
+    }
+
+    .purchase {
+        float: right;
+        position: relative;
+        height: 100%;
+
+        .buy {
+            color: #414042;
+            @include bg-linear-gradient((top, #fedf4f, #feda41, #fdee7f, #fbca26 65%, #fedf4f));
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+
+        .price {
+            color: #414042;
+            font-size:1.6em;
+            font-weight:bold;
+        }
+
+        img {
+            vertical-align: middle;
+            margin-bottom: 7px;
+            margin-left: 5px;
+            margin-right: 10px;
+        }
+
+    }
+
+
+    .item_list {
+        height: 400px;
+        overflow-y: auto;
+        border: 2px solid #AAA;
+        margin-left: 0px;
+
+        .store_item {
+            display: block;
+            clear: both;
+            border-bottom: 2px solid #DDD;
+            cursor: pointer;
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+
+            .item_panel {
+                height: 72px;
+                clear: both;
+                padding: 6px;
+
+                .chevron {
+                    display: inline-block;
+                }
+            }
+
+            .description_panel {
+                height: 0px;
+                width: 100%;
+                clear: both;
+                overflow-y: hidden;
+
+                .description {
+                    font-size:1.6em;
+                    padding: 8px;
+                }
+            }
+
+            &.expanded .chevron {
+                @include rotate(90deg);
+            }
+        }
+    }
+
+    .item_shelf {
+        display: table;
+        float: left;
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        box-shadow: inset 2px 2px 4px #555 !important;
+
+        .sticker_wrapper {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+    }
+
+    .shop_footer {
+        padding-top: 10px;
+        @extend .clearfix;
+
+        .balance {
+            color: #808285;
+            float: left;
+            margin-top: 5px;
+            margin-left: 16px;
+            font-size:1.6em;
+
+            .sticker_currency_count {
+                color: #414042;
+            }
+
+            img {
+                position: relative;
+                top: 4px;
+            }
+        }
+
+        button {
+            padding: 8px 10px;
+            float: right;
+            color: #076830;
+            @include bg-linear-gradient((top, #d8f6e3, #bfedcf));
+            margin-right: 18px;
+        }
+    }
+}

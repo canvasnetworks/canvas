@@ -1,0 +1,78 @@
+{% extends "comment/explore.html" %}
+
+{% block pageclass %}
+    monster
+    explore
+{% endblock %}
+
+{% block title %}
+    | Monster Mash
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        #header .signup_banner {
+            display:none;
+        }
+
+        #header .placeholder.tall {
+            height:3.8em;
+        }
+    </style>
+{% endblock %}
+
+{% set tile_renderer = "monster_image_tiles" %}
+{% set tile_selector = ".explore_tile" %}
+
+{% block page_header %}
+<header>
+    <div class="bg_texture"></div>
+    <div class="fixed_width_wrapper{{ " wide" if not request.user.is_authenticated() }}">
+        <h1>Fashion a Frankenstein with your Friends</h1>
+        <div class="explanation">
+            <div class="monster_mascot">
+                <img src="/static/img/monster_mascot.png">
+            </div>
+            <div class="chat_bubble">
+                <p>
+                    Monster Mash is a Canvas project inspired by
+                    <a href="http://en.wikipedia.org/wiki/Exquisite_corpse">exquisite corpse games</a>.
+                </p>
+                <ol>
+                    <li><span>Draw the top-half of a monster.</span></li>
+                    <li><span>Ask your friends to complete it. They'll see a tiny bit of the top-half so they know where to keep drawing.</span></li>
+                    <li><span>Surprising, Scary, and Hilarious Results!!</span></li>
+                </ol>
+            </div>
+            <div class="call_to_action">
+                {% if request.user.is_authenticated() %}
+                <a class="start_monster" href="/monster/create"><button>Start a Monster</button></a>{% endif %}<a {% if request.user.is_authenticated() %}class="complete_monster"{% endif %} href="/monster/random"><button>Finish a Monster</button></a>
+            </div>
+        </div>
+        {% if not request.user.is_authenticated() %}
+            <div class="signup">
+                {% set signup_button_text = "Start mixing »" %}
+                {% include "signup/_signup_form.html" %}
+            </div>
+        {% endif %}
+    </div>
+</header>
+{% endblock %}
+
+{% block content_header %}
+    <h1>Latest Creations:</h1>
+{% endblock %}
+
+{% block extra_explore_js %}
+    <script>
+        $(function() {
+           signup_new.wire($('#page .signup_form'));
+
+            canvas.remove_context_menus();
+            monster.content_context_menu();
+            {% if not request.user.is_authenticated() %}
+                canvas.bind_label_to_input($('#page .signup input'));
+            {% endif %}
+        });
+    </script>
+{% endblock %}

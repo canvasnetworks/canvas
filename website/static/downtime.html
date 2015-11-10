@@ -1,0 +1,181 @@
+<!doctype html>
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Canvas - Server maintenance</title>
+<style>
+    * {
+        margin:0;
+        padding:0;
+        border:0;
+    }
+    
+    html {
+        font:62.5% Arial, Helvetica, sans-serif;
+    }
+    
+    body {
+        text-align:center;
+        padding:20px;
+    }
+    
+        header {
+            margin-bottom:40px;
+        }
+    
+            .logo {
+                margin-bottom:40px;
+            }
+    
+            p.message {
+                width:600px;
+                font-size:2.6em;
+                color:#666;
+                margin:0 auto;
+            }
+            
+        #main {
+            width:600px;
+            margin:0 auto;
+        }
+        
+            #stickers_column {
+                float:left;
+                width:152px;
+                margin-right:28px;
+                height:450px;
+                background:url("img/sticker_column_bg.png");
+                -moz-border-radius-topleft: 0px;
+                -moz-border-radius-topright: 0px;
+                -moz-border-radius-bottomright: 7px;
+                -moz-border-radius-bottomleft: 7px;
+                border-top-left-radius: 0px;
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 7px;
+                border-bottom-left-radius: 7px;
+            }
+            
+                #sticker_widget .stickers {
+                    background:#fff;
+                    border:1px solid #bbb;
+                    border-bottom:0;
+                }
+                
+                    span.sticker_container {
+                        display:inline-block;
+                        width:50px;
+                        height:50px;
+                        background:url("img/stickers/monocle.png") 0px -50px;
+                        vertical-align:top;
+                        z-index:3;
+                        background-size: 100% 300%;
+                        -moz-background-size: 100% 300%;
+                        -webkit-background-size: 100% 300%;
+                    }
+                
+                #sticker_widget .stickers_footer {
+                    background:#6D2312 url('/static/img/footer-textures/monocle.jpg');
+                    -moz-border-radius-topleft: 0px;
+                    -moz-border-radius-topright: 0px;
+                    -moz-border-radius-bottomright: 7px;
+                    -moz-border-radius-bottomleft: 7px;
+                    border-top-left-radius: 0px;
+                    border-top-right-radius: 0px;
+                    border-bottom-right-radius: 7px;
+                    border-bottom-left-radius: 7px;
+                    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+                    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+                    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+                }
+                
+                    #sticker_widget .stickers_footer p {
+                        padding:5px;
+                        font-size:1.3em;
+                        color:#fff;
+                        text-shadow:0px -1px 1px black !important;
+                    }
+            
+            #image_column {
+                width:600px;
+                float:left;
+            }
+            
+                #image_column .image_container img {
+                    display:block;
+                }
+            
+                #image_column .post_footer {
+                    position:relative;
+                    background:#6D2312 url('/static/img/footer-textures/monocle.jpg');
+                    min-height:40px;
+                    -moz-border-radius-topleft: 0px;
+                    -moz-border-radius-topright: 0px;
+                    -moz-border-radius-bottomright: 7px;
+                    -moz-border-radius-bottomleft: 7px;
+                    border-top-left-radius: 0px;
+                    border-top-right-radius: 0px;
+                    border-bottom-right-radius: 7px;
+                    border-bottom-left-radius: 7px;
+                    -webkit-box-shadow: 0px 1px 0px #362308;
+                    -moz-box-shadow: 0px 1px 0px #362308;
+                    box-shadow: 0px 1px 0px #362308;
+                }
+                
+                    #image_column .post_footer p {
+                        color:#fff;
+                        text-shadow:0px -1px 1px black !important;
+                        font-size:1.6em;
+                        padding:10px 10px 5px 15px;
+                        text-align:left;
+                    }
+                    
+                    .top_sticker span.sticker_container {
+                        position:absolute;
+                        right:5px;
+                        bottom:5px;
+                    }
+        
+.clear {
+    clear:both;
+}
+    
+</style>
+</head>
+<body>
+    <div id="container">
+        <header>
+            <img class="logo" src="/static/img/canvas-beta-logo-large.png">
+            <p class="message">
+                We're currently down for server maintenance. Sorry for the inconvenience. We'll be back up shortly.
+            </p>
+        </header>
+        <div id="main">
+            <div id="image_column">
+                <div class="comment_op reply has_content stickerable post_45024 stickered">
+                    <div class="drop_target_border"></div>
+                    <div class="reply_content expanded">
+                        <div class="image_container">
+                            <img class="comment-image" src="/static/img/classwhale.jpg" width="600" height="427">
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="post_footer">
+                        <div class="reply_body_expanded">
+                            <p class="reply_text">
+                                See you again soon. Pip pip.
+                            </p>
+                        </div>
+                        <div class="image_stickers">
+                            <div class="top_sticker">
+                                <span class="sticker_container"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="clear">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends "drawquest/dqbase.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/drawquest/whitelisting.css">
+{% endblock %}
+
+{% block extra_javascript %}
+    <script src="/static/js/drawquest/whitelisting.js"></script>
+    <script src="https://raw.github.com/dmauro/Keypress/master/keypress-1.0.1.js"></script>
+{% endblock %}
+
+{% block body_class %}{% endblock %}
+
+{% block body %}
+    {% block nav %}
+        <nav>
+            <a class="active">Whitelist</a>
+            |
+            <a href="/admin/staff/whitelisting/flagged">Flagged</a>
+            |
+            <a href="/admin/staff/whitelisting/new">Newest</a>
+        </nav>
+    {% endblock %}
+
+    {% block mode_toggle %}
+        <div id="whitelisting_toggle_container">
+            <button id="whitelisting_toggle" data-enabled="{{ enabled|to_json }}">{{ "Disable Whitelisting" if enabled else "Enable Whitelisting" }}</button>
+        </div>
+    {% endblock %}
+
+    <ul>
+        {% include "whitelisting/whitelist_items.html" %}
+    </ul>
+    <div class="loading">
+        Loading more...
+        <div class="ajax-loader"></div>
+    </div>
+{% endblock %}
+
+{% block fb %}{% endblock %}
+{% block ga %}{% endblock %}
+

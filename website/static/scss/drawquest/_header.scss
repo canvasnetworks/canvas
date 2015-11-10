@@ -1,0 +1,59 @@
+#header {
+    position:relative;
+    border-bottom:5px solid $quest_header_border_color;
+    z-index:1;
+    @include bg-linear-gradient($quest_header_gradient);
+
+    .fixed_width_wrapper {
+        padding:5px;
+        @include clearfix();
+    }
+
+    .app_icon {
+        float:left;
+        width:30px;
+        height:30px;
+        margin-right:1.25em;
+        border:none;
+        background:white;
+        background:url(/static/img/drawquest/app_icon_60.png);
+        background-size:100% 100%;
+        @include border-radius(5px);
+        @include box-shadow(0 0 1px 1px $_color_dark_brown);
+    }
+
+    .logo {
+        float:left;
+        width:170px;
+    }
+
+    a.app_store_link {
+        float:right;
+        
+        img {
+            height:30px;
+        }
+    }
+
+    .app_icon,
+    a,
+    img {
+        display:block;
+    }
+}
+
+@media
+only screen and (max-width:320px) and (orientation:portrait),
+only screen and (min-device-width:768px) and (max-device-width:1024px) and (orientation:portrait),
+only screen and (-webkit-min-device-pixel-ratio:1.5) and (orientation:portrait),
+only screen and (min-device-pixel-ratio:1.5) and (orientation:portrait),
+only screen and (max-width:999px)
+{
+    #header {
+        a.app_store_link img {
+            position:relative;
+            height:20px;
+            top:6px;
+        }
+    }
+}

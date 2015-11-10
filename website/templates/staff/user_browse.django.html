@@ -1,0 +1,39 @@
+{% extends "base/headered_base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style type="text/css">
+#page #content {
+    width: 800px;
+    margin: 10px auto 0px auto;
+}
+
+#content ul {
+    font-size:1.6em;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+    <form action="" method="post">{% csrf_token %}
+        Search by email:
+        <input type="text" name="email" size="50">
+        {% if email %}
+            {% if matched_user %}
+                <span><a href="/staff/user/{{ matched_user.username }}">{{ matched_user.username }}</a></span>
+            {% else %}
+                No user with that email address.
+            {% endif %}
+        {% endif %}
+    </form>
+    <br/>
+    
+    <h1>Recently disabled and inactive users:</h1><br/>
+    <ul>
+    {% for user in recent_disablings %}
+        <li><a href="/staff/user/{{user}}">{{user}}</a> on {{user.issued|pretty_unixtime}} ({{user.email}})</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

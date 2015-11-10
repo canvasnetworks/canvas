@@ -1,0 +1,16 @@
+@import "feed_item", "intro_tour";
+
+#page.feed {
+    #content_well {
+        background:#EFF3F5;
+        @include box-shadow(inset 1px 1px 0 rgba(#000, 0.15));
+    }
+
+    #content > footer {
+        padding:1em;
+        font-size:1.4em;
+        color:#777;
+        text-align:center;
+        @include text-shadow(white);
+    }
+}

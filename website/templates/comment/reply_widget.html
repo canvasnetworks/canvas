@@ -1,0 +1,53 @@
+<div id="postwidget" class="pw_container">
+    <h1>Post your reply:</h1>
+    <div class="widget">
+        <div class="image_wrapper">
+            <div class="thumbnail_wrapper">
+                <img class="pw_thumbnail_img" src="/static/img/0.gif">
+            </div>
+            {% include "content/image_chooser.html" %}
+            {% include "remix/remix_widget.html" %}
+            {% include "remix/audio_remix_widget.html" %}
+        </div>
+        <div class="form_inputs">
+            <div class="input_wrapper caption">
+                <label for="postwidget_caption">Caption <em>(optional)</em>:</label>
+                <span class="reply_addendum"></span>
+                <textarea id="postwidget_caption" class="pw_text" rows="3"></textarea>
+            </div>
+            <div class="charcount_warning">
+                Maximum of 2000 characters allowed. Current count: <span class="charcount"></span>
+                <br><br>
+            </div>
+            <div class="clearfix">
+                <div class="input_wrapper identity logged_in">
+                    <label>Posting as:</label>
+                    <ul>
+                        <li>
+                            <img src="/static/img/identity_user.png">
+                            <span>{{ request.user.username }}</span>
+                        </li>
+                        <li>
+                            <img src="/static/img/identity_anonymous.png">
+                            <span>anonymous</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="input_wrapper fb_share_toggle">
+                    <label>Share:</label>
+                    <button class="facebook tooltipped {% if not enable_timeline_posts %}disabled{% endif %}" title="Share this remix with your Facebook friends"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="submit form_submission">
+        <input type="submit" class="advance upload_submit_button" value="Post reply" disabled="true">
+        <div class="code_of_conduct">
+            <div class="input_wrapper code_of_conduct">
+                <input id="postwidget_conduct" class="pw_conduct" type="checkbox" checked="true">
+                <label for="postwidget_conduct">I agree to the <a href="/code_of_conduct" target="_new">Code of Conduct</a></label>
+            </div>
+        </div>
+    </div>
+</div>
+

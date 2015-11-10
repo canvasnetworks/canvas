@@ -1,0 +1,94 @@
+@import "vars", "mixins";
+
+#page {
+    width: 700px;
+    margin: 20px auto;
+    color: $default_text_color;
+    text-align: center;
+    
+    h1 {
+        font-size:2.4em;
+        margin:1.5em 0 0.5em 0;
+        color:#333;
+        
+        &.error {
+            color:$canvas_notice_red;
+        }
+        
+        &.success {
+            color:$canvas_dark_green;
+        }
+    }
+    
+    .message {
+        margin:20px auto;
+        font-size:1.6em;
+        text-align:center;
+    }
+    
+    & > p:not(.message) {
+        font-size:1.4em;
+        color:#333;
+    }
+    
+    .submit {
+        text-align:center;
+        font-size:2.0em;
+        margin-bottom:20px;
+    }
+    /*The .unsubscribe classname is so that we can reuse the email subscriptions snippet in the settings page without overriding too much CSS*/
+    .unsubscribe ul {
+        text-align:left;
+        border:1px solid #aaa;
+        margin:0;
+        margin-bottom:20px;
+        background:#fafcf4;
+        overflow:hidden;
+        @include border-radius();
+        @include box-shadow(inset 1px 1px 3px rgba(#000, 0.3));
+
+        li {
+            padding:10px;
+            list-style-type:none;
+            font-size:1.4em;
+            color:#999;
+
+            &:first-child {
+                @include border-radius(7 7 0 0);
+            }
+
+            &:last-child {
+                @include border-radius(0 0 7 7);
+            }
+
+            &:not(:last-child) {
+                border-bottom:1px solid #aaa;
+            }
+
+            &.active {
+                color:#333;
+                background:#eff4dd;
+                @include box-shadow(0 1px 4px rgba(#000, 0.4));
+                
+                &#unsubscribe_all {
+                    color:#fff;
+                    background:$canvas_notice_red;
+                    @include text-shadow(dark);
+                }
+            }
+
+            label {
+                font-weight:bold;
+            }
+
+            hr {
+                margin:0.1em 0 0.1em 20px;
+                border-top:1px solid #888;
+            }
+
+            p {
+                padding-left:20px;
+            }
+        }
+    }
+}

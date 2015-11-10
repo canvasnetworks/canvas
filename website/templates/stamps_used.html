@@ -1,0 +1,17 @@
+{% djextends "base.django.html" %}
+
+{% block extra_body_classes %}standard{% endblock %}
+
+{% block content %}
+{% if content.first_caption %}<a href="{{ content.first_caption.get_absolute_url() }}">{% endif %}<img src="{{ content.details().get_absolute_url_for_image_type('giant') }}">{% if content.first_caption %}</a>{% endif %}
+
+
+<h2>Stamps Used</h2>
+{% for stamp in stamps %}
+<p>
+{% if stamp.first_caption %}<a href="{{ stamp.first_caption.get_absolute_url() }}">{% endif %}<img src="{{ stamp.details().get_absolute_url_for_image_type('original') }}">{% if stamp.first_caption %}</a>{% endif %}
+</p>
+{% endfor %}
+
+{% endblock %}
+

@@ -1,0 +1,62 @@
+{% extends "header/base.html" %}
+
+{% block header_nav %}{% endblock %}
+{% block facebook_like %}{% endblock %}
+
+{% block header_right_side %}
+    <ul class="user_links">
+        <li class="avatar">
+            <a>
+                {{ header_avatar(request.user.username) }}
+                <span>▼</span>
+            </a>
+            <div class="dropdown right_aligned">
+                <div class="ul_wrapper">
+                    <div class="hover_buffer"></div>
+                    <ul>
+                        <li><a href="/user/{{ request.user.username }}">View My Profile</a></li>
+                        <li><a href="/settings">Settings</a></li>
+                        <li><a href="/invite">Invite Friends</a></li>
+                        <li><a href="mailto:bugs@example.com">Report Bug</a></li>
+                        <li><a href="http://canvasnetworks.uservoice.com">Feedback</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+
+        <li class="activity">
+            <a class="progress_bar" title="Receive {{ last_sticker.level_total - last_sticker.level_progress }} more points to get more #1 stickers!">
+                <div class="progress_fill" style="width:{{ (last_sticker.level_progress/last_sticker.level_total * 100)|round|int }}%;">
+                    <span>{{ (last_sticker.level_progress/last_sticker.level_total * 100)|round|int }}</span>
+                </div>
+                <span>▼</span>
+                <div class="notification_count" {% if activity_stream_unseen <= 0 %}style="display:none;"{% endif %}>
+                    <span>{{ activity_stream_unseen }}</span>
+                </div>
+            </a>
+            <div class="dropdown right_aligned">
+                <div class="ul_wrapper">
+                    {% include "activity/_activity_stream.html" %}
+                </div>
+            </div>
+        </li>
+
+        <li class="new_thread">
+            <a href="/post_thread{% if request.nav_tag %}?t={{ request.nav_tag }}{% endif %}">
+                Start a Thread
+            </a>
+        </li>
+
+        {% if request.user.can_moderate_flagged %}
+            <li class="flagged">
+                <a href="/staff/flagged">
+                    <span class="count">{{ flagged_unjudged }}</span>
+                </a>
+                <div class="arrow"></div>
+            </li>
+        {% endif %}
+
+    </ul>
+{% endblock %}
+

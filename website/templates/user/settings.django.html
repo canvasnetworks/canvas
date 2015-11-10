@@ -1,0 +1,213 @@
+{% extends "base/full_base.django.html" %}
+
+{% block sticker_pack %}{% endblock %}
+
+{% load canvas_tags %}
+{% load compress %}
+
+{% block pageclass %}
+    settings
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <p class="feedback_message">{{ message|safe }}</p>
+    <form id="settings" method="POST">
+        {% csrf_token %}
+
+        {% for form in all_forms %}
+            {{ form.non_field_errors }}
+        {% endfor %}
+        <section>
+            <h2>Email</h2>
+            <hr>
+            <div class="input_wrapper email">
+                {{ email_form.email }}
+                {{ email_form.email.errors }}
+            </div>
+
+            {% if email_confirmation %}
+                <p class="notice">
+                    We've sent you an email to confirm your new email address: <strong>{{ email_confirmation.new_email }}</strong>.
+                    Please check your inbox at that address for a message from us and visit the link given in it to confirm this change.
+                </p>
+                <p><button id="cancel_email_confirmation">Cancel address change</button></p>
+            {% else %}
+                {% if email_updated %}
+                    <p class="notice">
+                        Your email address has been updated!
+                    </p>
+                {% else %}
+                    <p>
+                        We never share your information with anyone and you can opt out of
+                        receiving email below.
+                    </p>
+                {% endif %}
+            {% endif %}
+        </section>
+        <section class="facebook_connections">
+            <h2>Connections</h2>
+            <hr>
+            <div class="connected input_wrapper">
+                <span><img src="/static/img/share_facebook_large.png"></span>
+                <span class="connection_name">Checking...</span>
+            </div>
+            <ul class="connected connections">
+                <li class="active">
+                {{ connections_form.enable_timeline }} Add Canvas to your Facebook Timeline
+                </li>
+            </ul>
+            <div class="disconnected fb_signup_wrapper" style="display: none;">
+                <button type="button" class="facebook facebook_login_button">Connect with Facebook</button>
+            </div>
+        </section>
+        <section>
+            <h2>Change your password</h2>
+            <hr>
+            <div class="input_wrapper">
+                <label for="id_old_password" class="default">Old password</label>
+                {{ pw_form.old_password }}
+                {{ pw_form.old_password.errors }}
+            </div>
+            <span>|</span>
+            <div class="input_wrapper">
+                <label for="id_new_password1" class="default">New password</label>
+                {{ pw_form.new_password1 }}
+                {{ pw_form.new_password1.errors }}
+            </div>
+            <div class="input_wrapper">
+                <label for="id_new_password2" class="default">New password again</label>
+                {{ pw_form.new_password2 }}
+                {{ pw_form.new_password2.errors }}
+            </div>
+            {% if password_updated %}
+                <p>
+                    Your password has been updated!
+                </p>
+            {% endif %}
+        </section>
+        <section>
+            <h2>Mail Preferences</h2>
+            <hr>
+            {% include "email_settings_snippet.django.html" %}
+        </section>
+        <section>
+            <h2>Security</h2>
+            <hr>
+            <ul class="security">
+                <li class="active">
+                {{ https_form.force_https }}
+                <label for="id_force_https">Always force HTTPS</label>
+                <p>
+                HTTPS is a secure connection that will prevent people from
+                eavesdropping on your network traffic to and from Canvas.
+                </p>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Browsing</h2>
+            <hr>
+            <ul class="browsing">
+                <li class="active">
+                {{ browsing_form.hide_reposts }}
+                <label for="id_replied">Hide known reposts</label>
+                <p>
+                Hide images on browse pages which have been previously posted to Canvas.
+                </p>
+                </li>
+                <li class ="id_active">
+                {{ browsing_form.hide_userpage_from_google }}
+                <label for="hide_userpage_from_google">Hide your profile from search engines</label>
+                <p>
+                This is an experimental feature that will prevent most search engines from indexing your profile in search results.
+                </p>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Chrome Extension</h2>
+            <hr>
+            <p>
+                <a href="https://chrome.google.com/webstore/detail/bmkigdhngepnbeipcijhdiheebhnelal" target="_blank">Canvas Remixer</a> for Chrome makes it easier to remix images from anywhere on the web.
+            </p>
+        </section>
+        <section>
+            <h2>Delete account</h2>
+            <hr>
+            <button id="delete_account" class="cancel" type="button">Please delete my account</button>
+        </section>
+        <button type="submit" class="advance">Save Settings</button>
+    </form>
+
+    <form id="delete_account_form" action="{% url apps.user_settings.views.disable_account %}" method="POST">
+        {% csrf_token %}
+    </form>
+</div>
+{% endblock content %}
+
+{% block extra_javascript %}
+<script>
+settings.submit_button_glow = function () {
+    if (settings.submit_button.length) {
+        var speed = 600;
+        settings.submit_button.animate({color:"#F0a"}, speed, "swing", function() {
+            settings.submit_button.animate({color:"#03441F"}, speed, "swing", settings.submit_button_glow);
+        });
+    }
+};
+
+jQuery(document).ready(function () {
+    unsubscribe.wire({{unsubscribed_settings|to_json}});
+
+    settings.submit_button = $("#page button[type=submit]");
+
+    canvas.bind_label_to_input($("#settings input[type=password]"));
+    // Show feedback message if needed
+    if ($("#page .feedback_message").text()) {
+        $("#page .feedback_message").css("display", "inline-block");
+    }
+
+    {% if email_confirmation %}
+        $("#cancel_email_confirmation").bind("click", function(e) {
+            e.preventDefault();
+            window.location.href = "{{ email_confirmation.cancellation_url }}";
+        });
+    {% endif %}
+
+    // Remove warnings after you've taken focus on a field
+    $("input").bind("focus", function() {
+        var error_list = $(this).parent().find("ul.errorlist");
+        if (error_list.length) {
+            error_list.slideUp(200);
+        }
+    });
+
+    $("#delete_account").bind("click", function(e) {
+        e.preventDefault();
+        new canvas.ConfirmDialog({
+            title: "Are you sure?",
+            message: "That sounds pretty drastic. Are you sure you want to delete your account?",
+            cancel_text: "Cancel",
+            default_button: "cancel",
+            ok_text: "Delete",
+            success: function() {
+                // Delete account and logout here.
+                $('#delete_account_form').submit();
+            }
+        });
+    });
+    $("button[type=submit]").bind("click", function() {
+        $(this).addClass("submitting");
+    });
+
+    $("#page input").bind("change", function() {
+        settings.submit_button_glow();
+    });
+
+    settings.wire_facebook();
+
+});
+</script>
+{% endblock %}
+

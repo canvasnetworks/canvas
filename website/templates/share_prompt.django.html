@@ -1,0 +1,30 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+{% load compress %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/signup_prompt.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+    <div class="login_prompt modal share_prompt">
+        <div>
+            <div class="clearfix">
+                <h1>Share your creation!</h1>
+            </div>
+            <div class="share">
+                <a class="facebook_share" href="" onClick="canvas.record_fact('flow_share', {type: 'facebook'}); canvas.share_url(2001, '{{ post_pending_signup_url }}');return false;">
+                    <img class="tooltipped" src="/static/img/share_facebook_large.png" title="Share your post on Facebook!"></a>
+                <a class="twitter_share" href="" onClick="canvas.record_fact('flow_share', {type: 'twitter'}); canvas.share_url(2002, '{{ post_pending_signup_url }}');return false;">
+                    <img class="tooltipped" src="/static/img/share_twitter_large.png" title="Share your post on Twitter!"></a>
+                <br>
+            </div>
+            <a href="/signup_exit_iframe?in_flow=yes"><button class="advance">Finished »</button></a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+

@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Canvas Images for {{ user.username }}</title>
+    <style>
+        .image {
+            /*-webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            width:400px;
+            height:300px;*/
+            max-width:100%;
+        }
+        .image_container {
+            display:inline-block;
+            float:left;
+            width:360px;
+            padding:0;
+            margin:4px;
+        }
+    </style>
+</head>
+<body style="background-color:#eaeaea">
+<h1>{{ user.username }}'s uploaded images</h1>
+<p><strong>Click on any image to download it. Or right-click and click Save As.</strong></p>
+<p><em>Power users only:</em> If you have too many images, another option is to use a browser extension to download all the images on this page. Please look on Google for an image downloader extension for the browser that you use.</p>
+
+{% for image_url in image_urls %}
+    <a href="{{ image_url }}" download class="image_container">
+        <img class="image" src="{{ image_url }}">
+    </a>
+{% endfor %}
+</body>
+</html>

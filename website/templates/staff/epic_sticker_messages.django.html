@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/reset.css">
+        <style>
+            body {
+                margin:2em;
+                font-family:Helvetica;
+            }
+            h1 {
+                font-size:2em;
+                font-weight:bold;
+                margin:0 auto;
+                display:block;
+                text-align:center;
+                margin-bottom:1em;
+            }
+            table {
+                width:300px;
+                border:1px solid gray;
+                margin:0 auto;
+            }
+            tr {
+                background-color:#ddd;
+            }
+            tr.odd {
+                background-color:#eee;
+            }
+            th {
+                font-weight:bold;
+                background-color:#bbb;
+                border-bottom:4px solid gray;
+                text-align:left;
+            }
+            td, th {
+                padding:.4em .6em;
+                text-align:left;
+                max-width:400px;
+                overflow:hidden;
+                /*border:1px solid lightgray;*/
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Epic Sticker Messages</h1>
+        <table>
+            <tr>
+                <th>Message (newest first, {{ total }} total)</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Post</th>
+            </tr>
+        {% for sticker in stickers %}
+            <tr class="{% cycle "even" "odd" %}">
+                <td>{{ sticker.epic_message }}</td>
+                <td><a href="/staff/user/{{ sticker.user.username }}">{{ sticker.user.username }}</a></td>
+                <td>{{ sticker.comment.author.username }}</td>
+                <td><a href="{{ sticker.comment.get_absolute_url }}">Link</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    </body>
+</html>
+

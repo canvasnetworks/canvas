@@ -1,0 +1,53 @@
+{% djextends "base.django.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/logged_out_homepage.css?{{ timestamp() }}">
+<link rel="stylesheet" href="/static/css/logged_out_homepage_admin.css?{{ timestamp() }}">
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="/static/lib/jquery.pajinate.js?{{ timestamp() }}"></script>
+<script src="/static/js/logged_out_homepage_admin.js?{{ timestamp() }}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>Homepage Admin</h1>
+<em>For logged-out users.</em>
+
+<form method="POST" id="homepage_admin_form"> {% csrf_token %}
+    <input type="submit" value="Save & Publish" id="publish">
+
+    {% if page_updated %}
+        <div>
+            <p class="save_message">Saved.</p>
+        </div>
+    {% endif %}
+
+    <div class="spotlighted_threads_container">
+        <h2>Selected for Homepage</h2>
+        <div>
+            <input type="text" id="add_thread_input" placeholder="thread ID">
+            <button id="add_thread_button">Add Thread</button>
+            <em id="thread_id_explanation">Thread ID: the XXXX part of e.g. <code>/p/<span class="id">XXXX</span></code> or <code>/p/<span class="id">XXXX</span>/reply/848970</code></em>
+        </div>
+        <div class="spotlighted_threads">
+            {% for thread in spotlighted_threads %}
+                {{ jinja_thread_preview(thread, True) }}
+            {% endfor %}
+        </div>
+    </div>
+</form>
+
+<div class="suggested_threads_container">
+    <h2>Suggestions</h2>
+    <div class="suggested_threads">
+        <div class="page_navigation"></div>
+        <ul class="content">
+            {% for thread in suggested_threads %}
+                <li>{{ jinja_thread_preview(thread, True) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+

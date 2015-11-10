@@ -1,0 +1,29 @@
+/* =============================
+    Non-Semantic JS Helpers
+============================= */
+
+.hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+.invisible {
+    visibility: hidden !important;
+}
+
+.visible {
+    visibility: visible !important;
+}
+
+.fixed {
+    position:fixed !important;
+}
+
+.absolute {
+    position:absolute !important;
+}
+
+/* Deprecated. Use clearfix mixin or class */
+.clear {
+    clear:both;
+}

@@ -1,0 +1,18 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+{% load compress %}
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/confirm_email.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+<div class="confirm_email">
+    <h1>Confirm Email Address</h1>
+
+    <p>Invalid confirmation key. Please check the URL in the confirmation email we sent to you, or <a href="mailto:support@example.com">contact support</a>.</p>
+</div>
+{% endblock %}
+
+

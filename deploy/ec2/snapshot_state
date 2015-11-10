@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+# AMIs from http://uec-images.ubuntu.com/releases/maverick/release/
+import sys; sys.path += ['/var/canvas/common', '../../common']
+
+import datetime
+import urllib
+
+import configuration
+import ec2
+
+import os
+import os.path
+
+def main():
+    for bucket_name, run_path in [('canvas-state-snapshots', '/var/canvas/website/run'),
+                                  ('drawquest-state-snapshots', '/var/canvas/website/drawquest/run'),]:
+        s3_conn = ec2.s3_connection()
+        bucket = s3_conn.get_bucket(bucket_name)
+
+        day = datetime.date.today().strftime("%Y.%m.%d")
+        instance_id = urllib.urlopen("http://169.254.169.254/latest/meta-data/instance-id").read()
+        time = datetime.datetime.now().strftime("%H.%M.%S")
+
+        dir_name = "%s-%s" % (instance_id, time)
+
+        key_name = "%s/%s.tgz" % (day, dir_name)
+
+        tmpdir = "/tmp/" + dir_name
+        os.mkdir(tmpdir)
+        
+        tail = lambda path: ("tail -n 1000 " + path, os.path.basename(path))
+        tail_run = lambda filename: tail(os.path.join(run_path, filename))
+
+        commands = [
+            ("ps aux", 'process_list.txt'),
+            ("df", "df.txt"),
+            ("lsof", "lsof.txt"),
+            ("netstat -n", "netstat.txt"),
+            tail("/var/log/dmesg"),
+            tail("/var/log/syslog"),
+            tail_run('twistd.log'),
+            tail_run('gunicorn.log'),
+            tail_run('nginx.access.log'),
+            tail_run('nginx.error.log'),
+        ]
+
+        for cmd, filename in commands:
+            os.system("%(cmd)s 2>&1 >> %(tmpdir)s/%(filename)s" % locals())
+
+        os.system("cd /tmp; tar -czf snapshot.tgz " + dir_name)
+
+        key = bucket.new_key(key_name)
+        key.set_contents_from_filename('/tmp/snapshot.tgz')
+        
+
+if __name__ == '__main__':
+    main()
+

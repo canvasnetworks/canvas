@@ -1,0 +1,120 @@
+@import "vars", "mixins";
+
+body {
+    padding:0;
+    margin:0;
+    background:transparent;
+    @include clearfix();
+}
+
+#image_tile {
+    float:left;
+    min-width:450px;
+    max-width:602px;
+    background:transparent;
+    border:1px solid #ccc;
+    margin:0;
+    @include border-radius(0 0 7 7);
+
+    &.padded .image_container{
+        padding:10px;
+
+        img {
+            margin:0 auto;
+            @include box-shadow(0 0 1px rgba(#000, 0.4));
+        }
+    }
+
+    .image_container {
+        position:relative;
+        background:white;
+
+        .theme_bg {
+            position:absolute;
+            width:100%;
+            height:100%;
+            left:0;
+            top:0;
+            @include opacity(0.35);
+        }
+
+        img {
+            display:block;
+            position:relative;
+            margin:0;
+            z-index:1;
+            max-width:600px;
+            height:auto;
+            background:#fff;
+        }
+    }
+
+    footer {
+        position:relative;
+        padding:10px;
+        @include clearfix();
+        @include border-radius(0 0 7 7);
+
+        .top_sticker {
+            position:absolute;
+            right:5px;
+            top:-10px;
+            z-index:2;
+        }
+
+        .sticker_float {
+            float:right;
+            width:43px;
+            height:28px;
+        }
+
+        .author {
+            font-size:1.4em;
+            margin-bottom:0.5em;
+
+            .username {
+                font-weight:bold;
+            }
+
+            .deemph {
+                @include opacity(0.65);
+                font-weight:normal;
+                font-style:italic;
+            }
+
+            & > span:last-child {
+                padding-right:10px;
+            }
+        }
+
+        .caption,
+        .title  {
+            font-size:1.4em;
+            padding-left:5px;
+        }
+
+        .title {
+            font-weight: bold;
+            padding-left: 0px;
+        }
+
+        .url {
+            float:left;
+            position:relative;
+            top:12px;
+            font-size:1.4em;
+        }
+
+        .logo {
+            float:right;
+            span {
+                &.remixed:after {
+                    content:url(/static/img/footer/remixed_on.png);
+                }
+                &.monster_logo:after {
+                    content:url(/static/img/footer/monster_mash_on.png);
+                }
+            }
+        }
+    }
+}

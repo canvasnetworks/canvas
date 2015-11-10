@@ -1,0 +1,39 @@
+{% djextends "base/full_base.django.html" %}
+
+{% block sticker_pack %}{% endblock %}
+
+{% block title %} | Archive{% endblock %}
+
+{% block pageclass %}
+    archive
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+    .archive_link.popular {
+        font-weight:bold;
+        font-size:1.4em;
+    }
+    .archive_link {
+        font-size:1.3em;
+    }
+    .anon {
+        color:#aaa;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <h1>Canvas Archive</h1>
+
+    <h2>Links to every thread in Canvas.</h2>
+
+    <ul style="margin-top:1em;">
+    {% for op in ops %}
+    <li><a class="archive_link" href="{{ op.get_absolute_url() }}">{{ op.title if op.title else "(no title)" }}</a> <span style="font-size:1.1em">({% if not op.anonymous %}<a href="/user/{{ op.author.username }}">{{ op.author.username }}</a>{% else %}<span class="anon">Anonymous</span>{% endif %})</span></li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

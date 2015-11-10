@@ -1,0 +1,93 @@
+<a class="id_anchor" name="{{ reply.id }}"></a>
+
+<div class="not_expanded"{% if is_expanded and reply.reply_content %} style="display:none;"{% endif %}>
+    <div class="timestamp">
+        <p>
+            {{ relative_timestamp(reply.timestamp) }}
+        </p>
+    </div>
+    <div class="post_body">
+        <div class="sticker_theme_bg sticker_themed {% if reply.top_sticker() %}{{ reply.top_sticker().name }}{% else %}unthemed{% endif %}"></div>
+        <div class="wrapper">
+            {% if reply.reply_content %}
+                <a href="{{ reply.url }}" class="expand_post">
+                    <p class="expand_post">Expand</p>
+                    <div class="image_wrapper">
+                        {{ content(reply, "thumbnail") }}
+                    </div>
+                </a>
+            {% endif %}
+            <p class="username">
+                {% if reply.author_name == "Anonymous" %}
+                    anonymous
+                {% else %}
+                    <a href="/user/{{ reply.author_name }}">{{ reply.author_name }}</a>
+                {% endif %}
+            </p>
+            {% if reply.reply_text %}
+                <p class="caption">
+                    {% if reply.replied_comment %}
+                        <a href="{{ reply.replied_comment.url }}" class="replied_link js_check_for_local_link">{{ reply.get_replied_text() }}</a>
+                    {% endif %}
+                    {% if not is_expanded or not reply.reply_content %}{{ ugc_text(reply.reply_text, 2000) }}{% endif %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if reply.reply_content %}
+    <div class="expanded"{% if is_expanded %} style="display:block;"{% endif %}>
+        <nav>
+            <div class="prev"></div>
+            <div class="next"></div>
+        </nav>
+        <div class="fullsize_image_wrapper">
+            <div class="border"></div>
+            <div class="image_container">
+                <img onClick="new_thread.toggle_image_size($(this));" src="{% if is_expanded %}{{ reply.reply_content.get_absolute_url_for_expanded() }}{% endif %}" data-url="{{ reply.reply_content.get_absolute_url_for_expanded() }}">
+            </div>
+            <a class="remix_corner tooltipped" title="Remix this image!" onClick="canvas.record_fact('flow_click_remix');canvas.encourage_signup('remix');"></a>
+        </div>
+        <div class="details">
+            <div class="faded_sticker_bg sticker_themed {% if reply.top_sticker() %}{{ reply.top_sticker().name }}{% else %}unthemed{% endif %}"></div>
+            <div class="scrolling_wrapper">
+                <div class="post_info">
+                    <div class="source">
+                        {% if reply.reply_content.remix_of_giant_url %}
+                            <a href="{{ reply.reply_content.remix_of_first_caption_url }}" class="js_check_for_local_link"><img class="remix_of_icon" src="{{ reply.reply_content.remix_of_thumbnail_url }}"></a>
+                            <img src="/static/img/remix_icon.png">
+                        {% endif %}
+                        <span class="timestamp">{{ relative_timestamp(reply.timestamp) }}</span>
+                    </div>
+                    <p class="username">
+                        {% if reply.author_name == "Anonymous" %}
+                            anonymous
+                        {% else %}
+                            <a href="/user/{{ reply.author_name }}">{{ reply.author_name }}</a>
+                        {% endif %}
+                    </p>
+                    {% if reply.reply_text %}
+                        <p class="caption">
+                            {% if reply.replied_comment %}
+                                <a href="{{ reply.replied_comment.url }}" class="replied_link js_check_for_local_link">{{ reply.get_replied_text() }}</a>
+                            {% endif %}
+                            {% if is_expanded %}{{ ugc_text(reply.reply_text, 2000) }}{% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="detail_modules"></div>
+            </div>
+            <div class="reply_widget">
+                <h2>Add your reply:</h2>
+                <button class="dismiss" onClick="canvas.record_fact('flow_click_remix');canvas.encourage_signup('remix');">Make a remix</button>
+                <div class="input_wrapper">
+                    <label class="default" onClick="canvas.record_fact('logged_out_thread_reply_input_clicked');canvas.encourage_signup('reply');">Write a comment</label>
+                    <textarea onClick="canvas.record_fact('logged_out_thread_reply_input_clicked');canvas.encourage_signup('reply');$(this).blur();"></textarea>
+                </div>
+            </div>
+            <div class="close">×</div>
+        </div>
+    </div>
+{% endif %}
+

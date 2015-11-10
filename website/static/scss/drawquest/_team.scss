@@ -1,0 +1,87 @@
+.team_page {
+    $img_ratio:4/3;
+
+    .page {
+        ul {
+            text-align:center;
+        }
+
+        li {
+            display:inline-block;
+            position:relative;
+            width:335px;
+            text-align:left;
+            $padding:30px;
+            margin-bottom:$padding;
+            margin-right:$padding;
+
+            &:nth-child(even) {
+                margin-right:0;
+            }
+
+            figure {
+                border:$drawing_outer_border;
+                border-bottom:0;
+                background:$drawing_bg_color;
+                padding:15px;
+                padding-bottom:0;
+
+                img {
+                    $size:300px;
+
+                    display:block;
+                    width:$size;
+                    height:$size/$img_ratio;
+                    border:$drawing_inner_border;
+                    border-bottom:0;
+                }
+            }
+
+            figcaption {
+                footer {
+                    $avatar_width:50px;
+
+                    position:relative;
+                    width:100%;
+                    border:$drawing_footer_border;
+                    padding:5px;
+                    padding-left:15px;
+                    color:$default_dark_font;
+                    @include bg-linear-gradient($drawing_footer_gradient);
+                    @include clearfix();
+
+                    .avatar {
+                        position:absolute;
+                        left:0;
+                        top:0;
+                        width:$avatar_width;
+                        height:100%;
+                        background:$_color_white;
+                    }
+
+                    h2 {
+                        margin:0;
+                        font-size:1.6em;
+                    }
+
+                    h3 {
+                        margin:0;
+                        font-size:1.2em;
+                        font-weight:normal;
+                    }
+                }
+
+                > p {
+                    width:90%;
+                    margin:0 auto;
+                    border:2px solid $_color_dark_gray;
+                    border-top:0;
+                    padding:1em;
+                    background:$_color_white;
+                    font-size:1.2em;
+                    color:$default_dark_font;
+                }
+            }
+        }
+    }
+}

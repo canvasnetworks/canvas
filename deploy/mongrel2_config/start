@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /home/mongrel2/canvas/mongrel2_config
+m2sh start -db config.sqlite -every -sudo

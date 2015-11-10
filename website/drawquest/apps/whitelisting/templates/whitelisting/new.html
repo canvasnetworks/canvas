@@ -1,0 +1,16 @@
+{% extends "whitelisting/whitelisting.html" %}
+
+{% block body_class %}new{% endblock %}
+
+{% block nav %}
+        <nav>
+            <a href="/admin/staff/whitelisting">Whitelist</a>
+            |
+            <a href="/admin/staff/whitelisting/flagged">Flagged</a>
+            |
+            <a class="active">Newest</a>
+        </nav>
+{% endblock %}
+
+{% block mode_toggle %}{% endblock %}
+

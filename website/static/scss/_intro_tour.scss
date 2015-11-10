@@ -1,0 +1,85 @@
+.tour_hint {
+    position:absolute !important;
+    z-index:20;
+    @include clearfix();
+
+    .bubble {
+        position:relative;
+        width:254px;
+        font-size:1.4em;
+        color:#fff;
+        cursor:pointer;
+        @include text-shadow(dark);
+    }
+
+    &.arrow_up {
+        .bubble {
+            padding:25px 30px 25px 20px;
+            background:transparent url(/static/img/intro_bubble_top.png);
+            background-size:100% 100%;
+        }
+    }
+    &.arrow_down {
+        .bubble {
+            padding:15px 30px 40px 20px;
+            background:transparent url(/static/img/intro_bubble_bottom.png);
+            background-size:100% 100%;
+        }
+    }
+    &.arrow_left {
+        .bubble {
+            padding:15px 25px 25px 35px;
+            background:transparent url(/static/img/intro_bubble_left.png);
+            background-size:100% 100%;
+        }
+    }
+    &.arrow_right {
+        .bubble {
+            padding:15px 45px 25px 20px;
+            background:transparent url(/static/img/intro_bubble_right.png);
+            background-size:100% 100%;
+        }
+    }
+
+    .next {
+        float:left;
+        font-size:1.4em;
+        line-height:0.5em;
+        color:#999;
+    }
+
+    .skip {
+        float:right;
+        font-size:1.1em;
+        color:#999;
+        line-height:0.9em;
+    }
+
+    footer {
+        padding:10px;
+        background:#fff;
+        @include clearfix();
+        @include border-radius(4);
+        @include box-shadow(2px 2px 5px rgba(#000, 0.3));
+    }
+
+    .next,
+    .skip {
+        position:relative;
+    }
+}
+
+.tour_scrim {
+    position:fixed;
+    z-index:19;
+    width:100%;
+    height:100%;
+    left:0;
+    top:0;
+    background:#fff;
+    @include opacity(0.5);
+}
+
+.tour_highlight {
+    @include box-shadow(0 0 0 4px #DAFF00);
+}

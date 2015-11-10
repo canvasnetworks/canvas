@@ -1,0 +1,29 @@
+<header id="header" class="{% block header_classes %}{% endblock %}">
+    <div class="placeholder {{ "disabled_tall_disabled" if not request.user.is_authenticated() }}"></div>
+    <div class="fixed_wrapper">
+        <div class="top_bar">
+            <div class="wrapper">
+                {% block logo_outer %}
+                    <div class="logo">
+                        {% block logo %}
+                            <a href="/"></a>
+                            {% block facebook_like %}
+                                <div class="fb_like_wrapper">
+                                    <div class="fb-like" data-href="http://www.facebook.com/" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>
+                                </div>
+                            {% endblock %}
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+                <div class="right_side">
+                    {% block header_right_side %}
+                        <a href="/login"><button class="login">Log in</button></a>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        {% block signup_banner %}{% endblock %}
+    </div>
+    <div id="audio_embed"></div>
+</header>
+

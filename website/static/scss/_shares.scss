@@ -1,0 +1,92 @@
+.invite_wrapper {
+    .external_invites {
+        display:inline-block;
+        @extend .clearfix;
+
+        a {
+            display:block;
+            float:left;
+            width:115px;
+            cursor:pointer;
+            color:$canvas_blue;
+            margin:4px;
+            padding:5px;
+            border:1px solid #ccc;
+            @extend .rounded_corners;
+            @include box-shadow(inset -1px -1px 3px rgba(#000, 0.3));
+
+            &:hover {
+                color:$canvas_blue_hover;
+            }
+
+            img {
+                margin:0 auto;
+                display:block;
+            }
+
+            span {
+                font-size:1.4em;
+            }
+        }
+    }
+
+    .input_wrapper {
+        margin-top:3px;
+
+        input {
+            width:80%;
+            margin:0;
+            font-size:1.8em;
+            border:1px solid #bbb;
+            outline:0;
+            padding:5px;
+            @include border-radius(3 0 0 3);
+            @include box-shadow(inset 1px 1px 2px rgba(#000, 0.15));
+            $speed:0.3s;
+            @include transition((border-top-color $speed, border-right-color $speed, border-bottom-color $speed, border-left-color $speed));
+
+            &:hover {
+                border:1px solid #999;
+                @include box-shadow(inset 1px 1px 2px rgba(#000, 0.1));
+            }
+
+            &:focus {
+                border:1px solid $canvas_blue_hover;
+                @include box-shadow(inset 1px 1px 2px rgba(#000, 0.1));
+            }
+        }
+
+        button {
+            width:20%;
+            margin:0;
+            padding:5px 0;
+            text-align:center;
+            font-size:1.8em;
+            vertical-align:middle;
+            @extend .rounded_right;
+        }
+    }
+
+    #invite_canvas_user {
+        position:relative;
+        width:400px;
+        margin:10px auto 0;
+        text-align:left;
+
+        span {
+            font-size:1.4em;
+            color:#666;
+        }
+
+        .invite_status_message p {
+            color:$canvas_dark_green;
+        }
+    }
+
+    p.notify_remix_points {
+        margin:0;
+        margin-bottom:0.5em;
+        max-width:none;
+    }
+}
+

@@ -1,0 +1,35 @@
+{% set needs_pagination = page_last > 1 %}
+{% if needs_pagination or has_top_remixes %}
+    <nav class="pagination">
+        {% if needs_pagination %}
+            <a href="/p/{{ short_id }}/{{ page_current - 1 }}#replies">
+                <button class="prev dismiss" {% if page_current <= 1 or sort_by_top %} disabled{% endif %}>
+                    ❮ &nbsp; prev
+                </button>
+            </a>
+            <a href="/p/{{ short_id }}/{{ page_current + 1 }}#replies">
+                <button class="next dismiss" {% if page_current >= page_last or sort_by_top %} disabled{% endif %}>
+                    next &nbsp; ❯
+                </button>
+            </a>
+        {% endif %}
+        <ul>
+            {% if needs_pagination %}
+                {% for num in pages %}
+                    <li class="{{ "active" if num == page_current and not sort_by_top }}">
+                        <a href="/p/{{ short_id }}/{{num}}#replies">{{ num }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+            <li class="{{ "active" if page == "current" or (not needs_pagination and not sort_by_top)}}">
+                <a href="/p/{{ short_id }}/current#replies">Most Recent</a>
+            </li>
+            {% if has_top_remixes %}
+                <li class="{{ "active" if sort_by_top }}">
+                    <a href="/p/{{ short_id }}/top#replies">Best</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+

@@ -1,0 +1,63 @@
+@import "explore_tile";
+
+#page.explore {
+    #content_header {
+        button {
+            font-size:1.2em;
+        }
+
+        > button.follow_topic_toggle {
+            float:right;
+            margin-right:20px;
+        }
+    }
+
+    #content_well {
+        margin-top:1em;
+        @extend .clearfix;
+        $width_available:790px;
+        $width:250px;
+        $margin:($width_available - $width*3)/2;
+
+        > p {
+            margin:1em;
+            text-align:center;
+            font-size:1.6em;
+            color:#777;
+            @include text-shadow(white);
+        }
+
+        .column {
+            float:left;
+            width:$width;
+            margin-right:$margin;
+
+            &:last-of-type {
+                margin-right:0;
+            }
+
+            .filler {
+                display:none;
+                margin-top:$margin;
+                width:$width;
+                background:#fff;
+                border:1px solid #888;
+                @include box-shadow(0 0 3px rgba(#000, 0.25));
+            }
+
+            > div:empty + .filler {
+                margin-top:0;
+                padding-bottom:$margin - 2;
+                @extend .box_sizing_content;
+            }
+        }
+    }
+
+    #content > footer {
+        padding:1em;
+        font-size:1.4em;
+        color:#777;
+        text-align:center;
+        @include text-shadow(white);
+    }
+}

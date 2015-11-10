@@ -1,0 +1,37 @@
+#page.activity .activity_stream {
+    margin:1em auto;
+    width:700px;
+
+    > h1 {
+        float:left;
+        width:150px;
+        padding:0.25em 1em;
+        text-align:right;
+        color:#999;
+        font-size:1.2em;
+        text-transform:capitalize;
+    }
+
+    > h2 {
+        /* No activity warning */
+        color:#777;
+        text-align:center;
+    }
+
+    > ul {
+        float:left;
+        width:400px;
+    }
+
+    > ul:last-of-type {
+        li.activity_item:last-of-type:not(.level_up) {
+            border:1px solid #aaa;
+        }
+    }
+
+    > ul:first-of-type {
+        li.activity_item.level_up:first-of-type {
+            border-top:0;
+        }
+    }
+}

@@ -1,0 +1,11 @@
+builds
+last*
+next*
+*.txt
+*.log
+workspace*
+cobertura
+javadoc
+htmlreports
+ncover
+doclinks

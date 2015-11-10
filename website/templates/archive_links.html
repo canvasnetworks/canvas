@@ -1,0 +1,33 @@
+{% djextends "base/full_base.django.html" %}
+
+{% block sticker_pack %}{% endblock %}
+
+{% block title %} | Archive{% endblock %}
+
+{% block pageclass %}
+    archive
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+    .archive_link.popular {
+        font-weight:bold;
+        font-size:1.4em;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <h1>Canvas Archive</h1>
+
+    <h2>All Tags</h2>
+
+    <ul style="margin-top:1em;font-size:1.2em">
+    {% for cat in categories %}
+        <li><a class="archive_link {{ "popular" if cat.details().posts > 200}}" href="/x/{{ cat.name }}/archive">{{ cat.name }}</a> ({{ cat.details().posts }} posts)</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

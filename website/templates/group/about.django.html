@@ -1,0 +1,127 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+{% load compress %}
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/group_about.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block extra_body_classes %}group_{{category.name}}{% endblock %}
+{% block content %}
+<div class="group_about">
+    {% if category_disabled %}<h1 class="disabled_group">This group has been disabled</h1>{% endif %}
+    
+    <h1>{{ category.name }}</h1>
+    <hr/>
+    {% if has_form %}<form id="group_about">{% endif %}    
+        
+    {% if can_modify_group %}
+            <h2>Description:</h2>
+            <br/>
+            <textarea type="text" class="description_text">{{ category.description }}</textarea><br/>
+            
+            <br/>
+            <h3>Referees:</h3>
+            <p class="no_referees">You haven't added any referees yet. Referees can mark posts as off-topic in your group.</p>
+            <div class="referee_list"></div>
+
+            <br/>
+            <input type="text" class="add_referee_text">&nbsp;<button class="add_referee" onclick="return false;">Add</button>
+            <span class="add_referee_msg"></span>
+    {% else %}
+            Description:
+            <span class="group_description">{{ category.description }}</span>
+    {% endif %}
+    
+    <br/>
+    <br/>
+        
+    {% if can_disable_group %}
+         <input type="checkbox" id="group_about_disable_checkbox" {% if category_disabled %}checked{% endif %}>
+         <label for="group_about_disable_checkbox">Disabled. Checking this will disable group browsing and posting, but the threads will still be viewable.</label><br/><br/>
+    {% endif %}
+    
+    {% if has_form %}
+        <input type="submit" value="Update group" class="description_update"><br/><br/>
+        </form>
+    {% endif %}
+    
+    Founded by <a href="/user/{{ founder.username }}">{{ founder.username }}</a> on {{ category.founded_readable }}.
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+{% if has_form %}
+<script>
+$(function() {
+    var referees = {{ moderators|to_json }};
+    var referees_selector = 'input[type=checkbox]:checked.referee';
+    var input = $('.group_about input.add_referee_text');
+    var msg_span = $('.group_about span.add_referee_msg');
+    
+    var add_referee = function(name) {
+        $('.group_about .no_referees').hide();
+        $('<input type="checkbox" id="referee_' + name + '" class="referee" checked><label for="referee_' + name + '">&nbsp;' + name + '</label><br/>').data('username', name).appendTo('.group_about .referee_list');
+    }
+    
+    // Add existing referees.
+    $.each(referees, function(i, ref) {
+        add_referee(ref);
+    });
+    
+    canvas.init_default_value($('.group_about input.add_referee_text'), 'Canvas username');
+    
+    // Handle adding a referee.
+    $('.group_about button.add_referee').click(function() {
+        var username = input.val();
+        canvas.apiPOST('/user/exists', { username: username },
+            function (response) {
+                if (response.reason == 'This username is taken :(') {
+                    add_referee(username);
+                    input.val('');
+                    msg_span.removeClass('failure').addClass('success').text('Click "Update group" to save changes.');
+                } else {
+                    msg_span.removeClass('success').addClass('failure').text('No user exists by this name.');
+                }
+            }
+        );
+    });
+    
+    // Inform a save is necessary when unchecking a referee.
+    $(referees_selector).click(function() {
+       if (!$(this).is(':checked')) {
+            msg_span.removeClass('failure').addClass('success').text('Click "Update group" to save changes.');
+       }
+    });
+    
+    // Handle submitting the form.
+    $('.group_about form#group_about').submit(function () {
+        var form_data = {
+            'group_name': '{{ category.name }}',
+            'group_description': $(this).find('.description_text').val(),
+            'group_disabled': $(this).find('#group_about_disable_checkbox').attr('checked'),
+            'referees': [],
+        };
+        // Populate the referees list based on the checked referees.
+        $(referees_selector).each(function() { form_data.referees.push($(this).data('username')); });
+        
+        canvas.apiPOST(
+            '/group/edit',
+            form_data,
+            function (response) {
+                if (response.success) {
+                    window.location.reload(true);
+                } else if (response.reason) {
+                    alert(response.reason);
+                } else {
+                    canvas.log(response);
+                }
+            }
+        );
+        return false;
+    });
+});
+</script>
+{% endif %}
+{% endblock %}

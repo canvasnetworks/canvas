@@ -1,0 +1,99 @@
+body {
+    font:62.5% Arial, Helvetica, sans-serif;
+    color:#222;
+    background:url("/static/img/jobs-bg.png");
+}
+
+h1 {
+    background:#567;
+    color:#f5f5f5;
+    padding:0.2em 0.4em;
+    text-shadow:-1px -1px 0 #333;
+    font-size:1.6em;
+}
+
+a img {
+    border:0;
+    outline:0;
+}
+
+p, li {
+    font-size:1.4em;
+    text-shadow:0 1px 0 #fff;
+}
+
+a {
+    color:#06b;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+a:hover {
+    text-decoration:underline;
+}
+
+#wrapper {
+    width:980px;
+    margin:0 auto;
+    padding:20px 10px;
+}
+
+    .column_1 {
+        float:left;
+        width:475px;
+        margin-right:30px;
+    }
+    
+        .logo {
+            display:block;
+            margin:0 auto;
+            margin-bottom:20px;
+        }
+
+        ul, li {
+            padding-left:0;
+            list-style:none;
+        }
+        
+        li {
+            margin-bottom:0.5em;
+        }
+
+    .column_2 {
+        float:right;
+        width:475px;
+        margin-top:105px;
+    }
+
+p.email a {
+    font-size:3.0em;
+    text-decoration:none;
+    color:#222;
+}
+
+p.email a:hover {
+    color:#06b;
+}
+
+p.email {
+    text-align:center;
+}
+        
+.clearfix:before, .clearfix:after {
+  content: "\0020"; display: block; height: 0; visibility: hidden;    
+} 
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+ul.investors li {
+    display:inline;
+}
+
+    ul.investors li:not(:last-child):after {
+        content:", ";
+    }
+    
+.designer-job-desc li{
+    list-style-type:disc;
+    list-style-position:outside;
+}

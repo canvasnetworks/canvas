@@ -1,0 +1,26 @@
+{% djextends "base/full_base.django.html" %}
+
+{% block sticker_pack %}{% endblock %}
+
+{% block pageclass %}
+    activity
+{% endblock %}
+
+{% block content_well %}
+    <div class="activity_stream">
+        {% if activities|list|length == 0 %}
+            <h2>No activity items, try posting something!</h2>
+        {% endif %}
+
+        {% for day in activities|groupby('date')|sort(attribute='grouper', reverse=True) %}
+            <h1>{{ day.grouper|naturalday }}</h1>
+            <ul>
+                {% for activity in day.list %}
+                    {{ activity_stream_item(activity, request.user) }}
+                {% endfor %}
+            </ul>
+            <div class="clear"></div>
+        {% endfor %}
+    </div>
+{% endblock %}
+

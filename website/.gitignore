@@ -1,0 +1,14 @@
+docs
+twistd.log*
+*.upstream
+*.upstream.old
+dynamic_variables.nginx.conf
+manhole.port
+nosetests.xml
+\.coverage
+coverage.xml
+sentry.db
+nginx.conf
+nginx-factlog.conf
+buckets.properties
+.swf

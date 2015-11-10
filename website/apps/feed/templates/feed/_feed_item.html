@@ -1,0 +1,151 @@
+{% set stickered_by_viewer = True if viewer_sticker %}
+{% set my_post = True if comment.is_author(request.user) %}
+{% set sticker_name = comment.top_sticker().name if comment.top_sticker() %}
+{% set stickered_by_viewer = stickered_by_viewer if sticker_name else False %}
+
+<li class="feed_item dismissable" data-timestamp="{{ item.ts }}" data-comment_id="{{ comment.id }}" data-author_id="{{ comment.author_id if not comment.is_anonymous }}" data-thread_op_comment_id="{{ comment.thread_op_comment_id }}">
+    <div class="user">
+        {% if comment.author_profile_url %}
+            <a class="user_link" href="{{ comment.author_profile_url }}">
+            {{ small_avatar(comment.author_name) }}
+        {% endif %}
+            <p class="username">
+                {% if comment.author_profile_url %}
+                    {{ comment.author_name }}
+                {% else %}
+                    <span class="anon">Anonymous</span>
+                {% endif %}
+            </p>
+        {% if comment.author_profile_url %}
+            </a>
+        {% endif %}
+
+        <p class="timestamp">{{ relative_timestamp(comment.timestamp) }}</p>
+
+        {% if not comment.author_is_canvas() %}
+            {% if not comment.is_anonymous and not viewer_is_following(comment.author_id) and not my_post %}
+                <button class="follow_user_toggle" data-user_id="{{ comment.author_id }}" data-initial_state="false">Follow</button>
+            {% endif %}
+        {% endif %}
+
+        {% if comment.author_is_canvas() %}
+        {% elif item.type == "post" and comment.is_anonymous %}
+            <p class="feed_reason">You follow this user</p>
+        {% elif item.type == "promotion" %}
+            <p class="feed_reason">
+                Stickered by <a href="/user/{{ item.username }}">{{ item.username }}</a>
+            </p>
+            <p>
+                {{ sticker_image(item.sticker_type_id, 'medium', "shadow") }}
+            </p>
+        {% elif item.type == "sticky_thread" %}
+            <p class="feed_reason">Stickered by Canvas</p>
+        {% elif item.type == "thread" %}
+            <p class="feed_reason">You follow this thread</p>
+        {% endif %}
+    </div>
+    <div
+        class="wrapper {% if sticker_name %}stickered{% endif %} {% if stickered_by_viewer %}stickered_by_viewer{% elif my_post %}my_post{% else %}stickerable{% endif %}"
+        data-comment_id="{{ comment.id }}"
+        data-details="{{ comment|to_escaped_comment_details_json }}"
+    >
+        <div class="sticker_message_overlay"></div>
+        <div class="sticker_bg sticker_themed {{ sticker_name }}"></div>
+        <div class="sticker_flavor">
+            {% if sticker_name %}
+                {{ sticker_image(sticker_name, 'large', "shadow") }}
+                {% if comment.sorted_sticker_counts()[0].count > 1 %}
+                    <span class="sticker_count">
+                        <span>{{ comment.sorted_sticker_counts()[0].count }}</span>
+                    </span>
+                {% endif %}
+            {% endif %}
+            <div class="sticker_triangle">
+                <div class="rotated">
+                    <div class="sticker_themed {{ sticker_name }}"></div>
+                </div>
+            </div>
+            <div class="sticker_target"></div>
+            <div class="top_stickers">
+                {% for stick in comment.sorted_sticker_counts() %}
+                    {% if loop.index > 1 %}
+                        <span>
+                            {{ sticker_image(stick.type_id, 'medium', "shadow") }}
+                            <span class="sticker_count">
+                                <span>{{ stick.count }}</span>
+                            </span>
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="content">
+            {% if item.is_dismissable or item.type == 'sticky_thread' %}
+                <div class="close_options">
+                    ×
+                    <div class="close_dialog">
+                        <div class="hover_buffer"></div>
+                        <ul>
+                            {% if item.is_dismissable %}
+                                <li><a class="hide_offensive">Flag post</a></li>
+                            {% endif %}
+                            <li><a class="hide_comment">Hide post</a></li>
+                        </ul>
+
+                        {% if item.is_dismissable %}
+                        <ul>
+                            {% if item.type == "thread" %}
+                                <li><a class="hide_unfollow_thread">Unfollow this thread</a></li>
+                            {% else %}
+                                <li><a class="hide_thread">Hide all posts from this thread</a></li>
+                                {% if item.type == "post"
+                                        and not comment.is_anonymous
+                                        and viewer_is_following(comment.author_id) %}
+                                    <li><a class="hide_unfollow">Unfollow {{ comment.author_name }}</a></li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <a href="{{ comment.linked_url }}">
+                <div class="preview">
+                    {% if comment.external_content %}
+                        <div class="audio_hint"></div>
+                    {% elif comment.reply_content.original.animated %}
+                        <div class="animated_hint"></div>
+                    {% endif %}
+                    {% if item.type == "sticky_thread" %}
+                        <p class="sticky_text"><span class="ribbon_fold"></span><span class="text">{{ item.text }}</span></p>
+                    {% endif %}
+
+                    {% set img = comment.reply_content.column %}
+                    {{ content(comment, "medium_square", lazy=lazy_content) }}
+                </div>
+            </a>
+
+            <hgroup>
+                <h1><a href="{{ comment.linked_url }}">{{ comment.thread.title }}</a></h1>
+                {% set author_count = comment.thread.author_count %}
+                {% if author_count %}
+                    <h2><strong>{{ author_count }}</strong> {{ author_count|pluralize("person,people") }} remixing</h2>
+                {% endif %}
+            </hgroup>
+
+            <p class="tags">
+                {% for tag in comment.tags %}
+                    <a href="{{ tag.get_absolute_url() }}" class="tag_link">{{ tag.name }}</a>
+                {% endfor %}
+            </p>
+
+            {% if comment.reply_text %}
+                <p class="caption">
+                    {{ ugc_text(comment.reply_text, 2000, False, truncation_markup='<a class="more_link">(more)</a>') }}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</li>
+

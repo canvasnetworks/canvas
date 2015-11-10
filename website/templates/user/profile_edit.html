@@ -1,0 +1,70 @@
+{% extends "post_thread/post_thread.html" %}
+
+{% block content %}
+<div id="postwidget" class="pw_container">
+    <div class="animated_spinner" style="display: block;"></div>
+    <form id="form_widget">
+        <h1>Edit your profile:</h1>
+        <div class="widget">
+            <div class="image_wrapper">
+
+                <!-- Make sure it doesn't matter that we don't have pw_existed -->
+
+                {% if show_start_options %}
+                    <label for="remix">Start with an image or from scratch:</label>
+
+                    {% include "content/image_chooser.html" %}
+                {% endif %}
+
+                {% include "remix/remix_widget.html" %}
+
+                {% if not show_start_options %}
+                    <div class="start_over">
+                        <button id="start_over">× Delete and start over</button>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form_inputs">
+                <div class="input_wrapper caption">
+                    <label for="postwidget_caption">About you:</label>
+                    <textarea id="postwidget_caption" class="pw_text" rows="3"></textarea>
+                </div>
+                <input type="hidden" id="post_thread_title" value="Profile">
+                <input class="category_free_select" type="hidden" value="profiles">
+            </div>
+        </div>
+        <div class="submit form_submission">
+            <input type="submit" class="advance upload_submit_button" value="Update Profile" disabled="true">
+            <div class="code_of_conduct">
+                <div class="input_wrapper code_of_conduct">
+                    <input id="postwidget_conduct" class="pw_conduct" type="checkbox" checked="true">
+                    <label for="postwidget_conduct">I agree to the <a href="/code_of_conduct" target="_new">Code of Conduct</a></label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/profile_edit.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+    var draw_from_scratch_content = canvas.storeContent({{ start_content|to_json }});
+    profile_edit.thread_op = {{ thread_op|to_json }};
+    profile_edit.current_comment = {{ current_comment|to_json }};
+    profile_edit.wire();
+
+    if (profile_edit.current_comment != null) {
+        action.remix(draw_from_scratch_content.id, 'draw');
+        profile_edit.pw.toggle_submittable(true);
+        profile_edit.remixer._hide_close_button();
+    }
+
+    profile_edit.caption.val({{ bio_text|to_json }});
+</script>
+{% endblock %}

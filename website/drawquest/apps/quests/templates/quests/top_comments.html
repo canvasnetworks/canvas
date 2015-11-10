@@ -1,0 +1,383 @@
+{% extends "drawquest/dqbase.html" %}
+
+{% block viewport_meta %}
+    <meta name="viewport" content="width=device-height">
+{% endblock %}
+
+{% block extra_meta %}
+    <meta name="apple-itunes-app" content="app-id={{ app_store_id() }}, affiliate-data=myAffiliateData, app-argument=myURL">
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/drawquest/top_comments_page.css">
+{% endblock %}
+
+{% block body %}
+    <div class="quest_bar">
+        <div class="fixed_width_wrapper">
+            <a href="{{ app_store_link() }}" class="app_store_link">
+                <img src="/static/img/drawquest/promotion/apple_app_store@2x.png">
+            </a>
+            <h1 class="no_outline"><span class="ugc_text"> Quest title<span></h1>
+        </div>
+    </div>
+    <div class="main">
+        <div class="fixed_width_wrapper">
+            <ul class="comments">
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>1</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>2</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>3</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>4</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>5</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>6</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>7</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>8</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>9</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>10</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>11</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>12</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>13</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>14</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>15</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>16</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>17</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>18</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>19</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>20</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>21</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>22</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>23</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>24</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+                <li>
+                    <div class="drawing_wrapper">
+                        <a href="/p/xxx">
+                            <div class=" drawing">
+                                <img class="ugc_img" src="">
+                            </div>
+                        </a>
+                    </div>
+                    <p>
+                        by username &nbsp;&nbsp;
+                        <span>25</span> <img title="Starred" class="icon" src="/static/img/drawquest/share_star_small.png">
+                    </p>
+                </li>
+            </ul>
+            <div class="marketing">
+                <div>
+                    <img class="app_icon" src="/static/img/drawquest/app_icon_125.png">
+                    <img class="logo" src="/static/img/drawquest/logo_share_page.png">
+                    <p class="about">
+                        DrawQuest is a free drawing community exclusively for iPad.
+                        <br><br>
+                        Every day, people come together on DrawQuest to draw the Quest
+                        of the Day. What's a Quest? It's a challenge to use your
+                        imagination and complete a drawing!
+                        <br><br>
+                        Join us on <a href="http://facebook.com/">Facebook</a>
+                        or <a href="http://twitter.com/">Twitter</a>
+                        for the latest news and best drawings.
+                    </p>
+                </div>
+                <div>
+                    <p>See more drawings in the app!</p>
+                    <a href="{{ app_store_link() }}">
+                        <button class="cta">
+                            <img src="/static/img/drawquest/apple_icon_shadowed.png">&nbsp;
+                            Download the App
+                            &nbsp;<img src="/static/img/drawquest/button_arrow_shadowed.png">
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "drawquest/footer.html" %}
+{% endblock %}

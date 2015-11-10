@@ -1,0 +1,38 @@
+<div class="invite_remixers">
+    <header>
+        <div class="close"></div>
+        <h1>Invite Remixers!</h1>
+    </header>
+    <p>
+        Get more #1s when people remix your post!
+    </p>
+    <div class="invite_options">
+        <div class="external">
+            <a onClick="sticker_actions.share_comment(2001, {{ comment.id }}, null, 'invite_remixers');return false;">
+                <img src="/static/img/share_facebook_large.png">
+            </a>
+            <a onClick="sticker_actions.share_comment(2002, {{ comment.id }}, null, 'invite_remixers');return false;">
+                <img src="/static/img/share_twitter_large.png">
+            </a>
+            <a onClick="sticker_actions.share_comment(2006, {{ comment.id }}, null, 'invite_remixers');return false;">
+                <img src="/static/img/share_email_large.png">
+            </a>
+        </div>
+        <div class="internal">
+            <div class="input_wrapper">
+                <label for="inviteremixerusername_{{ uuid }}" class="default">Canvas username</label>
+                <input  id="inviteremixerusername_{{ uuid }}" class="canvas_username" type="text" autocomplete="off">
+                <button>Invite</button>
+            </div>
+            <div class="invite_status_message"></div>
+        </div>
+        <div class="arbitrary">
+            <div class="input_wrapper">
+                <label for="inviteremixerurl_{{ uuid }}">Share URL:</label>
+                <input value="{{ invite_url }}" type="text" class="invite_url ezselect" autocomplete="off">
+                <button class="copy_text">copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+

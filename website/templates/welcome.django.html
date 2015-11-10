@@ -1,0 +1,134 @@
+{% extends "base.django.html" %}
+
+{% load canvas_tags %}
+{% load jinja_tags %}
+{% load compress %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/welcome.css">
+{% endcompress %}
+{% endblock %}
+
+{% block extra_body_classes %}{% if onboarding %}onboarding_finish{% endif %}{% endblock %}
+
+{% block content %}
+{% if post_pending_signup_url %}
+    <div class="post_pending">
+        Thanks for posting! We'll take you back to your post in just a moment.
+    </div>
+{% endif %}
+
+{% if onboarding %}
+    {% render_jinja "onboarding/finish.html" %}
+    <img src="/static/img/intro_steps.png">
+    <button class="onboarding_next primary_finish_button" data-onboarding_next="{{ onboarding_next }}">
+        Continue to Canvas Homepage
+    </button>
+{% else %}
+    <div class="fake_header">
+        <h1>What is Canvas?</h1>
+        <p>
+            Canvas is a place to share and play with images. <strong>Explore</strong> new content created by other users,
+            <strong>vote</strong> on your favorites, and even <strong>make</strong> your own image remixes with the in-browser editor.
+        </p>
+    </div>
+    <span class="skip_animations">skip ahead</span>
+    <a class="ready"><input id="ready_button" type="submit" class="advance" value="Continue"></a>
+    <div class="tutorials">
+        <div class="column" id="column_1">
+            <h1>Drag stickers to vote</h1>
+            <img src="/static/img/welcome-1.png">
+        </div>
+        <div class="column" id="column_2">
+            <h1>Remix other images</h1>
+            <img src="/static/img/welcome-2.png">
+        </div>
+        <div class="column" id="column_3">
+            <h1>Start a conversation</h1>
+            <img src="/static/img/welcome-3.png">
+        </div>
+        <div class="clear">
+    </div>
+    <br/><br/>
+{% endif %}
+{% endblock %}
+
+{% block extra_javascript %}
+{% compress js %}
+    <script src="/static/js/onboarding/onboarding.js"></script>
+{% endcompress %}
+
+{% if not onboarding %}
+    <script>
+    jQuery(document).ready(function () {
+        var is_fixed = false,
+            is_locked = false,
+            last_scrolltop = 0,
+            footer_offset = 0,
+            infinite_load_offset = 1000;
+        if (!current.is_mobile) {
+            canvas.log("not mobile");
+            $(window).scroll(function(e) {
+                if ($(window).scrollTop() < last_scrolltop && is_fixed) {
+                    // Scrolling up
+                    is_locked = false;
+                    footer_offset = $(window).scrollTop() - last_scrolltop + footer_offset;
+                    footer_offset = Math.min(footer_offset, 0);
+                    $("#footer").css({bottom:footer_offset});
+                    var difference = $("#footer").offset().top + $("#footer").outerHeight(true) - $(document).height();
+                    if (difference > 0) {
+                        footer_offset += difference;
+                        footer_offset = Math.min(footer_offset, 0);
+                        $("#footer").css({bottom:footer_offset});
+                    }
+                }
+                else if ($(window).scrollTop() > last_scrolltop && is_fixed && !is_locked) {
+                    // Scrolling down
+                    is_locked = false;
+                    footer_offset = footer_offset + $(window).scrollTop() - last_scrolltop;
+                    footer_offset = Math.min(footer_offset, 0);
+                    $("#footer").css({bottom:footer_offset});
+                    if (footer_offset >= 0) {
+                        is_locked = true;
+                        $("#footer").css({bottom:0});
+                        footer_offset = 0;
+                    }
+                }
+                else if (($(window).scrollTop() + $(window).height()) >= ($("#footer").offset().top + $("#footer").outerHeight()) && !is_fixed && !is_locked) {
+                    is_fixed = true;
+                    is_locked = true;
+                    $("#footer").css({position:"fixed", bottom:0, left:0, zIndex:4, width:"100%"});
+                    $(window).scrollTop($(window).scrollTop() + $("#footer").outerHeight(true));
+                }
+                last_scrolltop = $(window).scrollTop();
+            });
+        }
+        $(window).trigger("scroll");
+        
+        // Fade in columns
+        $("#column_1").animate({opacity:1}, 1000, "swing");
+        setTimeout(function() {
+            $("#column_2").animate({opacity:1}, 1000, "swing");
+        }, 2500);
+        setTimeout(function() {
+            $("#column_3").animate({opacity:1}, 1000, "swing");
+            $(".skip_animations").css("z-index", "-1");
+        }, 5000);
+        setTimeout(function() {
+            $("#ready_button, header").animate({opacity:1}, 1000, "swing");
+            var redirect_url = "{{next}}";
+            $("a.ready").attr("href", redirect_url);
+        }, 7000);
+        
+        $(".skip_animations").bind("click", function() {
+            $("#column 1, #column_2, #column_3, header, #ready_button").css("opacity", 1);
+            $(".skip_animations").css("z-index", "-1");
+            var redirect_url = "{{next}}";
+            $("a.ready").attr("href", redirect_url);
+        });
+    });
+    </script>
+{% endif %}
+{% endblock %}
+

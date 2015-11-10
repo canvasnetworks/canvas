@@ -1,0 +1,46 @@
+{% macro linked_image(post) %}
+    {% set img = post.reply_content.column %}
+    <a href="{{ post.url }}">
+        <div class="ugc_img" style="background-image: url({{ img.name }}); background-size:{% if img.height > img.width %}100% auto{% else %}auto 100%{% endif %}"></div>
+    </a>
+{% endmacro %}
+
+<div class="thread_preview" data-op_id="{{ thread.main_post.id }}">
+    {% if admin_view %}
+        <div class="ordinal">
+            <input type="number" name="sort_order-{{ thread.main_post.id }}" value="{{ thread.sort }}" placeholder="ordinal">
+            <a class="remove">remove from homepage</a>
+            <a class="add">add to homepage</a>
+        </div>
+        <div class="sticky_text">
+            Text: <input type="textbox" name="text-{{ thread.main_post.id }}" value="{{ thread.text }}" placeholder="text"/>
+        </div>
+    {% endif %}
+
+    {% if show_curation_info %}
+        <div class="details">
+            <span>
+                {% if thread.curator %}
+                    Selected by: {{ thread.curator }}
+                {% endif %}
+                {% if thread.timestamp %}
+                    {{ relative_timestamp(thread.timestamp) }}
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+
+    <div class="main_thumbnail">
+        {{ linked_image(thread.main_post) }}
+    </div>
+    <hgroup>
+        <h1><a href="{{ thread.main_post.url }}" class="ugc_text">{{ thread.main_post.title }}</a></h1>
+        <h2>
+            <img src="/static/img/remix_icon.png">
+            {% if thread.main_post.category %}
+                <a href="{{ thread.main_post.category_url }}">#{{ thread.main_post.category }}</a>
+            {% endif %}
+        </h2>
+    </hgroup>
+</div>
+

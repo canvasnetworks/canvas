@@ -1,0 +1,57 @@
+{% extends "base.django.html" %}
+
+{% load canvas_tags %}
+{% load jinja_tags %}
+{% load compress %}
+
+{% block extra_css %}
+{% compress css %}
+    <link rel="stylesheet" href="/static/css/view_thread.css">
+    <link rel="stylesheet" href="/static/css/image_tile.css">
+    <link rel="stylesheet" href="/static/css/postwidget.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block title %}
+| Posted in #{{ main_comment.comment.category }}
+{% if title %}: {{ title|striptags }}{% endif %}
+{% endblock %}
+
+{% block head %}
+<meta property="og:title" content="{{ fb_metadata.title|escape }}">
+<meta property="og:description" content="{{ fb_metadata.description|escape }}">
+<meta property="og:image" content="{{ fb_metadata.image }}">
+<meta property="og:type" content="{% og_type %}">
+<link rel="image_src" href="{{ fb_metadata.image }}" />
+{% endblock %}
+
+{% block content %}
+{% render_jinja "threads/view_thread.html" %}
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra_javascript %}
+{% compress js %}
+    <script src="/static/js/view_thread.js"></script>
+{% endcompress %}
+
+<script>
+current.share_page = true;
+view_thread.num_top = {{ num_top|to_json }};
+view_thread.remaining_remixes = {{ remaining_remixes|to_json }};
+view_thread.main_comment = {{ main_comment.comment|to_json }};
+view_thread.parent_comment = {{ parent_comment.comment|to_json }};
+view_thread.top_replies = [];
+
+{% for tile in remixes %}
+    view_thread.top_replies.push({{ tile.comment|to_json }});
+{% endfor %}
+
+$(function () {
+    view_thread.wire();
+    canvas.record_fact("flow_page_ready");
+});
+</script>
+{% endblock %}
+

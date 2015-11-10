@@ -1,0 +1,33 @@
+{% if invited.first_name %}
+<p>Hi {{ invited.first_name }},</p>
+{% endif %}
+
+<p>{% if inviter_name %}Your friend {{ inviter_name }} has invited you{% else %}You have been invited{% endif %} to join Canvas!</p>
+
+{% if extra_message %}<p>{{ extra_message }}</p>{% endif %}
+
+<p>To sign up, visit the following link: <a href="https://example.com/signup?invite={{ code }}" target="_blank" title="Sign up for Canvas!">https://example.com/signup?invite={{ code }}</a></p>
+
+{% if invited %}
+<p>For our beta, we're using Facebook Connect to handle invites and
+authenticate new users. We won't show your Facebook profile photo
+or name anywhere on the site and will only store your e-mail
+address for future updates.</p>
+{% endif %}
+
+<p>We want Canvas to be the best place to share and play with images.
+Remember that Canvas is a worksafe site. Please use common sense,
+keep it clean, and respect copyrights.</p>
+
+<p>Canvas in its current form represents just a kernel of our
+long-term vision for the site, and we couldn't be more excited
+about what's in store. We look forward to having you try it out 
+as we spend the next few months collecting feedback, learning, 
+tweaking, and building the best site possible.</p>
+
+<p>Thank you for participating in the beta!</p>
+
+<p>-Canvas Team</p>
+
+
+<p>PS: Follow us on Twitter (<a href="http://twitter.com/" target="_blank" title="Canvas Twitter">@canv_as</a>) and Tumblr (<a href="http://blog.example.com/" target="_blank" title="Canvas Blog">blog.example.com</a>)!</p>

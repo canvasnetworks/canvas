@@ -1,0 +1,11 @@
+import hudson.model.*
+enabled = false
+for(item in Hudson.instance.items) {
+  if (!(item.name in ['deploy', 'test_and_deploy'])) {
+    item.disabled=(!enabled)
+    item.save()
+    println("=> "+enabled + " " + item.name)
+  } else {
+    println("SKIPPED: "+item.name)
+  }
+}

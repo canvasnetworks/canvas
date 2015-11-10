@@ -1,0 +1,73 @@
+.share_comment {
+    display:inline-block;
+    @include clearfix();
+
+    button {
+        float:left;
+        width:30px;
+        height:26px;
+        padding:0;
+        border-width:1px 0 1px 1px;
+        font-size:1.2em;
+        @extend .rounded_none;
+        @extend .box_sizing_content;
+    }
+
+    button:first-of-type {
+        @extend .hard_edge_right;
+    }
+
+    button:last-of-type {
+        border-width:1px;
+        @extend .hard_edge_left;
+    }
+
+    button.share_facebook {
+        $url:url(/static/img/share/share_button_facebook_bg.png);
+        @include bg-image-over-linear-gradient($url, (90deg, #ccc 0%, #eee 100%));
+        &:hover {
+            background-position:bottom center;
+            @include bg-image-over-linear-gradient($url, (90deg, #ccc 0%, #eee 100%));
+        }
+        &:active {
+            background-position:bottom center;
+            @include bg-image-over-linear-gradient($url, (90deg, #ccc*0.95 0%, #eee*0.98 100%));
+        }
+    }
+    button.share_twitter {
+        $url:url(/static/img/share/share_button_twitter_bg.png);
+        @include bg-image-over-linear-gradient($url, (90deg, #ccc 0%, #eee 100%));
+        &:hover {
+            background-position:bottom center;
+            @include bg-image-over-linear-gradient($url, (90deg, #ccc 0%, #eee 100%));
+        }
+        &:active {
+            background-position:bottom center;
+            @include bg-image-over-linear-gradient($url, (90deg, #ccc*0.95 0%, #eee*0.98 100%));
+        }
+    }
+    button.share_email {
+        $url:url(/static/img/share/share_button_email_bg.png);
+        @include bg-image-over-linear-gradient($url, (90deg, #ccc 0%, #eee 100%));
+        &:hover {
+            background-position:bottom center;
+            @include bg-image-over-linear-gradient($url, (90deg, #ccc 0%, #eee 100%));
+        }
+        &:active {
+            background-position:bottom center;
+            @include bg-image-over-linear-gradient($url, (90deg, #ccc*0.95 0%, #eee*0.98 100%));
+        }
+    }
+    button.share_tumblr {
+        $url:url(/static/img/share/share_button_tumblr_bg.png);
+        @include bg-image-over-linear-gradient($url, (90deg, #ccc 0%, #eee 100%));
+        &:hover {
+            background-position:bottom center;
+            @include bg-image-over-linear-gradient($url, (90deg, #ccc 0%, #eee 100%));
+        }
+        &:active {
+            background-position:bottom center;
+            @include bg-image-over-linear-gradient($url, (90deg, #ccc*0.95 0%, #eee*0.98 100%));
+        }
+    }
+}

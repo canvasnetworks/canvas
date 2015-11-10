@@ -1,0 +1,47 @@
+{% extends "drawquest/dqbase.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/unsubscribe.css"/>
+{% endblock %}
+
+{% block body %}
+    {% if user %}
+        <div id="unsubscribe_feedback">
+            {% if unsubscribed %}
+                <h1 class="success">
+                    Your subscription settings have been succesfully saved!
+                </h1>
+            {% else %}
+                <h1>Something went wrong</h1>
+                <p>
+                    Invalid e-mail token "{{ token }}" for email "{{ email }}" or user "{{ user.username }}".
+                    Please contact <a href="mailto:support@example.com">support@example.com</a> to unsubscribe.
+                </p>
+            {% endif %}
+        </div>
+        {% block email_settings_snippet %}{% endblock %}
+    {% else %}
+        {% if unsubscribed %}
+            <h1>Unsubscribed</h1>
+            <p>{{ email }} will no longer receive emails from DrawQuest.</p>
+        {% else %}
+            {% if not error %}
+                <h1>Unsubscribe</h1>
+                <p>Opt out of all future emails to the address <strong>{{ email }}</strong> from DrawQuest.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="token" value="{{ token }}" />
+                    <input type="hidden" name="email" value="{{ email }}" />
+                    <input type="submit" value="Unsubscribe"></input>
+                </form>
+            {% else %}
+                <h1>Something went wrong</h1>
+                <p>
+                    Invalid e-mail token "{{ token }}" for email "{{ email }}" or user "{{ user_id }}".
+                    Please contact <a href="mailto:support@example.com">support@example.com</a> to unsubscribe.
+                </p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {% block user %}{% endblock %}
+{% endblock %}

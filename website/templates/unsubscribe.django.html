@@ -1,0 +1,82 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+{% load compress %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/unsubscribe.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block header %}{% endblock %}
+{% block content %}
+
+{% if user %}
+    <div id="unsubscribe_feedback">
+        {% if unsubscribed %}
+            <h1 class="success">
+                {% if unsubscribed_from_thread %}
+                    You've been unsubscribed from that thread!
+                {% else %}
+                    Your subscription settings have been succesfully saved!
+                {% endif %}
+            </h1>
+            {% if unsubscribed_on_get %}
+                <p class="message">
+                    <a href="javascript:unsubscribe.show_options();">(manage your email settings further)</a>
+                </p>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div id="settings_wrapper"{% if unsubscribed_on_get %} style="display:none;"{% endif %}>
+        <h1>E-Mail Settings</h1>
+        <form id="settings" method="POST" class="unsubscribe" action="/unsubscribe">
+            {% csrf_token %}
+            {% include "email_settings_snippet.django.html"%}        
+            <input type="hidden" name="token" value="{{ token }}">
+            {% if user_id %}
+                <input type="hidden" name="user_id" value="{{ user_id }}">
+            {% endif %}
+            <button type="submit" class="advance submit">Save Settings</button>
+        </form>
+    </div>
+{% else %}
+    {% if unsubscribed %}
+        <h1>Unsubscribed</h1>
+        <p>{{ email }} will no longer receive emails from Canvas.</p>
+    {% else %}
+        {% if not error %}
+            <h1>Unsubscribe</h1>
+            <p>Opt out of all future emails to the address <strong>{{ email }}</strong> from Canvas.</p>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="token" value="{{ token }}" />
+                <input type="hidden" name="email" value="{{ email }}" />
+                <input type="submit" value="Unsubscribe"></input>
+            </form>
+        {% else %}
+            <h1>Something went wrong</h1>
+            <p>
+                Invalid e-mail token "{{ token }}" for email "{{ email }}" or user "{{ user_id }}".
+                Please <a href="/login">log in</a> or if you are unable, contact <a href="mailto:support@example.com">support@example.com</a> to unsubscribe
+            </p>
+        {% endif %}
+    {% endif %}
+{% endif %}
+        
+{% endblock %}
+{% block base_ready %}{% endblock %}
+{% block base_onload %}{% endblock %}
+
+{% if user %}
+    {% block extra_javascript %}
+    <script>
+        jQuery(document).ready(function() {
+            unsubscribe.wire({{ unsubscribed_settings|to_json }});
+        });
+    </script>
+    {% endblock %}
+{% endif %}
+
+{% block footer %}{% endblock %}
+

@@ -1,0 +1,16 @@
+{% extends "whitelisting/whitelisting.html" %}
+
+{% block body_class %}flag_queue{% endblock %}
+
+{% block nav %}
+        <nav>
+            <a href="/admin/staff/whitelisting">Whitelist</a>
+            |
+            <a class="active">Flagged</a>
+            |
+            <a href="/admin/staff/whitelisting/new">Newest</a>
+        </nav>
+{% endblock %}
+
+{% block mode_toggle %}{% endblock %}
+

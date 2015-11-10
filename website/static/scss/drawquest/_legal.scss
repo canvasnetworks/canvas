@@ -1,0 +1,42 @@
+body.legal .page {
+    p {
+        font-size:1.2em;
+        line-height:1.4em;
+        color:$default_dark_font;
+    }
+
+    .navigation {
+        ul {
+            margin:0;
+        }
+
+        span, li {
+            font-size:1.4em;
+            line-height:1.4em;
+            color:$default_dark_font;
+        }
+
+        span {
+            font-weight:bold;
+        }
+    }
+
+    section {
+        margin:3em 0;
+
+        li > span {
+            font-size:1.2em;
+            line-height:1.4em;
+            color:$default_dark_font;
+            font-weight:bold;
+        }
+    }
+
+    h2 {
+        font-size:1.8em;
+
+        a {
+            color:$default_dark_font;
+        }
+    }
+}

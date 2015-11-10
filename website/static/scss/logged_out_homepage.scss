@@ -1,0 +1,356 @@
+@import "vars", "mixins";
+// Only take what we need from extendables for space savings
+.rounded_1_25em {
+    @include border-radius(1.25em);
+}
+.rounded_0_35em {
+    @include border-radius(0.35em);
+}
+.rounded_5px {
+    @include border-radius(5);
+}
+.rounded_4px {
+    @include border-radius(4);
+}
+.clearfix {
+    @include clearfix();
+}
+
+.box_sizing_content {
+    @include box-sizing(content-box);
+}
+
+.box_sizing_border {
+    @include box-sizing(border-box);
+}
+
+.text_selection_auto {
+    @include text-selection(auto);
+}
+
+.text_selection_none {
+    @include text-selection(none);
+}
+@import "normalize", "defaults", "sitewide", "js_helpers", "thread_preview";
+@import "signup_form";
+
+body {
+    background:#fff;
+}
+
+#page {
+    width:inherit;
+    margin:inherit;
+
+    button {
+        
+    }
+
+    header {
+        border-bottom:1px solid #999;
+        @include bg-linear-gradient((90deg, #eee 0%, #fff 100%));
+
+        .wrapper {
+            width:1000px;
+            margin:0 auto;
+            padding:0 15px;
+            @include clearfix();
+        }
+
+        hgroup.logo {
+            float:left;
+
+            h1,
+            h2{
+                float:left;
+            }
+
+            h1 {
+                margin-right:20px;
+            }
+
+            h2 {
+                position:relative;
+                top:5px;
+            }
+
+            img {
+                margin:5px 0 8px;
+                vertical-align:middle;
+            }
+        }
+
+        .links {
+            position:relative;
+            top:8px;
+        }
+
+        a.log_in {
+            float:right;
+            display:block;
+            margin-left:10px;
+
+            button {
+                font-size:1.2em;
+            }
+        }
+
+        .about_us {
+            float:right;
+            padding:5px 0;
+            font-size:1.4em;
+
+            a {
+                color:$canvas_blue_muted;
+
+                &:hover,
+                &:active {
+                    color:$canvas_blue_muted_dark;
+                }
+            }
+        }
+    }
+
+    .marketing {
+        position:relative;
+        @include bg-linear-gradient((90deg, #a0e0ff 0%, #38a6d2 100%));
+        @include box-shadow(inset 0 -1px 10px rgba(#000, 0.3));
+
+        .bg_texture {
+            @include fullsize();
+            z-index:0;
+            background:url(/static/img/bg_transparent.png);
+        }
+
+        h1 {
+            color:#111;
+            @include text-shadow(lighter);
+        }
+
+        .wrapper {
+            position:relative;
+            width:940px;
+            margin:0 auto;
+            padding:5px 10px 30px;
+            z-index:1;
+            @include clearfix();
+
+            > h1 {
+                width:530px;
+                margin:10px 0;
+                padding:0 10px;
+                font-size:3.6em;
+                color:#222;
+                text-align:left;
+            }
+        }
+
+        hr {
+            margin:5px 0;
+            border-top:1px solid #aaa;
+            border-bottom:1px solid rgba(#fff, 0.5);
+        }
+
+        .signup,
+        .explanation {
+            float:left;
+        }
+
+        .explanation {
+            margin-right:25px;
+
+            p.message {
+                font-size:1.4em;
+            }
+        }
+    }
+
+    .content {
+        width:1000px;
+        padding:10px;
+        margin:0 auto;
+        @include clearfix();
+
+        .standard_remixes,
+        .monster_promo {
+            > h1 {
+                font-size:2.4em;
+                color:#555;
+                margin:10px;
+                text-align:left;
+                @include text-shadow(light);
+            }
+        }
+
+        .standard_remixes {
+            float:left;
+            width:660px;
+
+            .explore_more {
+                text-align:center;
+                margin:30px 0;
+            }
+        }
+
+        .monster_promo {
+            float:left;
+            width:300px;
+            margin-left:20px;
+            text-align:center;
+
+            > .wrapper {
+                position:relative;
+                margin-bottom:1.5em;
+                border:1px solid #ccc;
+                padding:10px;
+                background:#fff;
+                text-align:left;
+                @include clearfix();
+                @include border-radius();
+                @include box-shadow(0 1px 0 #fff);
+
+                > img {
+                    float:left;
+                    margin-left:-5px;
+                    margin-bottom:1em;
+                }
+            }
+
+            .chat_bubble {
+                float:left;
+                position:relative;
+                width:195px;
+                padding:0.8em;
+                @include bg-linear-gradient((-90deg, #d4f1ff 0%, #bce6fb 100%));
+                font-size:1.2em;
+                margin-bottom:1em;
+                @include border-radius(0.6em);
+
+                p + p {
+                    margin-top:1em;
+
+                    a {
+                        color:$canvas_dark_blue;
+                    }
+                }
+
+                &:before {
+                    content:"\00a0";
+                    display:block;
+                    position:absolute;
+                    width:0;
+                    height:0;
+                    left:-20px;
+                    top:20px;
+                    border-width:5px 10px;
+                    border-style:solid;
+                    border-color:transparent #d4f1ff transparent transparent;
+                }
+            }
+
+            .monster {
+                width:250px;
+                margin:1.25em auto 0.75em;
+            }
+        }
+    }
+}
+
+#intro_animation {
+    > .matte {
+        border:2px solid #999;
+        padding:13px;
+        background:$canvas_white url(/static/img/bg_transparent.png);
+        @include border-radius();
+
+        .animation_window {
+            $width:500px;
+            $height:347px;
+            width:$width;
+            height:$height;
+            border:1px solid #333;
+            cursor:pointer;
+            overflow:hidden;
+            @include box-sizing(content-box);
+            @include box-shadow(0 0 5px rgba(#000, 0.5));
+
+            * {
+                cursor:pointer;
+            }
+
+            ul {
+                position:relative;
+
+                li {
+                    position:relative;
+                    width:$width;
+                    height:$height;
+                    background:url(/static/img/editbg.png) center center no-repeat;
+                    background-size:100% auto;
+                }
+            }
+
+            .frame_1 { background-image:url(/static/img/intro_animation/caldy_intro_frame1.gif); }
+            .frame_2 { background-image:url(/static/img/intro_animation/caldy_intro_frame2.gif); }
+            .frame_3 { background-image:url(/static/img/intro_animation/caldy_intro_frame3.gif); }
+            .frame_4 { background-image:url(/static/img/intro_animation/caldy_intro_frame4.gif); }
+
+            .frame_2 .scribble {
+                position:absolute;
+                width:187px;
+                height:130px;
+                left:285px;
+                top:24px;
+                background:#fff;
+
+                &.play_animation {
+                    background:transparent;
+                }
+            }
+        }
+    }
+}
+
+#animation {
+    display:none;
+    .animation_wrapper {
+        position:relative;
+        width:500px;
+        height:200px;
+        margin:0 auto;
+        border:1px solid #aaa;
+        background:#fff;
+        overflow:hidden;
+    }
+
+    .pan {
+        position:relative;
+    }
+
+    .movable {
+        position:absolute;
+    }
+
+    .flipped {
+        -moz-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        transform: scaleX(-1);
+        -ms-filter: fliph; /*IE*/
+        filter: fliph; /*IE*/
+    }
+    
+    .preload {
+        position:absolute;
+        top:200px;
+    }
+
+    .message {
+        width:500px;
+        height:1em;
+        margin:10px auto;
+        color:#333;
+        text-align:center;
+    }
+}
+

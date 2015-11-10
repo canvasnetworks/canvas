@@ -1,0 +1,103 @@
+li.activity_item {
+    a {
+        display:block;
+        width:400px;
+        border:1px solid #aaa;
+        border-bottom:0;
+        padding:1em;
+        background:#fff;
+        color:#333;
+        text-align:left;
+        @extend .clearfix;
+
+        &:hover {
+            text-decoration:none;
+            color:#333;
+            background:#EFFAFF;
+        }
+    }
+
+    &.unread a {
+        background:#EAF3F9;
+    }
+
+    img.thumbnail {
+        float:left;
+        width:50px;
+        height:50px;
+        margin-right:1em;
+        border:1px solid #999;
+    }
+
+    button,
+    .icon,
+    .sticker_container {
+        float:right;
+    }
+
+    button {
+        margin-top:0.5em;
+        margin-left:0.5em;
+    }
+
+    .icon {
+        width:50px;
+        height:50px;
+        background-repeat:no-repeat;
+        background-position:center center;
+    }
+
+    p.message {
+        font-size:1.4em;
+    }
+
+    p.timestamp {
+        font-size:1.2em;
+        color:#777;
+    }
+
+    &.level_up {
+        background:transparent;
+        border-left:0;
+        border-right:0;
+        cursor:default;
+        @include text-shadow(white);
+
+        a {
+            text-align:center;
+        }
+
+        h1 {
+            font-size:2.4em;
+        }
+
+        p {
+            font-size:1.4em;
+        }
+
+        .sticker_container {
+            float:none;
+            vertical-align:bottom;
+            position:relative;
+            top:0.22em;
+        }
+    }
+
+    .personal_message {
+        margin-top:0.5em;
+        padding:1em;
+        background:rgba(#000, 0.05);
+        @extend .rounded_4px;
+        @include box-shadow(inset 1px 1px 1px rgba(#000, 0.3));
+
+        p {
+            font-size:1.4em;
+            line-height:1.4em;
+
+            &:before {
+                content:url(/static/img/feed_tile/quotation.png);
+                margin-right:0.5em;
+            }
+        }
+    }
+}

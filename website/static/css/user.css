@@ -1,0 +1,211 @@
+#page {
+    position:relative;
+    width:1000px;
+    margin:0 auto;
+    padding:10px 10px 0 10px;
+}
+
+#page hr {
+    margin-top:0;
+    margin-bottom:0.6em;
+}
+
+#sticker_column {
+    padding-bottom:40px;
+    margin-bottom:30px;
+}
+
+.main_column h1 {
+    font-size:1.8em;
+}
+
+#page.user .message {
+    font-size: 1.6em;
+    font-weight: bold;
+    clear: both;
+}
+
+#page > h1 {
+    font-size:3.2em;
+    margin-bottom:0.25em;
+}
+
+#page > h1 .staff_badge {
+    font-size: 0.6em;
+}
+
+#page h2 {
+    font-size: 1.2em;
+}
+
+    #page .gutter {
+        width:18px;
+        float:left;
+    }
+            
+    .main_column {
+        float:left;
+    }
+    
+    .image_group {
+        margin-bottom:20px;
+    }
+    
+    .column {
+        width:150px;
+        margin-right:10px;
+        float:left;
+    }
+    
+    .column:last-child {
+        margin-right:0;
+    }
+    
+        .column .footer {
+            content:"\00a0";
+            text-align:center;
+            font-size:1.6em;
+            color:#fff;
+            vertical-align:center;
+            margin-bottom:10px;
+        }
+        
+        #page .back_link {
+            float:left;
+            margin-left:25px;
+            font-size:1.8em;
+            display:none;
+        }
+        
+        #page .show_more_loading,
+        #page .show_more_link {
+            display:block;
+            text-align:center;
+            font-size:1.8em;
+            color:#aaa;
+            cursor:pointer;
+        }
+        
+        #page .next_link {
+            float:right;
+            margin-right:25px;
+            font-size:1.8em;
+            display:none;
+        }
+        
+        .image_tile {
+            width:150px;
+            margin-bottom:10px;
+        }
+        
+            .image_tile .image_container {
+                -webkit-box-shadow: inset 1px 1px 0px #ccc, inset -1px 0px 0px #ccc;
+                -moz-box-shadow: inset 1px 1px 0px #ccc, inset -1px 0px 0px #ccc;
+                box-shadow: inset 1px 1px 0px #ccc, inset -1px 0px 0px #ccc;
+            }
+            
+            .image_tile .image_caption {
+                padding:5px 5px 3px 5px;
+                font-size:1.2em;
+            }
+            
+            .image_tile .image_reply_count {
+                padding:3px 5px 5px 5px;
+                font-size:1.0em;
+            }
+                    
+            .image_notification {
+                padding:3px 5px 5px 5px;
+            }
+                    
+            .image_tile .image_stickers {
+                width:140px;
+                right:5px;
+                bottom:0;
+            }
+        
+                .image_tile .top_sticker .sticker_count {
+                    bottom:2px;
+                    right:-3px;
+                    font-size:0.4em;
+                }
+                
+                .image_tile .image_sticker_details {
+                    padding-bottom:0;
+                }
+                
+                .image_tile .sticker_overlay .sticker_container,
+                .image_tile .top_sticker .sticker_container {
+                    width:25px;
+                    height:25px;
+                }
+                
+        .image_tile .image_footer {
+            min-height:20px;
+        }
+        
+        .image_tile .image_stickers_wrapper {
+            width:150px;
+            font-size:0.8em;
+        }
+        
+        .image_tile .image_stickers {
+            bottom:-20px;
+        }
+
+        .image_tile .comment_container p {
+            width:150px;
+        }
+    
+    .sort_column {
+        width:40px;
+        height:150px;
+        float:left;
+        text-align:center;
+    }
+    
+        .sort_column .filter_button {
+            display:inline-block;
+            width:25px;
+            height:25px;
+            background:#ccc;
+            border-top:2px solid #ddd;
+            border-left:2px solid #d8d8d8;
+            border-right:2px solid #c0c0c0;
+            border-bottom:2px solid #bbb;
+            cursor:pointer;
+            margin-bottom:3px;
+        }
+    
+        .sort_column .filter_button.active {
+            display:inline-block;
+            width:25px;
+            height:25px;
+            background:#b0b0b0;
+            border-top:2px solid #999;
+            border-left:2px solid #aaa;
+            border-right:2px solid #d8d8d8;
+            border-bottom:2px solid #ddd;
+            cursor:default;
+            margin-bottom:3px;
+        }
+    
+        .sort_column .sticker_container {
+            display:inline-block;
+            width:25px;
+            height:25px;
+            vertical-align:top;
+            z-index:3;
+            background-size:100% 300%;
+            background-position:0 -25px;
+        }
+        
+.temp {
+    height:0;
+    overflow:hidden;
+}
+
+.footer.faded {
+    opacity:0.25;
+    filter:alpha(opacity=25);
+}

@@ -1,0 +1,88 @@
+{% extends "drawquest/dqbase.html" %}
+
+{% block extra_meta %}
+<meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/drawquest/landing_page.css">
+{% endblock %}
+
+{% block extra_javascript %}
+    <script>
+        (function() {
+            // Slideshow helper to handle clicks
+            // and automatically scroll through
+            var slideshow = $('ul.slideshow');
+            var active_class = "active";
+            var slideshow_timer;
+
+            var slideshow_reset = function(delay) {
+                if (slideshow_timer) {
+                    clearInterval(slideshow_timer);
+                }
+                delay = (delay) ? delay : 3000;
+                slideshow_timer = setInterval(function() {
+                    var active = slideshow.children("." + active_class);
+                    var next = active.next();
+                    if (!next.length) {
+                        next = slideshow.children("li:first-child");
+                    }
+                    active.removeClass(active_class);
+                    next.addClass(active_class)
+                }, delay);
+            };
+            slideshow_reset();
+
+            slideshow.on("click", "li", function() {
+                var target = $(this);
+                if (target.hasClass(active_class)) {
+                    return;
+                }
+                slideshow_reset(5000);
+                slideshow.children("li." + active_class).removeClass(active_class);
+                target.addClass(active_class);
+            });
+        })();
+    </script>
+{% endblock %}
+
+{% block body %}
+    <section class="body">
+        <div class="fixed_width_wrapper">
+            <div class="main">
+                <ul class="slideshow">
+                    <li class="active"><div class="screenshot shot_1"></div></li>
+                    <li><div class="screenshot shot_2"></div></li>
+                    <li><div class="screenshot shot_3"></div></li>
+                </ul>
+                <a href="{{ app_store_link() }}" class="app_store_link">
+                    <img src="/static/img/drawquest/promotion/apple_app_store.png">
+                </a>
+            </div>
+            <div class="marketing">
+                <img class="app_icon" src="/static/img/drawquest/app_icon_60.png">
+                <img class="logo" src="/static/img/drawquest/logo_share_page.png">
+                <p class="about">
+                    DrawQuest is a free drawing community exclusively for iPad.
+                    <br><br>
+                    Every day, people come together on DrawQuest to draw the Quest
+                    of the Day. What's a Quest? It's a challenge to use your
+                    imagination and complete a drawing!
+                    <br><br>
+                    Join us on <a href="http://facebook.com/">Facebook</a>
+                    or <a href="http://twitter.com/">Twitter</a>
+                    for the latest news and best drawings.
+                </p>
+                <a href="{{ app_store_link() }}">
+                    <button class="cta">
+                        <img src="/static/img/drawquest/apple_icon_shadowed.png">&nbsp;
+                        Download the App
+                        &nbsp;<img src="/static/img/drawquest/button_arrow_shadowed.png">
+                    </button>
+                </a>
+            </div>
+        </div>
+    </section>
+    {% include 'drawquest/footer.html' %}
+{% endblock %}

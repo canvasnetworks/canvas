@@ -1,0 +1,157 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style>
+.fact {
+    display: inline-block;
+    background-color: #ddd;
+    border-radius: 4px;
+    margin: 6px;
+    padding: 4px;
+    float: left;
+    clear: both;
+}
+
+.fact.hide_details ul {
+    display: none;
+}
+
+.fact.hide_details .contract {
+    display: none;
+}
+
+.fact:not(.hide_details) .expand {
+    display: none;
+}
+
+.fact .fact_name {
+    float: left;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.fact .expand,
+.fact .contract {
+    font-size: 16px;
+    float: right;
+    clear: right;
+}
+#funnel_visualization div {
+    border:1px solid #eb725d;
+    border-radius: 4px;
+    display:inline-block;
+    font-size:14px;
+    margin:.5em;
+    padding:.2em .5em;
+}
+#funnel_visualization div.filled {
+    background-color:#eb725d;
+}
+#funnels {
+    background-color:#fefdeb;
+    margin-bottom:2em;
+}
+#funnels .funnel {
+    background-color:#f1bd6d;
+    border-radius: 4px;
+    margin:2em 4px 2em 2em;
+    display:inline-block;
+    padding:.5em .3em;
+}
+#funnels input {
+    margin:0 .5em;
+    position:relative;
+    top:-2px;
+}
+#funnels label {
+    font-size:16px;
+    font-weight:normal;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="funnels">
+    <div class="funnel"><input type="radio" name="funnels" checked="checked" id="all_facts"><label for="all_facts">All facts</label></div>
+    {% for funnel, facts in funnels.items %}
+        <div class="funnel">
+            <input data-facts='{{ facts|to_json }}' name="funnels" type="radio" id="funnel_{{ funnel }}">
+            <label for="funnel_{{ funnel }}">{{ funnel }}</label>
+        </div>
+    {% endfor %}
+    <div id="funnel_visualization"></div>
+</div>
+<div id="fact_stream">
+</div>
+{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block extra_javascript %}
+{% raw_html "jqt/fact.html" %}
+<script>
+$(function () {
+    $('#fact_stream').delegate(".fact", "click", function () {
+        $(this).toggleClass('hide_details');
+    });
+
+    var filter_stream = function () {
+        var filter_facts = $('#funnels :checked').data('facts');
+        if (filter_facts) {
+            $('#fact_stream .fact').each(function (_, el) {
+                el = $(el);
+                var fact_name = el.data('fact_name');
+                console.log(fact_name);
+                console.log(filter_facts);
+                if (filter_facts.indexOf(fact_name) === -1) {
+                    el.hide();
+                } else {
+                    el.show();
+                }
+            });
+        } else {
+            $('#fact_stream .fact').show();
+        }
+    };
+
+    var update_filter_progress = function () {
+        $('#funnel_visualization').empty();
+        var facts = $('#funnels input:checked').data('facts');
+        if (typeof facts === 'undefined') {
+            return;
+        }
+        $.each(facts, function (i, fact) {
+            var step = $('<div class="funnel_step"></div>').text(fact).appendTo($('#funnel_visualization'));
+            if ($('#fact_stream .fact[data-fact_name='+fact+']').length) {
+                step.addClass('filled');
+            }
+
+            if (i < facts.length - 1) {
+                $('#funnel_visualization').append('→');
+            }
+        });
+    };
+
+    $('#funnels input').click(function () {
+        var that = this;
+        filter_stream();
+        update_filter_progress();
+    });
+
+    realtime.subscribe({{ debug_fact_channel|to_json }}, function (messages) {
+        $.each(messages, function (i, fact) {
+            var info = {
+                fact_name: fact['type'] == 'metric' ? fact.metric : fact.type,
+                fact: fact,
+            };
+            $('#fact_stream').append(canvas.render('fact_template', info));
+            filter_stream();
+            update_filter_progress();
+        });
+    });
+});
+</script>
+{% endblock %}
+

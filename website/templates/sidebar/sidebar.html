@@ -1,0 +1,88 @@
+<div id="sidebar">
+    <nav>
+        <ul>
+            <li class="feed {% if current_nav == "feed" %}active{% endif %}">
+                <a href="/feed">
+                    <img src="/static/img/sidebar/icon_feed.png">
+                    Dashboard
+                    <span class="realtime_count">{{ feed_unseen if feed_unseen and feed_unseen > 0 }}</span>
+                </a>
+            </li>
+            <li {% if current_nav == "monster" %}class="active"{% endif %}>
+                <a href="/monster">
+                    <img src="/static/img/sidebar/icon_monster.png">
+                    Monster Mash
+                </a>
+            </li>
+            <li {% if current_nav == "explore" %}class="active"{% endif %}>
+                <a href="/x/everything">
+                    <img src="/static/img/sidebar/icon_explore.png">
+                    Explore
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <hr>
+    <div class="input_wrapper tag_search">
+        <label class="default" for="sidebar_tag_search">Search tags</label>
+        <input type="text"><button>&nbsp;</button>
+    </div>
+    <ul class="tracked_tags">
+        {% if request.user.is_authenticated() %}
+            {% for tag in tracked_tags %}
+                <li class="tracked_tag {% if not tag.tracked %}untracked{% endif %} {% if tag.current %}active{% endif %}">
+                    <a class="follow" onClick="sidebar.add_searched_tag();">+</a>
+                    <a class="remove" data-tag="{{ tag.name }}" data-unseen="{% if tag.unseen %}{{ tag.unseen }}{% endif %}">×</a>
+                    <a class="tag" href="/x/{{ tag.name }}/new">
+                        <span class="realtime_count" data-tag="{{ tag.name }}">{% if tag.unseen %}{{ tag.unseen }}{% endif %}</span>
+                        <span class="tag_name">{{ tag.name }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        {% else %}
+            {% for tag in tracked_tags %}
+                <li class="tracked_tag untracked {% if tag.current %}active{% endif %}">
+                    <a class="follow" onClick="canvas.encourage_signup('follow_tag');">+</a>
+                    <a class="tag" href="/x/{{ tag.name }}/new">
+                        <span class="tag_name">{{ tag.name }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+    <hr>
+    {% if request.user.is_authenticated() %}
+        {{ suggestion_widget(request.user) }}
+        <hr>
+    {% endif %}
+    <div class="contact_legal">
+        <a>Contact & Legal</a>
+        <div class="hidden_links">
+            <p class="more_links">
+                <a href="/about">About Canvas</a>
+                <a href="mailto:contact@example.com">Contact Us</a>
+                <a href="/code_of_conduct">Code of Conduct</a>
+                <a href="/terms">Terms of Service</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/dmca">DMCA</a>
+                <a href="http://blog.example.com">Blog</a>
+                <a href="//facebook.com/">Facebook</a>
+                <a href="//twitter.com/">Twitter</a>
+            </p>
+            <p class="facebook">
+                Like us on Facebook:
+            </p>
+            <div class="fb_like_wrapper">
+                <div class="fb-like" data-href="http://www.facebook.com/" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>
+            </div>
+            <p class="copyright">
+                Copyright © 2010-2012 Canvas Networks, Inc.
+                All rights reserved.
+            </p>
+        </div>
+    </div>
+    <div class="back_to_top" onClick="sidebar.back_to_top();">
+        Back to Top <img src="/static/img/sidebar/back_to_top.png">
+    </div>
+</div>
+

@@ -1,0 +1,11 @@
+// DrawQuest custom fonts
+@font-face {
+    font-family:'VanillaRegular';
+    src:url(/static/font/Vanilla-webfont.eot);
+    src:url(/static/font/Vanilla-webfont.eot?#iefix) format('embedded-opentype'),
+        url(/static/font/Vanilla-webfont.woff) format('woff'),
+        url(/static/font/Vanilla-webfont.ttf) format('truetype'),
+        url(/static/font/Vanilla-webfont.svg#VanillaRegular) format('svg');
+    font-weight:normal;
+    font-style:normal;
+}

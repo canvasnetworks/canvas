@@ -1,0 +1,282 @@
+/* Rounded tabs */
+ul.tabs {
+    
+}
+
+ul.tabs > li {
+    float:right;
+    padding-left:13px;
+    color:#fff;
+    height:25px;
+    margin-bottom:5px;
+    clear:right;
+    white-space:nowrap;
+    border-radius: 15px 0px 0px 15px;
+    -moz-border-radius: 15px 0px 0px 15px;
+    -webkit-border-top-right-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+}
+
+ul.tabs > li > img {
+    vertical-align:middle;
+    display:inline-block;
+}
+
+ul.tabs > li > span {
+    position:relative;
+}
+
+ul.tabs > li > *:last-child:after {
+    content:url('/static/img/tab-arrow.png');
+    vertical-align:middle;
+    display:inline-block;
+    margin-left:5px;
+}
+
+ul.tabs > li.main > *:last-child:after {
+    content:url('/static/img/inverted-arrow.png');
+    margin-left:2px;
+}
+
+.content {
+    position:relative;
+    width:710px;
+    min-width:710px;
+    left:-150px;
+    margin:0 auto;
+}
+        
+/* Posts */
+.post {
+    position:relative;
+    margin-bottom:3px;
+}
+
+.highlight > .post-right:after {
+    content:"\00a0";
+    position:absolute;
+    right:-3px;
+    top:0;
+    width:5px;
+    height:100%;
+    background:yellow;
+}
+
+    .post-left, #stash-left {
+        float:left;
+        width:300px;
+        text-align:right;
+    }
+        
+        .post-left > ul.tabs > li {
+            background:#81B4C5;
+        }
+        
+        .post.no-content ul.tabs > li {
+            margin-bottom:0;
+        }
+        
+        .post-left ul {
+            z-index:10;
+        }
+        
+            .post-left ul.tabs li > span.rel-timestamp {
+                color:#eee;
+                /*
+                font-size:10px;
+                top:-2px;
+                */
+            }
+            
+            .post-left > ul.tabs > li.main > span.rel-timestamp:after {
+                content:url('/static/img/timestamp-arrow.png');
+                vertical-align:middle;
+                display:inline-block;
+            }
+            
+            .post-left ul.tabs li > span:last-child {
+                font-weight:bold;
+            }
+            
+            .post-left ul.tabs li:nth-child(2) {
+                background:gray;
+            }
+    
+        .post-actions {
+            position:relative;
+            width: 100px;
+            right: -200px; /* -220px; /* hidden behind post by default */
+        }
+        
+            .post-actions > ul.tabs {
+                padding-top:30px;
+            }
+            
+                .post-actions > ul.tabs > li {
+                    font-style:italic;
+                    background:gray;
+                    cursor:pointer;
+                }
+                
+                .post-actions > ul.tabs > li:last-child {
+                    margin-bottom:0;
+                }
+                
+                    .post-actions > ul.tabs > li > img {
+                        margin-right:3px;
+                    }
+        
+    .post-right {
+        float:left;
+        width:410px;
+        min-width:410px;
+    }
+    
+        .post-body, .input-post-body {
+            position:relative;
+            z-index:10;
+            padding:5px;
+            background:#fff;
+            min-height:115px;
+        }
+        
+        .post-body.no-content {
+            min-height:0;
+        }
+        
+        .post.no-content .post-content {
+            display:none !important;
+        }
+        
+        .input-post-body {
+            padding:0 5px 5px 5px;
+            min-height:20px;
+        }
+        
+            .post-content, .input-post-content {
+                position:relative;
+                z-index:10;
+                background:#fff;
+            }
+            
+            .input-post-content {
+                padding-top:5px;
+            }
+            
+            .post-message {
+                background:#fff;
+                min-height:15px;
+            }
+            
+                .post-message:empty {
+                    min-height:0;
+                }
+            
+                .post-message > p {
+                    /* line-height: 1.2; */
+                    width:400px;
+                }
+                
+                .post-message > p {
+                    display:block;
+                    border-left:3px solid #aaa;
+                    padding-left:5px;
+                }
+                
+                .post.no-content .post-message > p {
+                    border:none;
+                }
+
+/* Posting and More Posts horizontal breaks */
+#break-post-bg {
+    position:absolute;
+    width:100%;
+    height:31px;
+    z-index: -10;
+    background:url("../img/break-post-bg.png");
+}
+
+#break-more-bg {
+    position:absolute;
+    width:100%;
+    height:79px;
+    z-index: -10;
+    background:url("../img/break-more-bg.png");
+}
+
+#break-post-spacer {
+    height: 31px;
+}
+
+#break-more-spacer {
+    height: 79px;
+    text-align:center;
+    color:#666;
+    font-size: 24px;
+    font-style:italic;
+    font-weight:bold;
+    padding-top: 30px;
+}
+
+    #break-more-spacer a {
+        color:#666;
+    }
+
+    #break-more-spacer > span{
+        cursor:pointer;
+    }
+
+.break-post-padding, .break-more-padding {
+    height: 15px;
+}
+
+.post-image.zoomable {
+    cursor: url(/static/img/zoomInCursor.png), auto;
+}
+
+.post-image.zoomable.zoomed-in {
+    cursor: url(/static/img/zoomOutCursor.png), auto;
+}
+
+.postbox-buttons {
+    float: left;
+}
+.postbox-settings {
+    float: right;
+}
+
+.postbox-imagedrop {
+       background: #eee url(/static/img/imagedrop.png?cachebreak) no-repeat;
+       color: #7792b1;
+       cursor: pointer;
+       font-size: 0.8em;
+       font-weight: bold;
+       text-align: center;
+       user-select: none;
+       -webkit-user-select: none;
+}
+
+.postbox-imagedrop:hover {
+       background: #eee url(/static/img/imagedrop_over.png?cachebreak) no-repeat;
+}
+
+.dropsize {
+    width: 106px;
+    height: 76px;
+}
+
+#postbox-loading {
+    position: absolute;
+    z-index: 50;
+    display: none;
+}
+
+#postbox-loading-content {
+    background: #ccc;
+    color: #666;
+    font-size: 0.7em;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}

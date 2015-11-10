@@ -1,0 +1,10 @@
+<script type="text/html" id="tracked_tag_template">
+    <li class="tracked_tag {{if untracked}}untracked{{/if}}">
+        <a class="follow" onClick="sidebar.add_searched_tag();">+</a>
+        <a class="remove" data-tag="${tag_name}">×</a>
+        <a class="tag" href="/x/${tag_name}">
+            ${tag_name}
+            <span class="realtime_count" data-tag="${tag_name}"></span>
+        </a>
+    </li>
+</script>

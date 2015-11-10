@@ -1,0 +1,149 @@
+{% load compress %}
+{% comment %}
+This is the set of common things between our js tests and our production base.django.html
+DO NOT add non-script tags to this.
+{% endcomment %}
+{% block html %}
+    {% block core_javascript %}
+        {% if PROJECT == "drawquest" %}
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.js"></script>
+        {% else %}
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+        {% endif %}
+
+        {% compress js %}
+            {% if not DEBUG %}
+                {% comment %}<script src="/static/lib/tracekit.9b7483a4e85b272fef64.js"></script>{% endcomment %}
+                {% comment %}<script src="/static/js/sentry.js"></script>{% endcomment %}
+            {% endif %}
+
+            <script src="/static/js/common.js"></script>
+            <script src="/static/js/follow_buttons.js"></script>
+            <script src="/static/js/widgets/base_widget.js"></script>
+
+            <script src="/static/lib/jquery.cookie.js"></script>
+            <script src="/static/lib/jquery.pubsub.js"></script>
+            <script src="/static/lib/jstorage.js"></script>
+            <script src="/static/lib/uploadify/jquery.uploadify.v2.1.4.js"></script>
+            <script src="/static/lib/jquery.tmpl.js"></script>
+            <script src="/static/lib/jquery.idle-timer.js"></script>
+            <script src="/static/lib/json2.js"></script>
+            <script src="/static/lib/swfobject/swfobject.js"></script>
+            <script src="/static/lib/ba-linkify.js"></script>
+            <script src="/static/lib/jquery.scrollTo.js"></script>
+            <script src="/static/lib/jquery.ba-resize.min.js"></script>
+            <script src="/static/lib/jquery.mobileDrag.js"></script>
+            <script src="/static/lib/jquery.tooltip.js"></script>
+            <script src="/static/lib/jquery.validate.js"></script>
+            <script src="/static/lib/jquery.mousewheel.js"></script>
+            <script src="/static/lib/fileupload/jquery.iframe-transport.js"></script>
+            <script src="/static/lib/fileupload/jquery.fileupload.js"></script>
+            <script src="/static/lib/filtrr.js"></script>
+            <script src="/static/lib/imagefilters.js"></script>
+            <script src="/static/lib/JSManipulate/dither.js"></script>
+            <script src="/static/lib/JSManipulate/oil.js"></script>
+            <script src="/static/lib/zclip/jquery.zclip.js"></script>
+            <script src="/static/lib/jquery.lazyload.js"></script>
+
+            <script src="/static/js/header.js"></script>
+            <script src="/static/js/effects.js"></script>
+            <script src="/static/js/activity_timer.js"></script>
+            <script src="/static/js/after_signup.js"></script>
+            <script src="/static/js/sidebar.js"></script>
+            <script src="/static/js/infinite_scroll.js"></script>
+            <script src="/static/js/invites.js"></script>
+            <script src="/static/js/lazy_images.js"></script>
+
+            <script src="/static/js/widgets/dialog.js"></script>
+            <script src="/static/js/widgets/menu.js"></script>
+            <script src="/static/js/widgets/numerical_input.js"></script>
+            <script src="/static/js/widgets/toggle_button.js"></script>
+
+            <script src="/static/js/image_chooser.js"></script>
+
+            <script src="/static/js/remix.js"></script>
+            <script src="/static/js/remix/tool.js"></script>
+            <script src="/static/js/remix/shortcuts_dialog.js"></script>
+            <script src="/static/js/remix/color.js"></script>
+            <script src="/static/js/remix/renderer.js"></script>
+            <script src="/static/js/remix/pointlist_tools.js"></script>
+            <script src="/static/js/remix/stampable_tools.js"></script>
+            <script src="/static/js/remix/click_tools.js"></script>
+            <script src="/static/js/remix/drag_tools.js"></script>
+            <script src="/static/js/remix/text.js"></script>
+            <script src="/static/js/remix/easel.js"></script>
+            <script src="/static/js/remix/blend_modes.js"></script>
+            <script src="/static/js/remix/filters.js"></script>
+            <script src="/static/js/remix/image_sources.js"></script>
+
+            <script src="/static/js/remix/remix_widget.js"></script>
+            <script src="/static/js/audio_remix_widget.js"></script>
+            <script src="/static/js/remix/base_panel.js"></script>
+            <script src="/static/js/remix/popout.js"></script>
+
+            <script src="/static/js/remix/popouts/layers_popout.js"></script>
+            <script src="/static/js/remix/popouts/images_popout.js"></script>
+
+            <script src="/static/js/remix/panels/brush_panel.js"></script>
+            <script src="/static/js/remix/panels/erase_panel.js"></script>
+            <script src="/static/js/remix/panels/text_panel.js"></script>
+            <script src="/static/js/remix/panels/fill_panel.js"></script>
+            <script src="/static/js/remix/panels/clone_panel.js"></script>
+            <script src="/static/js/remix/panels/shape_panel.js"></script>
+            <script src="/static/js/remix/panels/image_panel.js"></script>
+
+            <script src="/static/js/remix/pickers/base_pickers.js"></script>
+            <script src="/static/js/remix/pickers/size_picker.js"></script>
+            <script src="/static/js/remix/pickers/opacity_picker.js"></script>
+            <script src="/static/js/remix/pickers/color_picker.js"></script>
+            <script src="/static/js/remix/pickers/shape_picker.js"></script>
+            <script src="/static/js/remix/pickers/font_picker.js"></script>
+            <script src="/static/js/remix/pickers/softness_picker.js"></script>
+            <script src="/static/js/remix/pickers/tolerance_picker.js"></script>
+
+            <script src="/static/js/audio_remix_player.js"></script>
+            <script src="/static/js/comment.js"></script>
+            <script src="/static/js/comment_new.js"></script>
+            <script src="/static/js/browse.js"></script>
+            <script src="/static/js/explore.js"></script>
+            <script src="/static/js/uploads.js"></script>
+            <script src="/static/js/postwidget.js"></script>
+            <script src="/static/js/monster.js"></script>
+            <script src="/static/js/activity_stream.js"></script>
+
+            <script src="/static/js/stickers/stickers.js"></script>
+            <script src="/static/js/stickers/sticker_pack.js"></script>
+            <script src="/static/js/stickers/sticker_actions.js"></script>
+
+            <script src="/static/js/realtime.js"></script>
+            <script src="/static/js/params.js"></script>
+            <script src="/static/js/signup.js"></script>
+            <script src="/static/js/signup_new.js"></script>
+            <script src="/static/js/canvas_api.js"></script>
+            <script src="/static/js/validate.js"></script>
+            <script src="/static/js/graph_actions.js"></script>
+            <script src="/static/js/settings.js"></script>
+
+            <script src="/static/js/image_chooser.js"></script>
+
+            <script src="/static/js/post_thread/post_thread.js"></script>
+
+            <script src="/static/js/tag-it.js"></script>
+            <script src="/static/js/tag_edit.js"></script>
+
+            <script src="/static/js/admin.js"></script>
+            <script src="/static/js/profile_edit.js"></script>
+            <script src="/static/js/unsubscribe.js"></script>
+
+            <script src="/static/js/share_thread_widget.js"></script>
+
+            <script src="/static/js/stickers/sticker_shop_dialog.js"></script>
+            <script src="/static/js/stickers/epic_sticker_dialog.js"></script>
+
+            <script src="/static/lib/jpeg_encoder_basic.js"></script>
+        {% endcompress %}
+    {% endblock core_javascript %}
+{% endblock html %}
+

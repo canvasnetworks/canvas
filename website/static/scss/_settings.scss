@@ -1,0 +1,146 @@
+#page.settings #content > .wrapper {
+    width: 700px;
+    margin: 0 auto;
+    color: $default_text_color;
+    text-align: center;
+
+    h1 {
+        font-size: 2.2em;
+        color: #555;
+    }
+
+    ul {
+        li:not(:last-child) {
+            margin-bottom:10px;
+        }
+    }
+
+    label,
+    input {
+        font-size:1.4em;
+    }
+
+    .feedback_message {
+        display: none;
+        margin:5px 0;
+        background: $canvas_notice_red;
+        padding:5px 10px;
+        font-size:1.4em;
+        color:#eee;
+        @extend .rounded_corners;
+        @include text-shadow(dark);
+    }
+
+    section {
+        text-align: left;
+        border:1px solid #ccc;
+        padding:10px;
+        padding-left:20px;
+        background:$canvas_pale_yellow $yellow_bg_img;
+        margin:10px 0;
+        @extend .rounded_corners;
+        @include box-shadow(1px 1px 1px rgba(#000, 0.4) inset);
+
+        h2 {
+            position:relative;
+            left:-10px;
+            font-size: 1.6em;
+            color: #555;
+        }
+
+        hr {
+            position:relative;
+            left:-10px;
+            margin:0.3em 0 0.8em;
+        }
+
+        .input_wrapper.email{
+            width:400px;
+            margin-bottom:1em;
+        }
+
+        .input_wrapper {
+            width:210px;
+            display: inline-block;
+            vertical-align:top;
+            z-index:1;
+            margin:1px;
+
+            input {
+                width:100%;
+            }
+
+            + span {
+                font-size: 2.4em;
+                color: $canvas_blue_hover;
+                margin:0 7px;
+            }
+        }
+
+        p {
+            font-size: 1.2em;
+
+            &.notice {
+                color:$canvas_red;
+            }
+        }
+
+        input[type=text] + p {
+            margin-top:0.5em;
+        }
+
+        input[type=checkbox] + label {
+            margin-left:5px;
+
+            & + p {
+                margin-top:3px;
+                margin-left:20px;
+            }
+        }
+    }
+
+    section.facebook_connections {
+
+        span {
+            vertical-align: top;
+        }
+
+        span.connection_name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        span.disconnect_link {
+            float: right;
+            margin-right: 30px;
+
+            a {
+                font-size: 1.5em;
+            }
+        }
+
+        .input_wrapper {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        li {
+            font-size: 1.2em;
+        }
+
+    }
+
+    button.cancel {
+        position:relative;
+        left:-10px;
+        font-size:1.4em;
+    }
+
+    button[type=submit] {
+        font-size:1.8em;
+    }
+}
+
+#unsubscribe_all {
+    color:#777;
+}

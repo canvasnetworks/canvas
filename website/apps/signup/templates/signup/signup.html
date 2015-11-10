@@ -1,0 +1,20 @@
+{% djextends "base/base.django.html" %}
+
+{% block pageclass %}
+    signup
+{% endblock %}
+
+{% block page_header %}
+    <img class="logo" src="/static/img/canvas-logo-medium.png"/>
+{% endblock %}
+{% block content %}
+    {% include "signup/_signup_form.html" %}
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+    $(function() {
+        signup_new.wire($('#page .signup_form'));
+    });
+</script>
+{% endblock %}

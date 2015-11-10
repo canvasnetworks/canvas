@@ -1,0 +1,56 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style>
+#script_view {
+    margin: 50px 100px;
+}
+
+#script_view .tutorial * {
+    font-size: 14px;
+    margin: 0.5em;
+}
+
+#script_view .code {
+    font-size: 12px;
+    min-height: 300px;
+}
+
+#script_view .script_name {
+    font-size: 16px;
+    font-weight: bold;
+    user-select: text; -moz-user-select: text; -webkit-user-select: text;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="script_view">
+    <div class="script_name">http://example.com/script/{{ short_id }}</div>
+    <div class="code cm-s-default"></div>
+    <div class="tutorial">
+        <p>To use this script in the remix editor, click here:</p>
+        <img src="/static/img/script_tut_1.png" />
+        <p>Then paste this url here:</p>
+        <img src="/static/img/script_tut_2.png" />
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+var script = { hash: {{ rp.s3md5|to_json }}};
+jQuery(document).ready(function () {
+    $.getJSON('/script_drop/' + script.hash).done(function(response) {
+        var cm = CodeMirror($('#script_view .code').get(0), {
+            value: response.source,
+            mode: "javascript",
+            lineNumbers: true,
+            readOnly: true,
+        });
+    });    
+});
+</script>
+{% endblock %}

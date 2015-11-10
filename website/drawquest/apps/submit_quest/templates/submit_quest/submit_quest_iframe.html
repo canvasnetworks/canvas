@@ -1,0 +1,39 @@
+{% djextends "base/base.django.html" %}
+
+{% block pageclass %}
+    post_thread
+{% endblock %}
+
+{% block content %}
+    {{ submit_quest_form() }}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background:transparent !important;
+    }
+    
+    .fixed_width_wrapper {
+        width:730px !important;
+        padding:0 !important;
+    }
+</style>
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+    post_thread.quest_idea = true;
+
+    post_thread.post_submit_callback = function (post, response) {
+        window.location = '/quests/submit_quest/success';
+        return false;
+    };
+
+    var draw_from_scratch_content = canvas.storeContent({{ draw_from_scratch_content|to_json }});
+    $(function () {
+        post_thread.wire();
+    });
+</script>
+{% endblock %}
+

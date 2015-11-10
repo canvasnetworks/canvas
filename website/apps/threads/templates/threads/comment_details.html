@@ -1,0 +1,47 @@
+{% if replies %}
+    <div class="detail_module replies">
+        <h2>{{ replies|length }} {{ replies|pluralize("reply,replies") }}</h2>
+        <ul class="replies">
+            {% for reply in replies %}
+                <li>
+                    <div class="post_body">
+                        <div class="sticker_theme_bg sticker_themed {% if reply.top_sticker() %}{{ reply.top_sticker().name }}{% else %}unthemed{% endif %}"></div>
+                        <div class="wrapper">
+                            {% if reply.reply_content %}
+                                <a href="{{ reply.url }}" class="js_check_for_local_link">
+                                    <div class="image_wrapper">
+                                        <img src="{{ reply.get_thumbnail_absolute_url() }}">
+                                    </div>
+                                </a>
+                            {% endif %}
+                            <p class="username">
+                                {% if reply.author_name == "Anonymous" %}
+                                    anonymous
+                                {% else %}
+                                    <a href="/user/{{ reply.author_name }}">{{ reply.author_name }}</a>
+                                {% endif %}
+                            </p>
+                            {% if reply.reply_text %}
+                                <p class="caption">{{ ugc_text(reply.reply_text, 2000) }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{% if remixes %}
+    <div class="detail_module remixes">
+        <h2>{{ remixes|length }} {{ remixes|pluralize("remix,remixes") }}</h2>
+        <ul class="images">
+            {% for remix in remixes %}
+                <li>
+                    <a href="{{ remix.url }}" class="js_check_for_local_link">
+                        <img src="{{ remix.get_thumbnail_absolute_url() }}">
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

@@ -1,0 +1,278 @@
+{% extends "email/_base.html" %}
+{% set width = 580 %}
+
+{% block email_type %}user digests{% endblock %}
+{% block extra_style %}
+.centered {
+    text-align:center;
+}
+
+.section p,
+.section ul li {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:14px;
+    color:#333;
+}
+
+.section ul li {
+    margin-bottom:14px;
+}
+
+img.tutorial {
+    background:white;
+    border:2px solid #29abe2;
+    width:200px;
+    height:auto;
+}
+
+p.tips {
+    padding-left:10px;
+}
+
+td.header {
+    background-image: url(http://example.com/static/img/footer-textures/lol.png);
+    background-repeat: repeat;
+    background-color: #65d6a8;
+    margin: 0;
+    padding: 0;
+    
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-topright: 7px;
+    -moz-border-radius-bottomright: 7px;
+    -moz-border-radius-bottomleft: 7px;
+    -webkit-border-radius: 7px 7px 7px 7px;
+    border-radius: 7px 7px 7px 7px;
+    -webkit-box-shadow: 0 1px 0 #37b682;
+    -moz-box-shadow: 0 1px 0 #37b682;
+    box-shadow: 0 1px 0 #37b682;
+}
+
+h2 {
+    margin:0 10px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:20px;
+    font-weight:bold;
+    color:#ffffff !important;
+    text-shadow: 0 -1px 0 #37b682;
+}
+
+.featured_wrapper {
+    height:120px;
+    overflow:hidden;
+    background:#eeeeee;
+    border-top:1px solid #aaaaaa;
+    border-bottom:1px solid #aaaaaa;
+    border-left:1px solid #aaaaaa;
+    border-right:1px solid #aaaaaa;
+    
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-topright: 7px;
+    -moz-border-radius-bottomright: 7px;
+    -moz-border-radius-bottomleft: 7px;
+    -webkit-border-radius: 7px 7px 7px 7px;
+    border-radius: 7px 7px 7px 7px;
+    -webkit-box-shadow: inset 1px 1px 2px #aaaaaa;
+    -moz-box-shadow: inset 1px 1px 2px #aaaaaa;
+    box-shadow: inset 1px 1px 2px #aaaaaa;
+}
+{% endblock %}
+{% block body %}
+    <table class="section" width="{{ width - 50 }}" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="left">
+                <table width="{{ width - 50 }}" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="left" colspan="2" class="header" background="http://example.com/static/img/footer-textures/lol.png">
+                            <table cellpadding="0" cellspacing="5">
+                                <tr>
+                                    <td align="left">
+                                        <h2>Welcome to Canvas!</h2>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <br/><br/>
+                <p>
+                    Welcome to Canvas, a community to share and play with images. Here are just a few that have been created
+                    since you joined:
+                </p>
+                <br/><br/>
+                <table width="{{ width - 50 }}" cellpadding="0" cellspacing="8">
+                    <tr>
+                        {% for comment in featured_comments %}
+                            {% if (loop.index - 1) is divisibleby 3 %}
+                                </tr>
+                                <tr>
+                            {% endif %}
+                            <td class="featured_wrapper" align="center" valign="center" bgcolor="#eeeeee" height="120">
+                                <a href="{{ comment.url }}?{{ tracking_query }}"><img class="content" src="{{ get_img_url(comment.url)|safe }}"></a>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </table>
+                </p>
+                <br/><br/><br/>
+                {% if recipient.has_posted() %}
+                    <p>
+                        Looks like you've already started posting — you're a pro! Having fun? Why not
+                        <a class="link_external" href="/invite?{{ tracking_query }}">invite your friends</a> to come play?
+                        <br/><br/>
+                    </p>
+                    <table width="{{ width - 50 }}" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td align="left" colspan="2" class="header" background="http://example.com/static/img/footer-textures/lol.png">
+                                <table cellpadding="0" cellspacing="5">
+                                    <tr>
+                                        <td align="left">
+                                            <h2>Here are some other tips:</h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="{{ width - 50}}" cellpadding="0" cellspacing="10">
+                        <tr>
+                            <td align="left" valign="top">
+                                <img class="tutorial" src="/static/img/welcome/figures_sticker_1.png"/>
+                            </td>
+                            <td align="left" valign="top">
+                                <p>
+                                    Try dragging a sticker to a post that you like! This gives points
+                                    to the poster and helps other people discover it.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" valign="top">
+                                <img class="tutorial" src="/static/img/welcome/figures_remix_1.png"/>
+                            </td>
+                            <td align="left" valign="top">
+                                <p>
+                                    Click Remix on any image to add your personal touch to it, whether
+                                    that's adding text, stamps, or transforming it into something entirely new.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/><br/>
+                    <p>
+                        Keep up the great work, {{ notification.recipient.username }} — you'll be leveling up in no time!
+                        <br/><br/>
+                        -The Canvas Team
+                    </p>
+                {% else %}
+                {% if recipient.has_stickered() %}
+                    <p>
+                        Looks like you've already started stickering images — you're a pro!
+                        <br/><br/>
+                    </p>
+                    <table width="{{ width - 50 }}" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td align="left" colspan="2" class="header" background="http://example.com/static/img/footer-textures/lol.png">
+                                <table cellpadding="0" cellspacing="5">
+                                    <tr>
+                                        <td align="left">
+                                            <h2>Here are some other tips:</h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="{{ width - 50}}" cellpadding="0" cellspacing="10">
+                        <tr>
+                            <td align="left" valign="top">
+                                <img class="tutorial" src="/static/img/welcome/figures_remix_1.png"/>
+                            </td>
+                            <td align="left" valign="top">
+                                <p>
+                                    Click Remix on any image to add your personal touch to it, whether
+                                    that's adding text, stamps, or transforming it into something entirely new.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" valign="top">
+                                <img class="tutorial" src="/static/img/welcome/figures_share_1.png"/>
+                            </td>
+                            <td align="left" valign="top">
+                                <p>
+                                    Start a thread by sharing an image from your hard drive or around the
+                                    web. Watch the magic happen as the Canvas community stickers, remixes,
+                                    and starts a conversation around it!
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/><br/>
+                    <p>
+                        Keep up the great work, {{ notification.recipient.username }} — you'll be leveling up in no time!
+                        <br/><br/>
+                        -The Canvas Team
+                    </p>
+                {% else%}
+                    <table width="{{ width - 50 }}" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td align="left" colspan="2" class="header" background="http://example.com/static/img/footer-textures/lol.png">
+                                <table cellpadding="0" cellspacing="5">
+                                    <tr>
+                                        <td align="left">
+                                            <h2>A few tips to get you started:</h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="{{ width - 50}}" cellpadding="0" cellspacing="10">
+                        <tr>
+                            <td align="left" valign="top">
+                                <img class="tutorial" src="/static/img/welcome/figures_sticker_1.png"/>
+                            </td>
+                            <td align="left" valign="top">
+                                <p>
+                                    Try dragging a sticker to a post that you like! This gives points
+                                    to the poster and helps other people discover it.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" valign="top">
+                                <img class="tutorial" src="/static/img/welcome/figures_remix_1.png"/>
+                            </td>
+                            <td align="left" valign="top">
+                                <p>
+                                    Click Remix on any image to add your personal touch to it, whether
+                                    that's adding text, stamps, or transforming it into something entirely new.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" valign="top">
+                                <img class="tutorial" src="/static/img/welcome/figures_share_1.png"/>
+                            </td>
+                            <td align="left" valign="top">
+                                <p>
+                                    Start a thread by sharing an image from your hard drive or around the
+                                    web. Watch the magic happen as the Canvas community stickers, remixes,
+                                    and starts a conversation around it!
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/><br/>
+                    <p>
+                        Have fun out there, {{ notification.recipient.username }}!
+                        <br/><br/>
+                        -The Canvas Team
+                    </p>
+                {% endif %}
+                {% endif %}
+            </p>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

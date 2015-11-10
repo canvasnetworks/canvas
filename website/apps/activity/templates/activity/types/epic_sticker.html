@@ -1,0 +1,12 @@
+{% extends "activity/types/base_activity_item.html" %}
+
+{% block extra_activity_classes %}
+    epic_sticker
+{% endblock %}
+
+{% block icon %}
+    {{ sticker_image(activity.comment_sticker_type_id, "large") }}
+{% endblock %}
+{% block message %}
+    promoted your post with an epic sticker!
+{% endblock %}

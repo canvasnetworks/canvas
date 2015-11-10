@@ -1,0 +1,10 @@
+Hi,
+
+This email is to notify you that you've changed the email address associated with your Canvas user account ({{ user.username }}). Check your new email for a message from us to confirm this change.
+
+If you did not request this change, you can contact us at support@example.com
+
+Thanks,
+
+Canvas
+

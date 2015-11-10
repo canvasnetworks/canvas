@@ -1,0 +1,202 @@
+/* EXTENDABLE CLASSES
+
+The purpose of this file is to declare vendor-prefixed
+and other multiple line styles that are used in many places
+only once in the code to reduce filesize. These classes
+should not appear in the HTML, but use the SASS @extend
+functionality.
+*/
+.clearfix {
+    @include clearfix();
+}
+
+.box_sizing_content {
+    @include box-sizing(content-box);
+}
+
+.box_sizing_border {
+    @include box-sizing(border-box);
+}
+
+.box_sizing_padding {
+    @include box-sizing(padding-box);
+}
+
+.text_selection_auto {
+    @include text-selection(auto);
+}
+
+.text_selection_none {
+    @include text-selection(none);
+}
+
+.fullsize {
+    @include fullsize();
+}
+
+.box_shadow_none {
+    @include box-shadow(none);
+}
+
+.box_shadow_floating {
+    @include box-shadow(3px 3px 5px 1px rgba(#000, 0.3));
+}
+
+/*
+Rounded corner extendables
+
+Whenever you would normally use the border-radius
+mixin, you should instead check here for an extendable
+and make a new one if it's not already here.
+*/
+.rounded_corners {
+    @include border-radius();
+}
+
+.rounded_top {
+    @include border-radius(7 7 0 0);
+}
+
+.rounded_bottom {
+    @include border-radius(0 0 7 7);
+}
+
+.rounded_left {
+    @include border-radius(7 0 0 7);
+}
+
+.rounded_right {
+    @include border-radius(0 7 7 0);
+}
+
+.rounded_30px {
+    @include border-radius(30px);
+}
+
+.rounded_22px {
+    @include border-radius(22px);
+}
+
+.rounded_20px {
+    @include border-radius(20px);
+}
+
+.rounded_18px {
+    @include border-radius(18px);
+}
+
+.rounded_6px {
+    @include border-radius(6);
+}
+
+.rounded_5px {
+    @include border-radius(5);
+}
+
+.rounded_bottom_5px {
+    @include border-radius(0 0 5 5);
+}
+
+.rounded_4px {
+    @include border-radius(4);
+}
+
+.rounded_3px {
+    @include border-radius(3);
+}
+
+.rounded_1_25em {
+    @include border-radius(1.25em);
+}
+
+.rounded_0_6em {
+    @include border-radius(0.6em);
+}
+
+.rounded_0_5em {
+    @include border-radius(0.5em);
+}
+
+.rounded_0_4em {
+    @include border-radius(0.4em);
+}
+
+.rounded_0_35em {
+    @include border-radius(0.35em);
+}
+
+.rounded_0_25em {
+    @include border-radius(0.25em);
+}
+
+.hard_edge_left {
+    @include border-radius(0 0.35em 0.35em 0);
+}
+
+.hard_edge_right {
+    @include border-radius(0.35em 0 0 0.35em);
+}
+
+.rounded_none {
+    @include border-radius(0);
+}
+
+
+/* Formerly form mixins */
+.extend_wide_submit {
+    margin-top: 10px;
+    font-size: 2em;
+    @include border-radius(0 0 7 7);
+}
+
+.extend_single_submittable_field {
+    float:left;
+    font-size:1.8em;
+    padding:5px;
+    @include border-radius(3 0 0 3);
+}
+
+.extend_single_submittable_field_button {
+    float:left;
+    height:33px;
+    font-size:1.9em;
+    padding-left:0;
+    padding-right:0;
+    text-align:center;
+    @include border-radius(0 7 7 0);
+}
+
+/* Sub menu navigation */
+.extend_radio_option_li {
+    display:inline-block;
+    margin-right:1em;
+
+    a {
+        display:block;
+        border:1px solid #c5c5c5;
+        padding:0.2em 0.75em;
+        color:$canvas_blue;
+        font-size:1.6em;
+        font-weight:bold;
+        @extend .rounded_5px;
+        @include box-shadow(1px 1px 0 #fff);
+        @include bg-linear-gradient((-90deg, #fff 0%, #edeeee 100%));
+
+        &:hover {
+            text-decoration:none;
+            color:$canvas_dark_blue;
+            @include bg-linear-gradient((-90deg, #fff 0%, #e4e8e8 100%));
+        }
+
+        &:active {
+            @include box-shadow((1px 1px 0 #fff, inset 1px 1px 1px rgba(#000, 0.3)));
+        }
+    }
+
+    &.active a {
+        border-color:#a5a5a5;
+        color:#fff;
+        @include text-shadow(dark);
+        @include bg-linear-gradient((-90deg, #b1b1b1 0%, #cfcece 100%));
+    }
+}

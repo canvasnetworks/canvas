@@ -1,0 +1,46 @@
+<div id="pw_container_comment" class="pw_container new">
+    <div id="postwidget" class="reply_widget">
+        <div class="pw_upload_form">
+            <h1 class="postwidget_title"></h1>
+            <div class="widget">
+                {% include "content/image_chooser.html" %}
+                {% include "remix/remix_widget.html" %}
+                <div class="form_inputs">
+                    <div class="input_wrapper title">
+                        <label for="post_thread_title">Monster name <em>(required, no spoilers!)</em>:</label>
+                        <input id="post_thread_title" name="post_thread_title" type="text" maxlength="70" value="" autocomplete="off">
+                    </div>
+                    <div class="input_wrapper identity">
+                        <label>Posting as:</label>
+                        <ul>
+                            <li>
+                                <img src="/static/img/identity_user.png">
+                                <span>{{ request.user.username }}</span>
+                            </li>
+                            <li>
+                                <img src="/static/img/identity_anonymous.png">
+                                <span>anonymous user</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="input_wrapper category">
+                        <label for="category_select_input">Choose a group:</label>
+                        <input id="category_select_input" type="text" class="category_free_select" value="monstermash">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form_submission">
+            <input type="submit" class="upload_submit_button" value="Submit">
+
+            <div class="code_of_conduct">
+                <div class="input_wrapper">
+                    <input id="pw_conduct" class="pw_conduct" type="checkbox" checked="true">
+                    <label for="pw_conduct">I agree to the <a href="/code_of_conduct" target="_new">Code of Conduct</a></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

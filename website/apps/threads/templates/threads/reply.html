@@ -1,0 +1,23 @@
+<div class="reply">
+    {% if reply.reply_content %}
+        <div class="thumbnail">
+            <a href="{{ reply.url }}">
+                {{ content(reply, "small_square") }}
+            </a>
+        </div>
+    {% endif %}
+    
+    <div class="text">
+        <span class="metadata">
+            {% if reply.author_name == "Anonymous" %}
+                <span class="anonymous">anonymous</span>
+            {% else %}
+                <a href="/user/{{ reply.author_name }}">
+                    <span class="username">{{ reply.author_name }}</span>
+                </a>
+            {% endif %}
+            {{ relative_timestamp(reply.timestamp) }}
+        </span>
+        <span class="reply_text">{{ reply.reply_text }}</span>
+    </div>
+</div>

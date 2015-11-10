@@ -1,0 +1,112 @@
+{% djextends "base/full_base.django.html" %}
+
+{% set tile_renderer = "explore_tiles" %}
+{% set tile_selector = ".explore_tile" %}
+
+{% block pageclass %}
+    monster
+    explore
+{% endblock %}
+
+
+{% block extra_meta %}
+{% endblock %}
+
+{% block title %}
+{% endblock %}
+
+{% block sticker_pack %}
+{% endblock %}
+
+{% block extra_css %}{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block content_header %}
+    {% if request.nav_tag %}
+    <button class="follow_topic_toggle" data-topic_name="{{ request.nav_tag }}" data-initial_state="{{ viewer_is_following_tag|to_json }}"></button>
+    {% endif %}
+    <nav class="hidden">
+        <ul>
+            <li {% if sort == "hot" %}class="active"{% endif %}>
+                <a href="{{ popular_tag_link }}">Popular</a>
+            </li>
+            <li {% if sort == "new" and not nav_data.userpage_type == "stickered" %}class="active"{% endif %}>
+                <a href="{{ latest_tag_link }}">Latest</a>
+            </li>
+            <li {% if sort == "top" %}class="active"{% endif %}>
+                <a href="{{ best_tag_link }}">Best</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block content_well scoped %}
+    <div class="column">
+        <div>
+            {%- for tile in tiles -%}
+                {% if loop.index%3 == 1 %}
+                    {{ disposition_tile(tile_renderer, tile, {'image_type': 'column'}) }}
+                {% endif %}
+            {%- endfor -%}</div>
+        <div class="filler"></div>
+    </div>
+    <div class="column">
+        <div>
+            {%- for tile in tiles -%}
+                {% if loop.index%3 == 2 %}
+                    {{ disposition_tile(tile_renderer, tile, {'image_type': 'column'}) }}
+                {% endif %}
+            {%- endfor -%}
+        </div>
+        <div class="filler"></div>
+    </div>
+    <div class="column">
+        <div>
+            {%- for tile in tiles -%}
+                {% if loop.index%3 == 0 %}
+                    {{ disposition_tile(tile_renderer, tile, {'image_type': 'column'}) }}
+                {% endif %}
+            {%- endfor -%}
+        </div>
+        <div class="filler"></div>
+    </div>
+{% endblock %}
+
+{% block content_footer %}
+    Loading more... <img src="/static/img/loading.gif">
+{% endblock %}
+
+{% block extra_javascript scoped %}
+    {% compress js %}
+        <script src="/static/js/dismissal.js"></script>
+        <script src="/static/js/smooth_scroll.js"></script>
+    {% endcompress %}
+    <script>
+        $(function () {
+            {% block pagination_data %}
+                explore.nav_data = {{ nav_data|to_json }};
+                explore.post_offset = explore.nav_data.pagination_size;
+            {% endblock %}
+            explore.tile_renderer = "{{ tile_renderer }}";
+            explore.tile_selector = "{{ tile_selector }}";
+            explore.wire();
+
+            canvas.wire_dismissables();
+        });
+
+        // We have to do onload because we are re-sizing the images with CSS
+        $(window).load(function() {
+            explore.even_out_columns();
+        });
+
+        // This allows us to replace the api call for profile or other pages that extend
+        // the explore page, while still sorting the tiles into the columns the same way.
+        explore.api_more = function(data, callback) {
+            return {% block more_posts_api %}canvas.api.front_more{% endblock %}(data).done(function(response) {
+                callback(response);
+            });
+        };
+    </script>
+    {% block extra_explore_js %}{% endblock %}
+{% endblock %}
+

@@ -1,0 +1,4 @@
+--requirement=canvas.txt
+
+https://s3.amazonaws.com/canvas-public-artifacts/MySQL-python-1.2.3.tar.gz
+

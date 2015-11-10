@@ -1,0 +1,15 @@
+{% extends "drawquest/about.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/drawquest/about_page.css">
+    <style>
+        .fixed_width_wrapper {
+            width:1050px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block about_page_main %}
+<iframe src="/quests/submit_quest/iframe" width="100%" height="1275" style="border:0;"></iframe>
+{% endblock %}
+

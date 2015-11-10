@@ -1,0 +1,576 @@
+# Both Sandbox and Production config
+# GENERATED FROM nginx.conf.template!
+
+# http://wiki.nginx.org/CoreModule
+
+worker_processes 4;
+
+pid {{ run_path }}/nginx.pid;
+error_log {{ run_path }}/nginx.error.log;
+
+events {
+    {% if production %}
+    use epoll;
+    {% endif %}
+    accept_mutex on;
+    multi_accept on;
+    worker_connections 1024;
+}
+
+http {
+    include /var/canvas/website/mime.types;
+    default_type application/octet-stream;
+    server_tokens off;
+
+    log_format hostname '$remote_addr - $remote_user [$time_local] [$request_time elapsed] $http_host '
+                        '"$request" $status $body_bytes_sent '
+                        '"$http_referer" "$http_user_agent"';
+    access_log {{ run_path }}/nginx.access.log hostname;
+
+    sendfile on;
+
+    client_header_timeout 45;
+    client_body_timeout 30;
+    send_timeout 30;
+    reset_timedout_connection on;
+    ignore_invalid_headers on;
+
+    # Perhaps ideally this is specified in the / upstream for Django only, but 0.7.67 doesn't support that (later versions do).
+    # Note this is per-box, so this rate is roughly multiplied by the number of web boxes in the load balancer.
+    #limit_req_zone $binary_remote_addr zone=one:10m rate=120r/m;
+    #limit_req zone=one burst=300 nodelay;
+
+    # This lets users upload larger remixes
+    client_max_body_size 20m;
+
+    # via http://www.ruby-forum.com/topic/148567
+    port_in_redirect off;
+
+    upstream django_server {
+        server 127.0.0.1:8000 fail_timeout=0;
+    }
+
+    upstream drawquest_django_server {
+        server 127.0.0.1:8001 fail_timeout=0;
+    }
+
+    upstream s3 {
+        server s3.amazonaws.com;
+    }
+
+    {% if twisted_host %}
+        upstream twisted_server {
+            server {{ twisted_host }} fail_timeout=0;
+        }
+    {% endif %}
+
+    {% if not production %}
+        {% if project == "canvas" %}
+            {% if twisted_host %}
+                {% for subdomain in ('', 'rt_0.', 'rt_1.', 'rt_2.', 'rt_3.') %}
+                    server {
+                        # https support, for sandboxes. Real production uses a real cert from our ELB.
+                        listen 9001;
+                        server_name {{ subdomain }}savnac.com;
+
+                        ssl                     on;
+                        ssl_session_timeout     5m;
+                        ssl_certificate         /var/canvas/website/sandbox/savnac.chain.crt;
+                        ssl_certificate_key     /var/canvas/website/sandbox/savnac.key;
+
+                        # ciphers and protocols
+                        ssl_ciphers             DHE-RSA-AES256-SHA:HIGH:!aNULL:!MD5;
+                        ssl_protocols           TLSv1 SSLv3;
+
+                        location / {
+                            proxy_set_header X-Forwarded-Proto "https"; # ELB adds this in prod.
+                            proxy_pass http://{{ subdomain }}savnac.com:80;
+                        }
+                    }
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% macro ugc(expires='max', for_download=False) -%}
+            expires {{ expires }};
+
+            {% if for_download %}
+            add_header Content-Length $content_length;
+            add_header Content-Disposition attachment;
+            {% endif %}
+
+            add_header Cache-Control public;
+
+            {% if production %}
+            proxy_read_timeout 600;
+            proxy_connect_timeout 600;
+            proxy_send_timeout 600;
+            proxy_set_header Host s3.amazonaws.com;
+            proxy_redirect off;
+            {% if project == "canvas" %}
+            proxy_pass http://s3/canvas_public_ugc/$1;
+            {% else %}
+            proxy_pass http://s3/drawquest_public_ugc/$1;
+            {% endif %}
+            {% else %}
+            {% if project == "canvas" %}
+            alias /var/canvas/website/ugc/$1;
+            {% else %}
+            alias /var/canvas/website/{{ project }}/ugc/$1;
+            {% endif %}
+            {% endif %}
+    {%- endmacro %}
+
+    {% macro ugc_locations() -%}
+        location ~ /ugc_download/(.*)$ {
+            {{ ugc(for_download=True) }}
+        }
+
+        location ~ ^/ugc/(p/.*)$ {
+            {{ ugc(expires='900')}}
+        }
+
+        location ~ ^/ugc/(.*)$ {
+            {{ ugc() }}
+        }
+
+        location ~ ^/ugc.*$ {
+            if ($downtime = "true") {
+                return 503;
+            }
+            rewrite ^/(.*) /$1;
+        }
+    {%- endmacro %}
+
+    {% if project == "canvas" %}
+        server {
+            listen 9000;
+            server_name www.example.com
+                        ugc.example.com
+                        *.rt.example.com;
+            rewrite ^/(.*) http://example.com/$1 permanent;
+        }
+
+        server {
+            listen 9000;
+            server_name www.savn.ac;
+            rewrite ^/(.*) http://savn.ac/$1 permanent;
+        }
+    {% else %}
+        server {
+            listen 9000;
+            server_name www.example.com
+                        ugc.example.com;
+            rewrite ^/(.*) http://example.com/$1 permanent;
+        }
+
+        server {
+            listen 9000;
+            client_max_body_size 4G;
+
+            server_name api.example.com;
+
+            keepalive_timeout 5;
+
+            gzip on;
+            gzip_buffers 32 4k;
+            gzip_comp_level 6;
+            gzip_types text/plain text/css application/javascript application/json application/x-javascript application/rss+xml image/x-icon image/bmp;
+            gzip_proxied any;
+            gzip_disable "MSIE [1-6]\.";
+            gzip_vary on;
+
+            location / {
+                proxy_read_timeout 600;
+                proxy_connect_timeout 600;
+                proxy_send_timeout 600;
+                proxy_set_header Host example.com;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect off;
+
+                rewrite ^/(.*) /api/$1 break;
+                proxy_pass http://drawquest_django_server/api/$1;
+            }
+        }
+    {% endif %}
+
+    {% if twisted_host %}
+        server {
+            set $downtime "false"; # "true" = down everything expect, nginx directly serves /ping for load balancer
+
+            listen 9000;
+            {% if project == "canvas" %}
+            server_name ~^rt_[0-3](.example.com|.savnac.com|.savn.ac)$;
+            {% endif %}
+            {% if project == "drawquest" %}
+            server_name ~^rt(.example.com|.dq.savnac.com)$;
+            {% endif %}
+
+            location ~ ^/rt.*$ {
+                if ($downtime = "true") {
+                return 503;
+                }
+                proxy_read_timeout 600;
+                proxy_connect_timeout 600;
+                proxy_send_timeout 600;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect off;
+
+                proxy_pass http://twisted_server;
+            }
+
+            location / {
+                {% if project == "canvas" %}
+                rewrite ^/(.*) http://example.com/$1 permanent;
+                {% endif %}
+                {% if project == "drawquest" %}
+                rewrite ^/(.*) http://example.com/$1 permanent;
+                {% endif %}
+            }
+        }
+    {% endif %}
+
+    {% if project == "canvas" %}
+        server {
+            set $downtime "false"; # "true" = down everything expect, nginx directly serves /ping for load balancer
+
+            listen 9000;
+            client_max_body_size 4G;
+
+            # Match only our CDN domain
+            server_name www.canvasugc.com i.canvasugc.com canvasugc.com;
+
+            keepalive_timeout 5;
+
+            add_header X-Served-By $hostname;
+            error_page  503 /static/downtime.html;
+
+            gzip on;
+            gzip_buffers 32 4k;
+            gzip_comp_level 6;
+            gzip_types text/plain text/css application/javascript application/json application/x-javascript application/rss+xml image/x-icon image/bmp;
+            gzip_proxied any;
+            gzip_disable "MSIE [1-6]\.";
+            gzip_vary on;
+
+            {{ ugc_locations() }}
+
+            location /static/ {
+                expires max;
+                add_header Cache-Control public;
+                alias /var/canvas/website/static/;
+            }
+
+            # rewrite anything that isnt ugc or static content
+            location / {
+                rewrite ^/(.*) http://example.com/$1 permanent;
+            }
+        }
+
+        server {
+            set $downtime "false"; # "true" = down everything expect, nginx directly serves /ping for load balancer
+
+            listen 9000;
+            client_max_body_size 4G;
+
+            # Match anything under example.com, or example.com or any IP address (for load balancer)
+            server_name savnac.com
+                        example.com
+                        savn.ac
+                        localhost
+                        ~^(127|172|192|10)\.\d+\.\d+\.\d+$;
+
+            keepalive_timeout 5;
+
+            add_header X-Served-By $hostname;
+            error_page  503 /static/downtime.html;
+
+            gzip on;
+            gzip_buffers 32 4k;
+            gzip_comp_level 6;
+            gzip_types text/plain text/css application/javascript application/json application/x-javascript application/rss+xml image/x-icon image/bmp;
+            gzip_proxied any;
+            gzip_disable "MSIE [1-6]\.";
+            gzip_vary on;
+
+            location /static/ {
+                expires max;
+                add_header Cache-Control public;
+                alias /var/canvas/website/static/;
+            }
+
+            {% if not production %}
+                location /tests/ {
+                    alias /var/canvas/website/tests/;
+                }
+            {% endif %}
+
+            location = /zombies.txt {
+                expires max;
+                alias /var/canvas/website/zombies.txt;
+            }
+
+            location = /favicon.ico {
+                expires max;
+                alias /var/canvas/website/favicon.ico;
+            }
+
+            location = /apple-touch-icon-57x57.png {
+                expires max;
+                alias /var/canvas/website/apple-touch-icon-57x57.png;
+            }
+
+            location = /apple-touch-icon-72x72.png {
+                expires max;
+                alias /var/canvas/website/apple-touch-icon-72x72.png;
+            }
+
+            location = /apple-touch-icon-114x114.png {
+                expires max;
+                alias /var/canvas/website/apple-touch-icon-114x114.png;
+            }
+
+            location = /docs/sticker_guide_2771628.pdf {
+                expires max;
+                alias /var/canvas/website/sticker_guide_2771628.pdf;
+            }
+
+            location /admin_media/ {
+                expires max;
+                alias /usr/lib/pymodules/python2.6/django/contrib/admin/media/;
+            }
+
+            {% if twisted_host %}
+            location /twisted_ping {
+                proxy_read_timeout 600;
+                proxy_connect_timeout 600;
+                proxy_send_timeout 600;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect off;
+
+                proxy_pass http://twisted_server;
+            }
+            {% endif %}
+
+            # Bad top-level directories we don't want to send to Django.
+            location ~ ^/(global|global64|noman|noman64|dealdo|r7|lumis|a-fazenda-4)/.*$ {
+                return 404;
+            }
+            # Bad files/locations we don't want to send to Django.
+            location ~ ^/(pu|health_check.php|PMM/ProductUpdateController|social/convert/toVgnIds\.do)$ {
+                return 404;
+            }
+
+            location = /robots.txt {
+                alias /var/canvas/website/static/robots.txt;
+            }
+
+            {{ ugc_locations() }}
+
+            {% if twisted_host %}
+            location ~ ^/(script_drop|rt_stats).*$ {
+                if ($downtime = "true") {
+                    return 503;
+                }
+                proxy_read_timeout 600;
+                proxy_connect_timeout 600;
+                proxy_send_timeout 600;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect off;
+
+                proxy_pass http://twisted_server;
+            }
+            {% endif %}
+
+            location /nginx_ping.html {
+                alias /var/canvas/website/static/nginx_ping.html;
+            }
+
+            location /ping {
+                # Split out so that when downtime is true, /ping is still available (so servers stay load balanced)
+                if ($downtime = "true") {
+                    rewrite /ping /nginx_ping.html;
+                }
+
+                proxy_read_timeout 600;
+                proxy_connect_timeout 600;
+                proxy_send_timeout 600;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect off;
+
+                proxy_pass http://django_server;
+            }
+
+            location / {
+                if ($downtime = "true") {
+                    return 503;
+                }
+                proxy_read_timeout 600;
+                proxy_connect_timeout 600;
+                proxy_send_timeout 600;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect off;
+
+                proxy_pass http://django_server;
+            }
+        }
+    {% endif %}
+
+    {% if project == "drawquest" %}
+        server {
+            set $downtime "false"; # "true" = down everything expect, nginx directly serves /ping for load balancer
+
+            listen 9000;
+            client_max_body_size 4G;
+
+            # Match anything under example.com, or example.com or any IP address (for load balancer)
+            server_name example.com
+                        dq.savnac.com
+                        {% if production %}localhost{% endif %}
+                        ~^.*amazonaws\.com$
+                        ~^(127|172|192|10)\.\d+\.\d+\.\d+$;
+
+            keepalive_timeout 5;
+
+            add_header X-Served-By $hostname;
+            error_page  503 /static/downtime.html;
+
+            gzip on;
+            gzip_buffers 32 4k;
+            gzip_comp_level 6;
+            gzip_types text/plain text/css application/javascript application/json application/x-javascript application/rss+xml image/x-icon image/bmp;
+            gzip_proxied any;
+            gzip_disable "MSIE [1-6]\.";
+            gzip_vary on;
+
+            location /static/ {
+                expires max;
+                add_header Cache-Control public;
+                alias /var/canvas/website/static/;
+            }
+
+            {% if not production %}
+                location /tests/ {
+                    alias /var/canvas/website/tests/;
+                }
+            {% endif %}
+
+            location = /zombies.txt {
+                expires max;
+                alias /var/canvas/website/zombies.txt;
+            }
+
+            location = /favicon.ico {
+                expires max;
+                alias /var/canvas/website/drawquest/favicon.ico;
+            }
+
+            location /admin_media/ {
+                expires max;
+                alias /usr/lib/pymodules/python2.6/django/contrib/admin/media/;
+            }
+
+            # Bad top-level directories we don't want to send to Django.
+            location ~ ^/(global|global64|noman|noman64|dealdo|r7|lumis|a-fazenda-4)/.*$ {
+                return 404;
+            }
+            # Bad files/locations we don't want to send to Django.
+            location ~ ^/(pu|health_check.php|PMM/ProductUpdateController|social/convert/toVgnIds\.do)$ {
+                return 404;
+            }
+
+            location = /robots.txt {
+                alias /var/canvas/website/static/robots.txt;
+            }
+
+            {{ ugc_locations() }}
+
+            location /nginx_ping.html {
+                alias /var/canvas/website/static/nginx_ping.html;
+            }
+
+            location /ping {
+                # Split out so that when downtime is true, /ping is still available (so servers stay load balanced)
+                if ($downtime = "true") {
+                    rewrite /ping /nginx_ping.html;
+                }
+
+                proxy_read_timeout 600;
+                proxy_connect_timeout 600;
+                proxy_send_timeout 600;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect off;
+
+                proxy_pass http://drawquest_django_server;
+            }
+
+            location / {
+                if ($downtime = "true") {
+                    return 503;
+                }
+                proxy_read_timeout 600;
+                proxy_connect_timeout 600;
+                proxy_send_timeout 600;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_redirect off;
+
+                proxy_pass http://drawquest_django_server;
+            }
+        }
+
+        server {
+            set $downtime "false"; # "true" = down everything expect, nginx directly serves /ping for load balancer
+
+            listen 9000;
+            client_max_body_size 4G;
+
+            # Match only our CDN domain
+            server_name i.drawquestugc.com
+                        drawquestugc.com;
+
+            keepalive_timeout 5;
+
+            add_header X-Served-By $hostname;
+            error_page  503 /static/downtime.html;
+
+            gzip on;
+            gzip_buffers 32 4k;
+            gzip_comp_level 6;
+            gzip_types text/plain text/css application/javascript application/json application/x-javascript application/rss+xml image/x-icon image/bmp;
+            gzip_proxied any;
+            gzip_disable "MSIE [1-6]\.";
+            gzip_vary on;
+
+            {{ ugc_locations() }}
+
+            location /static/ {
+                expires max;
+                add_header Cache-Control public;
+                alias /var/canvas/website/static/;
+            }
+
+            # rewrite anything that isnt ugc or static content
+            location / {
+                rewrite ^/(.*) http://example.com/$1 permanent;
+            }
+        }
+    {% endif %}
+
+    server {
+        listen 9000 default;
+        server_name _;
+
+        location / {
+            return 404;
+        }
+    }
+}
+

@@ -1,0 +1,81 @@
+{% extends "jsbase.django.html" %}
+
+{% block html %}
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/lib/qunit/qunit.css" type="text/css"/>
+        <style type="text/css">
+        .visual_output {
+            vertical-align: top;
+        }
+
+        .visual_output img {
+            background-image: url(/static/img/editbg.png);
+            border: 1px solid black;
+            margin: 8px;
+        }
+
+        </style>
+    </head>
+    <body bgcolor="white"> {# Needed for phantom screenshots to be sane #}
+        <h1 id="qunit-header">Canvas Javascript Tests</h1>
+        <h2 id="qunit-banner"></h2>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests">
+        </ol>
+        <ol id="visual_test_output">
+        </ol>
+        <script>
+        var current = {};
+        </script>
+        {% block core_javascript %}{{ block.super }}{% endblock %}
+        <script src="/static/lib/qunit/qunit.js"></script>
+        <script src="/tests/js/junit.js"></script>
+        <script>
+        var junitSuite = new JUnitTestResult("qunit");
+        var testsPassed = 0;
+        var testsFailed = 0;
+
+        QUnit.testDone = function(t) {
+            if (0 === t.failed) {
+                testsPassed++;
+                } else {
+                testsFailed++;
+            }
+            junitSuite.addTest(t.name, !t.failed);
+            console.log(t.name + ' completed: ' + (0 === t.failed ? 'pass' : 'FAIL'));
+        }
+
+        var running = true;
+        QUnit.done = function(i) {
+            console.log(testsPassed + ' of ' + (testsPassed + testsFailed) + ' tests successful');
+            console.log('TEST RUN COMPLETED: ' + (0 === testsFailed ? 'SUCCESS' : 'FAIL'));
+            running = false;
+            window.onbeforeunload = null;
+        }
+
+        function check_for_qunit_results () {
+            if (running) {
+                return null;
+            }
+
+            return {
+                testsPassed: testsPassed,
+                testsFailed: testsFailed,
+                xml: junitSuite.render(),
+            };
+        }
+
+        </script>
+
+        {% block tests %}
+            <script src="/tests/js/test_common.js"></script>
+            <script src="/tests/js/test_params.js"></script>
+            <script src="/tests/js/test_uploads.js"></script>
+            <script src="/tests/js/test_stickers.js"></script>
+            <script src="/tests/js/test_remix.js"></script>
+        {% endblock %}
+    </body>
+</html>
+{% endblock html %}
+

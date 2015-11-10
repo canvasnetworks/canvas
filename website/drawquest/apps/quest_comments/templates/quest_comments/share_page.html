@@ -1,0 +1,137 @@
+{% extends "drawquest/dqbase.html" %}
+
+{% block title %}- {{ quest.title }}{% endblock %}
+
+
+{% set img_url_mobile = comment.content.get_absolute_url_for_image_type("gallery") %}
+{% set img_url_small = comment.content.get_absolute_url_for_image_type("gallery") %}
+{% set img_url_large = comment.content.get_absolute_url_for_image_type("gallery") %}
+{% set img_url_giant = comment.content.get_absolute_url_for_image_type("gallery") %}
+{% set img_url_original = comment.content.get_absolute_url_for_image_type("original") %}
+
+{% block extra_meta %}
+    <meta name="apple-itunes-app" content="app-id={{ app_store_id() }}, affiliate-data=myAffiliateData, app-argument=myURL">
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="/static/js/drawquest/sharing.js"></script>
+<script>
+    $(function() {
+        $('button.share').on('click', function() {
+            var share_type = $(this).attr("class").split(/\s+/);
+            share_type = share_type[share_type.length - 1];
+            var quest_title = "{{ quest.title|safe }}";
+            var img_url = "{{ img_url_original }}";
+            window.share(share_type, quest_title, img_url);
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/drawquest/share_page.css">
+    <style>
+        /* Response image CSS, needs to be in template */
+        .drawing {
+            background-image:url({{ img_url_small }});
+        }
+        @media
+        only screen and (max-width:320px) and (orientation:portrait),
+        only screen and (min-device-width:768px) and (max-device-width:1024px) and (orientation:portrait),
+        only screen and (-webkit-min-device-pixel-ratio:1.5) and (orientation:portrait),
+        only screen and (min-device-pixel-ratio:1.5) and (orientation:portrait),
+        only screen and (max-width:400px),
+        {
+            .drawing {
+                background-image:url({{ img_url_mobile }});
+            }
+        }
+        @media only screen and (min-width:1000px) {
+            .drawing {
+                background-image:url({{ img_url_small }});
+            }
+        }
+        @media only screen and (min-width:1300px) {
+            .drawing {
+                background-image:url({{ img_url_large }});
+            }
+        }
+        @media only screen and (min-width:1700px) {
+            .drawing {
+                background-image:url({{ img_url_giant }});
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block fb_metadata %}
+    <meta property="og:title" content="{{ quest.title }}">
+    <meta property="og:description" content="{{ comment.user.username }} completed a quest on DrawQuest.">
+    <meta property="og:image" content="{{ img_url_original }}">
+    <meta property="og:type" content="drawquest:quest">
+    <meta property="og:site_name" content="DrawQuest">
+    <meta property="article:published_time" content="{{ iso_8601(comment.timestamp) }}">
+    <meta property="fb:app_id" content="357753267646675">
+    <link rel="image_src" href="{{ img_url_original }}" />
+{% endblock %}
+
+{% block body %}
+    <div class="bg_gradient"></div>
+    <div class="quest_bar">
+        <div class="fixed_width_wrapper">
+            <a href="{{ app_store_link() }}" class="app_store_link">
+                <img src="/static/img/drawquest/promotion/apple_app_store.png">
+            </a>
+            <h1 class="no_outline"><span class="ugc_text"> {{ quest.title }}<span></h1>
+        </div>
+    </div>
+    <div class="fixed_width_wrapper">
+        <div class="main">
+            <div class="drawing_wrapper">
+                <a href="{{ img_url_original }}">
+                    <div class="ugc_img drawing"></div>
+                </a>
+            </div>
+            <div class="drawing_info">
+                <div class="user">
+                    <div class="avatar">
+                        {% if author.avatar_url %}
+                            <img src="{{ author.avatar_url }}">
+                        {% else %}
+                            <img src="/static/img/drawquest/avatar_default.png">
+                        {% endif %}
+                    </div>
+                    <img src="/static/img/drawquest/share_pencil.png">
+                    <p>
+                        <strong>{{ comment.user.username }}</strong> drew this
+                        <br>
+                        {{ comment.star_count }} <img title="Starred" class="icon" src="/static/img/drawquest/share_star.png">
+                        {{ comment.playback_count }} <img title="Plays" class="icon" src="/static/img/drawquest/share_play.png">
+                    </p>
+                </div>
+                <div class="social">
+                    <button class="share facebook"></button>
+                    <button class="share twitter"></button>
+                    <button class="share tumblr"></button>
+                </div>
+            </div>
+        </div>
+        <div class="marketing">
+            <a href="/"><img class="logo" src="/static/img/drawquest/logo_share_page.png"></a>
+            <p class="about">
+                <a href="/"><img src="/static/img/drawquest/app_icon_125.png"></a>
+                DrawQuest is a free drawing community exclusively for iPad.
+                Every day, people come together on DrawQuest to draw the Quest
+                of the Day.
+            </p>
+            <a href="{{ app_store_link() }}">
+                <button class="cta">
+                    <img src="/static/img/drawquest/apple_icon_shadowed.png">&nbsp;
+                    Download the App
+                    &nbsp;<img src="/static/img/drawquest/button_arrow_shadowed.png">
+                </button>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+

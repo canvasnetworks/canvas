@@ -1,0 +1,43 @@
+#page.login #content > .wrapper {
+    width:100%;
+    text-align:center;
+
+    .logo {
+        position:relative;
+        display:block;
+        left:-2.5em;
+        margin:2em auto;
+    }
+
+    .input_wrapper {
+        display:inline-block;
+        width:250px;
+    }
+
+    input[type=submit] {
+        width:130px;
+    }
+
+    form {
+        font-size:1.4em;
+    }
+
+    input.username {
+        @extend .hard_edge_right;
+    }
+    input.password {
+        @extend .rounded_none;
+    }
+    input[type=submit] {
+        @extend .hard_edge_left;
+    }
+
+    p {
+        font-size:1.4em;
+        margin:1em;
+    }
+
+    p.feedback_message {
+        color:$canvas_notice_red;
+    }
+}

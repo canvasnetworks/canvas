@@ -1,0 +1,13 @@
+#!/bin/bash
+
+fix="FIX"
+
+files="$(git diff --cached --name-only --diff-filter=ACM -S${fix}ME | awk '{print "/var/canvas/"$0""}' | xargs grep -P "[F]IXME" --files-with-matches)"
+if [ -z "$files" ]; then
+    exit 0
+else
+    echo "FIX your ${fix}ME's before committing:"
+    echo "${files}"
+    exit 1
+fi
+

@@ -1,0 +1,15 @@
+@import "vars", "mixins";
+
+#page {
+    .start_over {
+        width: 100%;
+        margin-left: 80px;
+        margin-bottom: 10px;
+
+        button {
+            color: #ddd;
+            @include text-shadow(none);
+            @include bg-linear-gradient((90deg, rgba(#cc3333, 1) 20%, rgba(#f8f8f8, 0) 100%));
+        }
+    }
+}

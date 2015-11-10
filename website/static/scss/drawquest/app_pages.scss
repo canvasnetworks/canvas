@@ -1,0 +1,12 @@
+@import "fonts", "mixins", "vars", "normalize", "defaults";
+@import "app_about_page", "app_legal";
+
+body {
+    background:$page_bg;
+    padding:2em;
+}
+
+.fixed_width_wrapper {
+    width:400px;
+    margin:0 48px;
+}

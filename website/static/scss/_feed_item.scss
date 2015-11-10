@@ -1,0 +1,429 @@
+.feed_item {
+    @extend .clearfix;
+
+    .content {
+        /* We have to z-index everything so we can absolutely position under it :( */
+        position:relative;
+        z-index:1;
+    }
+
+    .user {
+        float:left;
+        width:130px;
+        text-align:right;
+        padding-right:1.5em;
+        padding-top:1em;
+        color:#777;
+    }
+
+    .user_link {
+        /* We need this to prevent a chrome bug */
+        display:block;
+    }
+
+    > .wrapper {
+        float:left;
+        position:relative;
+        width:660px;
+        border:1px solid #ccc;
+        border-bottom:0;
+        padding:10px;
+        background:#fff;
+        @extend .clearfix;
+
+        .content > a {
+            text-decoration:none;
+        }
+
+        &.stickered {
+            .sticker_bg,
+            .sticker_flavor {
+                display:block;
+            }
+        }
+
+        &.drop_target {
+            @include box-shadow(inset 0 0 0 4px #DAFF00);
+        }
+
+        .ugc_img {
+            width:175px;
+            height:175px;
+        }
+    }
+
+    &:last-of-type {
+        .wrapper {
+            border:1px solid #ccc;
+        }
+    }
+
+    img.avatar {
+        display:block;
+        margin-left:auto;
+        margin-bottom:1em;
+    }
+
+    .preview {
+        float:left;
+        position:relative;
+        border:1px solid #ccc;
+        width:177px;
+        height:177px;
+        margin-right:1em;
+        @extend .box_sizing_padding;
+
+        .animated_hint {
+            position:absolute;
+            width:46px;
+            height:48px;
+            right:5px;
+            bottom:5px;
+            background:url(/static/img/gif-play-button-new.png);
+            background-position:0 0;
+        }
+
+        &:hover {
+            .animated_hint {
+                background-position:-46px 0;
+            }
+        }
+
+        .sticky_text {
+            /* Style the ribbon red in the feed, because
+            there is too much blue for it to stand out. */
+            background:$canvas_notice_red;
+
+            &:after {
+                border-left-color:$canvas_notice_red;
+            }
+
+            .ribbon_fold {
+                border-top-color:$canvas_notice_red/2;
+            }
+        }
+    }
+
+    p.username {
+        font-size:1.4em;
+        font-weight:bold;
+
+        span.anon {
+            font-weight:normal;
+            color:#999;
+        }
+    }
+
+    p.timestamp {
+        font-size:1.2em;
+        color:#999;
+    }
+
+    .user button {
+        margin:0.5em 0;
+    }
+
+    hgroup {
+        margin-right:1.5em;
+        margin-bottom:0.5em;
+
+        h1 {
+            font-size:1.8em;
+            font-weight:bold;
+        }
+
+        h2 {
+            font-size:1.4em;
+            font-weight:normal;
+
+            strong {
+                font-weight:bold;
+                font-size:1.285em;
+            }
+        }
+    }
+
+    p.tags {
+        float:left;
+        width:450px;
+        margin-bottom:1.5em;
+    }
+
+    p.caption {
+        margin-top:1em;
+        font-size:1.4em;
+        /* Don't float text around thumbnail */
+        width:388px;
+        margin-left:190px;
+
+        &:before {
+            content:url(/static/img/feed_tile/quotation.png);
+            position:relative;
+            top:-3px;
+        }
+    }
+
+    p.feed_reason {
+        margin-top:0.25em;
+        font-size:1em;
+        color:#999;
+
+        a {
+            color:#999;
+
+            &:hover {
+                text-decoration:none;
+            }
+        }
+    }
+
+
+
+    /* Sticker stuff */
+
+    .sticker_bg {
+        display:none;
+        @extend .fullsize;
+        @include opacity(0.15);
+    }
+
+    .sticker_message_overlay {
+        @extend .fullsize;
+        display:none;
+        padding:1em 0.5em;
+        text-align:center;
+        font-size:1.4em;
+        color:$canvas_notice_red;
+        background:rgba(#fff, 0.8);
+        z-index:2;
+        @include opacity(0);
+    }
+
+    .sticker_target {
+        /* Tells the Javascript where to place the sticker, and size */
+        position:absolute;
+        left:15px;
+        top:15px;
+        width:50px;
+        height:50px;
+    }
+
+    .sticker_flavor {
+        $size:70px;
+
+        display:none;
+        position:absolute;
+        right:0;
+        bottom:0;
+        width:$size;
+        height:$size;
+        z-index:2;
+
+        .sticker_triangle {
+            position:absolute;
+            width:$size;
+            height:$size;
+            right:0;
+            bottom:0;
+            overflow:hidden;
+
+            .rotated {
+                position:absolute;
+                width:$size*2;
+                height:$size*2;
+                left:15px;
+                top:15px;
+                overflow:hidden;
+                @include rotate(45deg);
+
+                .sticker_themed {
+                    position:absolute;
+                    width:$size*2;
+                    height:$size*2;
+                    left:-20px;
+                    top:0;
+                    @include rotate(-45deg);
+                }
+            }
+        }
+
+
+        > .sticker_container {
+            z-index:1;
+            @extend .sticker_target;
+
+            & + .sticker_count {
+                display:block;
+                position:absolute;
+                right:9px;
+                top:47px;
+                max-height:1.3em;
+                padding:0.1em 0.3em;
+                background:#fff;
+                color:#333;
+                vertical-align:bottom;
+                overflow:hidden;
+                z-index:1;
+                @include text-shadow(none);
+                @include box-shadow(1px 1px 2px 1px rgba(#000, 0.3));
+                @extend .rounded_corners;
+
+                span {
+                    display:block;
+                    position:relative;
+                }
+            }
+        }
+
+        .top_stickers {
+            position:absolute;
+            right:100%;
+            bottom:5px;
+            width:580px;
+            text-align:right;
+            color:#333;
+            vertical-align:bottom;
+            pointer-events:none;
+            @include text-shadow(none);
+            @include opacity(0);
+            @include transition(opacity 0.3s);
+
+            > span {
+                white-space:nowrap;
+            }
+
+            .sticker_container {
+                width:35px;
+                height:35px;
+            }
+
+            .sticker_count {
+                position:relative;
+                display:inline-block;
+                max-height:1.3em;
+                left:-15px;
+                padding:0.1em 0.3em;
+                background:#fff;
+                color:#333;
+                vertical-align:bottom;
+                overflow:hidden;
+                @include text-shadow(none);
+                @include box-shadow(1px 1px 1px rgba(#000, 0.3));
+                @extend .rounded_corners;
+
+                span {
+                    display:block;
+                    position:relative;
+                }
+            }
+        }
+
+        &:hover,
+        &.js_fake_hover {
+            .top_stickers {
+                @include opacity(1);
+            }
+        }
+    }
+
+
+    /* The dismiss X hover styling */
+
+    &:hover .close_options {
+        display:block;
+    }
+
+    .close_options {
+        display:none;
+        position:absolute;
+        width:22px;
+        height:22px;
+        top:-3px;
+        right:-3px;
+        padding:3px 4px 2px;
+        line-height:18px;
+        font-size:24px;
+        color:#ccc;
+        cursor:pointer;
+
+        .hover_buffer {
+            position:absolute;
+            width:60%;
+            height:3em;
+            top:-3em;
+            right:0;
+        }
+
+        .close_dialog {
+            display:none;
+            $border-color:#999;
+            position:absolute;
+            right:-6px;
+            top:2.75em;
+            border:1px solid $border-color;
+            background:#fff;
+            font-size:0.41em;
+            @include border-radius(0 0 5 5);
+            @include box-shadow(2px 2px 5px rgba(#000, 0.3));
+            
+            &:hover {
+                display:block;
+            }
+
+            &:before,
+            &:after {
+                content:"\00a0";
+                position:absolute;
+                width:0;
+                height:0;
+                pointer-events:none;
+                bottom:100%;
+                right:16px;
+                top:auto;
+                border:transparent solid;
+            }
+
+            &:before {
+                border-width:11.414px;
+                margin-right:-11.414px;
+                border-bottom-color:$border-color;
+            }
+
+            &:after {
+                border-width:10px;
+                margin-right:-10px;
+                border-bottom-color:#fff;
+            }
+
+            ul {
+                margin:0 1em;
+
+                & + ul {
+                    border-top:1px solid #ccc;
+                    margin-top:0.5em;
+                    padding-top:0.5em;
+                }
+
+                li {
+                    padding:0.75em 0;
+
+                    a {
+                        display:block;
+                        font-size:1.2em;
+                        white-space:nowrap;
+                    }
+                }
+            }
+        }
+
+        &:hover {
+            color:red;
+        }
+
+        &:active {
+            .close_dialog  {
+                display:block;
+            }
+        }
+    }
+}

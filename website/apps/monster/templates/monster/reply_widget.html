@@ -1,0 +1,45 @@
+<div id="pw_container_comment" class="pw_container new">
+    <div id="postwidget" class="reply_widget">
+        <div class="pw_upload_form">
+            <h1 class="postwidget_title"></h1>
+            <div class="widget">
+                <div class="top_preview" style="{{ top_preview_style }}"></div>
+                {% include "content/image_chooser.html" %}
+                {% include "remix/remix_widget.html" %}
+                {% if request.user.username %}
+                <div class="input_wrapper identity">
+                    <label>Posting as:</label>
+                    <ul>
+                        <li>
+                            <img src="/static/img/identity_user.png">
+                            <span>{{ request.user.username }}</span>
+                        </li>
+                        <li>
+                            <img src="/static/img/identity_anonymous.png">
+                            <span>anonymous user</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="input_wrapper fb_share_toggle">
+                    <label>Share:</label>
+                    <button class="facebook tooltipped" title="Share this remix with your Facebook friends"></span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form_submission">
+            <input type="submit" class="upload_submit_button" value="Submit">
+
+            <div class="code_of_conduct">
+                <div class="input_wrapper">
+                    <input id="pw_conduct" class="pw_conduct" type="checkbox" checked="true">
+                    <label for="pw_conduct">I agree to the <a href="/code_of_conduct" target="_new">Code of Conduct</a></label>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

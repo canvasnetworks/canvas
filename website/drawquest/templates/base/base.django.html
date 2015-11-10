@@ -1,0 +1,217 @@
+{% extends "jsbase.django.html" %}
+
+{% load canvas_tags %}
+{% load jinja_tags %}
+{% load compress %}
+
+{% block html %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width"/>
+        {% block extra_meta %}{% endblock %}
+
+        <link rel="shortcut icon" type="image/png" href="/favicon.ico">
+
+        <title>{% block title %}{% endblock %}</title>
+        {% block head %}{% endblock %}
+        {% block base_css %}
+            {% compress css %}
+                <link rel="stylesheet" href="/static/css/canvas.css">
+                <link rel="stylesheet" href="/static/lib/uploadify/uploadify.min.css">
+            {% endcompress %}
+        {% endblock %}
+        {% with request.user_kv as user_kv %}
+            <style>
+                .logged_in {
+                    {% if not current_user.is_authenticated %}
+                        display: none !important;
+                        visibility: none !important;
+                    {% endif %}
+                }
+
+                .logged_out {
+                    {% if current_user.is_authenticated %}
+                        display: none !important;
+                        visibility: none !important;
+                    {% endif %}
+                }
+
+                {% if request.META.SERVER_NAME == "savn.ac" %}
+                body {
+                  -moz-transform: scale(-1, 1);
+                  -webkit-transform: scale(-1, 1);
+                  -o-transform: scale(-1, 1);
+                  transform: scale(-1, 1);
+                  filter: FlipH;
+                }
+                {% endif %}
+            </style>
+            {% block extra_css %}{% endblock %}
+            <script>
+                var loading = true;
+                var current = {
+                    {% if current_user.is_authenticated %}
+                        logged_in: true,
+                        username: {{ request.user.username|to_json }},
+                        user_id: {{ request.user.id|to_json }},
+                        post_anonymously: {{ current_user_info.post_anonymously|to_json }},
+                        userinfo: {{ current_user_info.details|to_json }},
+                        notifications: {{ current_user.redis.notifications.get|to_json }},
+                        homepage_invite_url: {{ homepage_invite_url|to_json }},
+                    {% else %}
+                        logged_in: false,
+                        username: "Anonymous",
+                        userinfo: {},
+                        user_id: null,
+                        notifications: {},
+                    {% endif %}
+                        is_staff: {{ request.user.is_staff|to_json }}, // Don't use for anything that should be secure
+                        user_kv: {{ user_kv|to_json }},
+                        nav_category: {{ nav_category|to_json }},
+                        nav_tag: {{ nav_tag|to_json }},
+                        default_category: {{ default_category|to_json }},
+                        is_mobile: navigator.userAgent.match(/(Android|webOS|iPhone|iPod|iPad)/i) ? true : false,
+                        stickers: {{ global_stickers|to_json }},
+                        source: {{ tracking_source|to_json }},
+                        group_found_limit: {{ group_found_limit|to_json }},
+                        seasonal_event: {{ seasonal_event|to_json }},
+                        EPIC_STICKER_COST_THRESHOLD: {{ knobs.EPIC_STICKER_COST_THRESHOLD|to_json }},
+                        experiments: {},
+                        followed_tags: {{ followed_tags|to_json }},
+                        tag_channels: {{ tag_channels|to_json }},
+                        activity_stream_channel: {{ activity_stream_channel|to_json }},
+                        fb_namespace: {{ fb_namespace|to_json }},
+                        enable_timeline: {{ enable_timeline|to_json }},
+                        enable_timeline_posts: {{ enable_timeline_posts|to_json }},
+                };
+
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-16426630-1']);
+                _gaq.push(['_trackPageview']);
+                _gaq.push(['_setCustomVar', 1, 'is_authenticated', current.logged_in]);
+                if (current.logged_in) {
+                    _gaq.push(['_setVar', 'logged_in']);
+                    } else {
+                    _gaq.push(['_setVar', 'logged_out']);
+                }
+
+                (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+        {% endwith %} {# For caching user_kv #}
+        {% comment %} Custom tracking, should happen before all other JS but after GA is setup {% endcomment %}
+        <script>
+            // Quantcast Tag, part 1
+            var _qevents = _qevents || [];
+
+            (function() {
+                var elem = document.createElement('script');
+
+                elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+                elem.async = true;
+                elem.type = "text/javascript";
+                var scpt = document.getElementsByTagName('script')[0];
+                scpt.parentNode.insertBefore(elem, scpt);
+            })();
+        </script>
+    </head>
+    <body class="{% if request.META.SERVER_NAME == "savn.ac" %}hflipped{% endif %} {% block extra_body_classes %}{% endblock %}">
+
+        {% block header %}{% endblock %}
+        <div id="page" class="{% block pageclass %}{% endblock %}">
+            {% block page_header %}{% endblock %}
+            <div class="fixed_width_wrapper">
+                {% block sidebar %}{% endblock %}
+                {% block sticker_pack %}{% endblock %}
+                <div id="content">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+            {% block page_bottom %}{% endblock %}
+        </div>
+        {% block footer %}{% endblock %}
+        {% if not current_user.is_authenticated %}
+            {% render_jinja "signup/_signup_prompt.html" %}
+        {% endif %}
+
+        <div id="fb-root"></div>
+        {% comment %} This needs to be above the compressed JS so admin.js can check the power level via 'current'. {% endcomment %}
+        {% block base_javascript %}
+            {% block core_javascript %}{{ block.super }}{% endblock core_javascript %}
+
+            {% raw_html "jqt/comment.html" %}
+            {% raw_html "jqt/comment_replied.html" %}
+            {% raw_html "jqt/sticker.html" %}
+            {% raw_html "jqt/inventory_sticker.html" %}
+            {% raw_html "jqt/header_sticker.html" %}
+            {% raw_html "jqt/last_sticker.html" %}
+            {% raw_html "jqt/sticker_progress.html" %}
+            {% raw_html "jqt/notification.html" %}
+            {% raw_html "jqt/tracked_tag.html" %}
+            {% if request.user.is_staff %}
+                {% raw_html "jqt/comment_admin.html" %}
+            {% endif %}
+            <!-- Quantcast Tag, part 2 -->
+            <script>
+                _qevents.push( { qacct:"p-eaZ0055EcApEU"} );
+            </script>
+            <noscript>
+                <div style="display: none;"><img src="//pixel.quantserve.com/pixel/p-eaZ0055EcApEU.gif" height="1" width="1" alt="Quantcast"></div>
+            </noscript>
+            <script>
+              window.fbReady = new jQuery.Deferred();
+              window.fbAsyncInit = function() {
+                  FB.init({
+                          appId: '{{ request.fb_app_id }}',
+                          status: true,
+                          cookie: true,
+                          xfbml: true,
+                          oauth: true,
+                          channelUrl: 'http://{{ request.META.SERVER_NAME }}/static/html/fb_channel.html'
+                  });
+                  window.fbReady.resolve();
+              };
+              setTimeout(function() { window.fbReady.reject(); }, 15000);
+
+              $(function() {
+                var e = document.createElement('script'); e.async = true;
+                e.src = document.location.protocol +
+                  '//connect.facebook.net/en_US/all.js';
+                document.getElementById('fb-root').appendChild(e);
+              })
+
+            {% if current_user.is_authenticated %}
+                // Realtime.
+                current.user_pinned_channel = {{ user_pinned_channel|to_json }};
+                current.flag_channel = {{ flag_channel|to_json }};
+                current.user_channel = {{ user_channel|to_json }};
+                current.category_channel = {{ category_channel|to_json }};
+                current.sticker = {{ last_sticker|to_json }};
+
+                current.feed_following_channels = {{ feed_following_channels|to_json }};
+                current.feed_unseen = {{ feed_unseen|to_json }};
+            {% endif %}
+
+            window.check_ready = function() {
+                if(window.loading) { return null; }
+                return "ready";
+            };
+            $(function() {
+                window.loading = false;
+            });
+            </script>
+            {% block base_ready %}<script>$(function () { canvas.base_wires(); });</script>{% endblock %}
+            {% block extra_javascript %}{% endblock %}
+            {% block base_onload %}<script>$(function () { $(window).load(function () { canvas.base_onload();}) });</script>{% endblock %}
+        {% endblock %}
+    </body>
+</html>
+{% endblock html %}
+

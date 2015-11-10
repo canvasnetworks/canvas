@@ -1,0 +1,114 @@
+{% extends "base.django.html" %}
+
+{% load canvas_tags %}
+{% load compress %}
+
+{% block extra_css %}
+{% compress css %}
+<link rel="stylesheet" href="/static/css/signup_prompt.css"/>
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+    <div class="login_prompt modal {% if "post_pending" in request.GET %}post_pending{% endif %}">
+        <div>
+            <div class="clearfix">
+                {% if "post_pending" in request.GET %}
+                    <h1 class="post_pending">Almost done!</h1>
+                {% else %}
+                    <h1 class="signup">Signup for Canvas!</h1>
+                {% endif %}
+            </div>
+            {% if "post_pending" in request.GET %}
+            <div class="post_thumbnail">
+                <img src="{{ request.GET.small_column_url }}">
+            </div>
+            {% endif %}
+            <div class="signup_form">
+                {% if "sticker_limit" in request.GET %}
+                    <p class="sticker_limit">Get access to even more stickers and help promote the images you like by signing up! <strong>Just fill out this form:</strong></p>
+                {% endif %}
+                {% if "post_pending" in request.GET %}
+                    <p class="post_pending">We just need a few more details:</p>
+                {% endif %}
+                <form id="inline_signup_form" class="signup" method="POST" action="https://{{ DOMAIN }}/{% if "post_pending" in request.GET %}signup_share_prompt{% else %}signup_prompt{% endif %}?{{ request.META.QUERY_STRING }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <input type="hidden" name="info" value="{{ request.GET.info }}">
+
+                    <div class="input_wrapper">
+                        <label for="form_username">desired username</label>
+                        <input id="form_username" type="text" class="username" name="username" value="{{ username }}" spellcheck="false" autocomplete="off">
+                    </div>
+                    <div class="error_alert username_alert"><span></span></div>
+                    <div class="input_wrapper">
+                        <label for="form_email">email address</label>
+                        <input id="form_email" type="text" class="email" name="email" value="{{ email }}" spellcheck="false" autocomplete="off">
+                    </div>
+                    <div class="error_alert email_alert"><span></span></div>
+                    <div class="input_wrapper">
+                        <label for="form_password">create a password</label>
+                        <input id="form_password" type="password" class="password" name="password" value="{{ password }}" spellcheck="false" autocomplete="off">
+                    </div>
+                    <div class="error_alert password_alert"><span></span></div>
+                    {% if "post_pending" in request.GET %}
+                        <input type="submit" class="advance post_pending" value="Submit your post">
+                    {% else %}
+                        <input type="submit" class="advance" value="Signup for Canvas">
+                    {% endif %}
+
+                    <p class="feedback_message">{{ message|safe }}</p>
+                </form>
+            </div>
+            <div class="bottom_links">
+                {% if "post_pending" not in request.GET %}
+                    <div class="help">
+                        <a href="/signup_help_exit_iframe"><span>?</span> What's Canvas?</a>
+                    </div>
+                {% endif %}
+                <span class="login_link">or <a href="/login_exit_iframe">log in</a></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+    $(function () {
+        // Show feedback message if needed
+        if ($(".feedback_message").text()) {
+            $(".feedback_message").css("opacity", 1);
+        } else {
+            $(".feedback_message").hide().css("opacity", 1);
+        }
+
+        signup.container = $("#inline_signup_form");
+
+        $("#page input[type=text], #page input[type=password]").each(function () {
+            if ($(this).val()) {
+                $(this).siblings("label").addClass("hidden");
+                var class_name = $(this)[0].className.split(" ").shift();
+                if (class_name == "username") {
+                    signup.validate_username(null, false, true);
+                } else if (class_name == "password" || class_name == "password_verify") {
+                    signup.validate_passwords();
+                } else if (class_name == "email") {
+                    signup.validate_email();
+                }
+            }
+        });
+
+        signup.scoped('.fb_logout').bind('click', function (e) {
+            e.preventDefault();
+            FB.logout(function () {
+                window.location.reload(true);
+            });
+            return false; 
+        });
+        signup.wire();
+    });
+</script>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+

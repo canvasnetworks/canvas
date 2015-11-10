@@ -1,0 +1,90 @@
+@import "thread_comment";
+
+#page.thread_new #content {
+    position:relative;
+
+    .goto_anchor {
+        /* This is for going to the post with a buffer at the top to account for the header */
+        display:block;
+        position:relative;
+        top:-5em;
+    }
+
+    .thread_op {
+        margin-bottom:6em;
+    }
+
+    .thread_posts {
+        position:relative;
+        margin-bottom:2em;
+        
+        .user_band {
+            position:absolute;
+            width:130px;
+            height:100%;
+            background:#EFF3F5;
+        }
+    }
+
+    .pagination {
+        width:630px;
+        margin-top:2em;
+        margin-left:145px;
+        margin-bottom:2em;
+        text-align:center;
+        @extend .clearfix;
+
+        li {
+            @extend .extend_radio_option_li;
+            margin-right:0.3em;
+
+            a {
+                padding:0.2em 0.5em;
+            }
+        }
+
+        button {
+            font-size:1.2em;
+        }
+
+        button.prev {
+            float:left;
+        }
+        button.next {
+            float:right;
+        }
+
+        ul {
+            display:inline-block;
+        }
+    }
+
+    .more_posts {
+        position:absolute;
+        visibility:hidden;
+        width:50%;
+        display:block;
+        margin-left:260px;
+        padding:5px 20px;
+        font-size:1.6em;
+    }
+
+    section.reply_widget {
+        position:relative;
+        left:-190px;
+        width:960px;
+        margin-top:7em;
+        text-align:right;
+
+        #postwidget > .widget {
+            min-width:630px;
+        }
+
+        #postwidget > h1 {
+            margin-bottom:10px;
+            padding-left:10px;
+            font-size:1.6em;
+            color:#555;
+        }
+    }
+}

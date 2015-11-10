@@ -1,0 +1,74 @@
+<div id="postwidget" class="pw_container">
+    <div class="animated_spinner" style="display: block;"></div>
+    <form id="form_widget">
+        <h1>Submit a new quest idea:</h1>
+        <p>
+            Want to submit an idea in writing? Please just <a href="mailto:feedback@example.com">email us</a>. If you want to submit a quest template image instead, please use the form below. Actual quest templates are 2048x1536 pixels, but feel free to use another size if your idea is just a rough sketch. Thanks!
+        </p>
+        <div class="widget">
+            <div class="image_wrapper">
+                <div class="thumbnail_wrapper">
+                    <img class="pw_thumbnail_img" src="/static/img/0.gif">
+                </div>
+
+                <label for="remix">Add an image for the quest:</label>
+
+                {% include "content/image_chooser.html" %}
+
+                {% include "remix/remix_widget.html" %}
+            </div>
+            <div class="form_inputs">
+                <div class="input_wrapper title">
+                    <label for="post_thread_title">Quest goal <em>(required)</em>:</label>
+                    <input id="post_thread_title" name="post_thread_title" type="text" maxlength="70" value="" autocomplete="off">
+                </div>
+                <div class="input_wrapper name">
+                    <label for="post_thread_name">Your name <em>(required)</em>:</label>
+                    <input id="post_thread_name" name="post_thread_name" type="text" maxlength="70" value="" autocomplete="off">
+                </div>
+                <div class="input_wrapper email">
+                    <label for="post_thread_email">Email <em>(required)</em>:</label>
+                    <input id="post_thread_email" name="post_thread_email" type="text" maxlength="70" value="" autocomplete="off">
+                </div>
+                <div class="input_wrapper caption hidden">
+                    <label for="postwidget_caption">Caption <em>(optional)</em>:</label>
+                    <textarea id="postwidget_caption" class="pw_text" rows="3"></textarea>
+                </div>
+                <div class="clearfix">
+                    <div class="input_wrapper tags hidden">
+                        <label for="tag_select_input">Choose tags:</label>
+                        <input id="tag_select_input" type="text" class="tag_free_select" value="{{ default_tag }}" />
+                    </div>
+                    <div class="input_wrapper identity hidden">
+                        <label>Posting as:</label>
+                        <ul>
+                            <li>
+                                <img src="/static/img/identity_user.png">
+                                <span>{{ request.user.username }}</span>
+                            </li>
+                            <li>
+                                <img src="/static/img/identity_anonymous.png">
+                                <span>anonymous</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="input_wrapper fb_share_toggle hidden">
+                        <label>Share:</label>
+                        <button class="facebook tooltipped {% if not enable_timeline_posts %}disabled{% endif %}" type="button" title="Share this remix with your Facebook friends"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="submit form_submission">
+            <input type="submit" class="advance upload_submit_button" value="Submit Quest" disabled="true">
+            <div class="code_of_conduct hidden">
+                <div class="input_wrapper code_of_conduct">
+                    <input id="postwidget_conduct" class="pw_conduct" type="checkbox" checked="true">
+                    <label for="postwidget_conduct">I agree to the <a href="/code_of_conduct" target="_new">Code of Conduct</a></label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

@@ -1,0 +1,80 @@
+#page.profile {
+    #content_header {
+        .staff_notice {
+            display:block;
+            clear:both;
+            margin-bottom:1em;
+            font-size:1.4em;
+            color:red;
+        }
+
+        .avatar_button_wrapper {
+            float:left;
+            position:relative;
+            margin-right:1em;
+
+            button {
+                position:absolute;
+                left:100%;
+                bottom:0;
+                margin-left:10px;
+            }
+        }
+
+        a.edit {
+            text-decoration:none;
+
+            button {
+                float:right;
+                font-size:1.2em;
+            }
+        }
+
+        p.username {
+            font-weight:bold;
+            font-size:3.6em;
+            margin-bottom:0.1em;
+        }
+
+        a.followers {
+            font-size:1.2em;
+
+            strong {
+                font-size:2em;
+                font-weight:bold;
+            }
+        }
+
+        p.bio {
+            margin-top:0.5em;
+            font-size:1.6em;
+            max-height:4.6em;
+            overflow:hidden;
+
+            &:before {
+                content:url(/static/img/feed_tile/quotation.png);
+                height:18px;
+                position:relative;
+                top:-3px;
+            }
+        }
+
+        nav {
+            margin-top:1em;
+        }
+
+        ul.badges {
+            margin-top:.5em;
+        }
+
+        .badges li {
+            display:block;
+            float:left;
+            margin-left:.5em;
+
+            &:first-of-type {
+                margin-left:0;
+            }
+        }
+    }
+}

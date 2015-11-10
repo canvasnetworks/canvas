@@ -1,0 +1,37 @@
+#footer {
+    bottom:0;
+    background:#F2F2F2;
+    border-top:1px solid #ccc;
+    border-bottom:2px solid #ccc;
+    min-width:1000px;
+    margin-top: 10px;
+    padding:10px;
+    text-align:center;
+    font-size:1.2em;
+    color:#888;
+    text-shadow: 0px 1px 0px #ffffff;
+    filter: dropshadow(color=#ffffff, offx=0, offy=1);
+}
+
+    html.ie8 #footer {
+        position:fixed;
+        bottom:0;
+    }
+
+    #footer.mobile {
+        min-width:720px;
+        width:720px;
+    }
+    
+    html.ie8 #page {
+        padding-bottom:40px;
+    }
+
+#footer a {
+    color:#666;
+}
+
+#footer a:hover {
+    color:#f2a;
+    text-decoration:underline;
+}

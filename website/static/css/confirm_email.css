@@ -1,0 +1,12 @@
+.confirm_email {
+    position:relative;
+    width:400px;
+    margin:20px auto;
+    text-align:center;
+    font-size:1.4em;
+    color:#333;
+}
+.confirm_email p {
+    margin:1em;
+}
+

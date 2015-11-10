@@ -1,0 +1,35 @@
+{% extends "drawquest/app/base.html" %}
+
+{% block body_class %}app_about{% endblock %}
+
+{% block body %}
+    <div class="fixed_width_wrapper">
+        <h1><img class="app_icon" src="/static/img/drawquest/app_icon_40@2x.png">DrawQuest</h1>
+        <div class="modal">
+            <p>
+                DrawQuest is a free drawing community exclusively for iPad. Every day, people
+                come together on DrawQuest to draw the Quest of the Day. What's a Quest? It's
+                a challenge to use your imagination and complete a drawing!
+            </p>
+            <p>
+                Learn more about us on <a href="http://example.com">our website</a>,
+                and follow us on <a href="http://m.twitter.com/">Twitter</a>,
+                <a href="http://facebook.com/">Facebook</a>, and
+                <a href="http://tumblr.com">Tumblr</a>.
+            </p>
+            <p>
+                We'd love to hear your feedback:
+                <a href="mailto:feedback@example.com">feedback@example.com</a>
+            </p>
+            <p class="hiring">
+                <a href="/jobs"><img class="hiring" src="/static/img/drawquest/hiring@2x.png"><br>Come join our team!</a>
+            </p>
+            <p class="boring">
+                Our <a href="/app/privacy">privacy policy</a> and
+                <a href="/app/terms">terms of service</a> can be found
+                on our website.
+            </p>
+            <img class="tools" src="/static/img/drawquest/drawing_tools.jpg">
+        </div>
+    </div>
+{% endblock %}

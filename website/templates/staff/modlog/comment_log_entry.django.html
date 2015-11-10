@@ -1,0 +1,10 @@
+{% if log.comment.reply_content %}
+    <a href="/ugc/{{ log.comment.reply_content.details.original.name }}"><img src="{{ log.comment.reply_content.details.thumbnail.name }}" style="max-width: 50px"/></a><br/>
+    <a href="{{ log.comment.get_url }}">image</a>
+    {% if log.comment.parent_comment %}
+        (<a href="{{ log.comment.parent_comment.get_url }}#{{ log.comment.id}}">context</a>)
+    {% endif %}
+{% else %}
+    <a href="{{ log.comment.parent_comment.get_url }}#{{ log.comment.id}}">text reply</a>
+{% endif %}
+moderated to: {{ log.visability_name }}

@@ -1,0 +1,31 @@
+{% djextends "base/headered_base.django.html" %}
+
+{% block pageclass %}
+    post_thread
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .input_wrapper.category {
+            display:none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="remix_wrapper">
+    {% include "monster/create_widget.html" %}
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+    <script>
+        monster.monster_start_content = canvas.storeContent({{ monster_content|to_json }});
+        $(document).ready(function() {
+            monster.wire();
+            $('#tag_select_input').tagit({
+                animate : false,
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style>
+table.plist {
+    margin: 0 auto;
+    font-size: 20px;
+    font-family: monospace;
+}
+    table.plist th {
+        background-color: gray;
+        color: white;
+        font-weight: bold;
+    }
+
+    table.plist td {
+        min-width: 60px;
+        padding: 10px;
+    }
+    
+    table.plist tr:nth-of-type(2n) td {
+        background-color: #ccc;
+    }
+    
+    table.plist tr:hover td {
+        background-color: black;
+        color: white;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<table class='plist'>
+    <tr>
+        <th>Id</th> <th>User</th> <th>Host</th> <th>db</th> <th>Command</th> <th>Time</th> <th>State</th> <th>Info</th>
+    </tr>
+    {% for cols in processlist %}
+        <tr>
+            {% for col in cols %}
+                <td>{{ col }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

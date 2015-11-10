@@ -1,0 +1,97 @@
+{% extends "base/headered_base.django.html" %}
+{% load canvas_tags %}
+
+{% block extra_css %}
+<style type="text/css">
+
+#page tr {
+    border-bottom: #DDD solid 1px;
+}
+
+#page th, td {
+    padding: 1px 8px;
+    border-right: #DDD solid 1px;
+}
+
+#page table {
+    margin: auto;
+    font-size: 1em;
+}
+
+span.ip {
+    font-family: monospace;
+}
+
+#page .user_header,
+#page .log_wrapper {
+    margin: 10px auto 10px auto;
+    width: 600px;
+    clear: both;
+}
+
+#page .user_header {
+    font-size: 2em;
+    margin-bottom: 2em;
+}
+
+#page .user_header h1 {
+    clear: both;
+    margin-bottom: 1em;
+}
+
+#page .log_wrapper {
+    font-size: 12px;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="user_header">
+    <h1>{{ip}}</h1>
+    <h2 class='ipgeo' data-ip="{{ ip }}">...<h2>
+    <div class="clear"></div>
+</div>
+
+<div class="log_wrapper">
+    <table>
+        <tr>
+            <th>Last Request Time</th>
+            <th>User</th>
+            <th>Links</th>
+        </tr>
+        {% for user, timestamp in history %}
+        <tr>
+            <td>{{ timestamp|pretty_unixtime }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+                <a href="/user/{{user.username }}">profile</a> | 
+                <a href="/staff/user/{{user.username}}">staff page</a> | 
+                <a href="/staff/user/{{user.username}}/ip_history">ip history</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+$(function() {
+    $('.ipgeo').each(function (index) {
+        var $this = $(this);
+        var ip = $this.attr('data-ip');
+        $.ajax({
+            url: "http://api.ipinfodb.com/v3/ip-city/", 
+            dataType: "jsonp",
+            data: { ip: ip, format: "json", key: "676473df7ac0004a0794a101c5c8ec333aa1b42c3f89653b0a5338496116728c" },
+            success: function (r) {
+                $this.text(titleCaps(r.cityName + ", " + r.regionName + ", " + r.countryName));
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

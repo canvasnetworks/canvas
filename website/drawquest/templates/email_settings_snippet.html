@@ -1,0 +1,39 @@
+<ul class="unsubscribe">
+    <li class="active">
+        <input name="newsletter" id="newsletter" type="checkbox" {% if not unsubscribed_settings.newsletter %}checked{% endif %}/>
+        <label for="newsletter">Monthly newsletter</label>
+        <p>
+            Each month we send out a newsletter to subscribers detailing new features, fun threads
+            from the month, and other fun news.
+        </p>
+    </li>
+    <li class="active">
+        <input name="replied" id="notification_direct_reply" type="checkbox" {% if not unsubscribed_settings.replied %}checked{% endif %}/>
+        <label for="replied">@reply notifications</label>
+        <p>
+            Receive an email each time someone directly replies to your post.
+        </p>
+    </li>
+    <li class="active">
+        <input name="thread_replied" id="notification_thread_reply" type="checkbox" {% if not unsubscribed_settings.thread_replied %}checked{% endif %}/>
+        <label for="thread_replied">Thread reply notifications</label>
+        <p>
+            Receive an email each time someone posts in one of your threads. If you have a threaded
+            email client these will stack together, otherwise you can individually opt out of
+            receiving notifications from a thread if you are receiving too many.
+        </p>
+    </li>
+    <li class="active">
+        <input name="remixed" id="notification_remix" type="checkbox" {% if not unsubscribed_settings.remixed %}checked{% endif %}/>
+        <label for="remixed">Remix notifications</label>
+        <p>
+            Receive an email each time one of your images is remixed.
+        </p>
+    </li>
+    
+    
+    <li id="unsubscribe_all">
+        <input name="ALL" id="never_receive_emails" type="checkbox" {% if unsubscribed_settings.ALL %}checked{% endif %}/>
+        <label for="ALL">Never receive emails from Canvas</label>
+    </li>
+</ul>

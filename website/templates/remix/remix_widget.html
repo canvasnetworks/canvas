@@ -1,0 +1,219 @@
+<div class="remix_widget">
+    <div class="left_bar">
+        <div class="tool_picker">
+            <button class="text">
+                <div class="icon"></div>
+                text
+            </button>
+            <button class="images">
+                <div class="icon"></div>
+                images
+            </button>
+            <button class="draw">
+                <div class="icon"></div>
+                draw
+            </button>
+            <button class="layers">
+                <div class="icon"></div>
+                layers
+            </button>
+        </div>
+        <div class="undo_redo">
+            <button class="undo" disabled>
+                <div class="icon"></div>
+                undo
+            </button>
+            <button class="redo" disabled>
+                <div class="icon"></div>
+                redo
+            </button>
+        </div>
+        <div class="panel_wrapper">
+            <div class="images panel">
+                <h1>images</h1>
+                {% include "remix/pickers/opacity_picker.html" %}
+            </div>
+            <div class="brush panel">
+                <h1>brush</h1>
+                {% include "remix/pickers/color_picker.html" %}
+                {% include "remix/pickers/size_picker.html" %}
+                {% include "remix/pickers/opacity_picker.html" %}
+                {% include "remix/pickers/softness_picker.html" %}
+                <div class="input_wrapper">
+                    <input id="0e0f2c86-ec83-11e1-b09e-8d256188709b" class="brush_square" type="checkbox" name="square"> <label class="brush_square_label" for="0e0f2c86-ec83-11e1-b09e-8d256188709b"><small>Square</small></label>
+                </div>
+            </div>
+            <div class="eraser panel">
+                <h1>erase</h1>
+                {% include "remix/pickers/size_picker.html" %}
+                {% include "remix/pickers/opacity_picker.html" %}
+                {% include "remix/pickers/softness_picker.html" %}
+                <div class="input_wrapper">
+                    <input id="20d33fe4-ee11-11e1-8145-1ccd6188709b" class="brush_square" type="checkbox" name="square"> <label class="brush_square_label" for="20d33fe4-ee11-11e1-8145-1ccd6188709b"><small>Square</small></label>
+                </div>
+            </div>
+            <div class="shape panel">
+                <h1>shapes</h1>
+                {% include "remix/pickers/color_picker.html" %}
+                {% include "remix/pickers/opacity_picker.html" %}
+                {% include "remix/pickers/shape_picker.html" %}
+            </div>
+            <div class="clone panel">
+                <h1>clone</h1>
+                {% include "remix/pickers/size_picker.html" %}
+                {% include "remix/pickers/opacity_picker.html" %}
+                {% include "remix/pickers/softness_picker.html" %}
+            </div>
+            <div class="text panel">
+                <h1>text</h1>
+                {% include "remix/pickers/color_picker.html" %}
+                {% include "remix/pickers/size_picker.html" %}
+                {% include "remix/pickers/font_picker.html" %}
+                {% include "remix/pickers/opacity_picker.html" %}
+            </div>
+            <div class="fill panel">
+                <h1>fill</h1>
+                {% include "remix/pickers/color_picker.html" %}
+                {% include "remix/pickers/opacity_picker.html" %}
+                {% include "remix/pickers/tolerance_picker.html" %}
+                <div class="input_wrapper">
+                    <input id="1e5c564d-26b3-481d-82ba-71c60b8cdc8b" class="fill_eraser" type="checkbox" name="erase"> <label for="1e5c564d-26b3-481d-82ba-71c60b8cdc8b"><small>Erase</small></label>
+                </div>
+            </div>
+        </div>
+        <div class="popout_wrapper">
+            <div class="popout layers_popout">
+                <div class="layer_previews layers">
+                    <div class="layer">
+                        <canvas class="foreground">
+                    </div>
+                    <div class="layer bottom_layer">
+                        <canvas class="background">
+                    </div>
+                </div>
+                <div class="blend_actions">
+                    Blend Mode:<br/>
+                    <select class="action blend"></select>
+                    <br/>
+                    <span class="action swap">Swap</span>
+                    <span class="action merge">Merge</span>
+                </div>
+                <div class="flip_rotate">
+                    <button class="action symbol flip_horiz tooltipped" title="Flip remix horizontally">
+                        <div class="icon"></div>
+                    </button>
+                    <button class="action symbol flip_vert tooltipped" title="Flip remix vertically">
+                        <div class="icon"></div>
+                    </button>
+                    <br/>
+                    <button class="action symbol rotate_cw tooltipped" title="Rotate remix clockwise">
+                        <div class="icon"></div>
+                    </button>
+                    <button class="action symbol rotate_ccw tooltipped" title="Rotate remix counter-clockwise">
+                        <div class="icon"></div>
+                    </button>
+                </div>
+                <div class="input_wrapper filters">
+                    <select>
+                        <option value="gaussian_blur">Blur</option>
+                        <option value="grayscale">Grayscale</option>
+                        <option value="noir">Noir</option>
+                        <option value="vintage">Vintage</option>
+                        <option value="oil">Oil Painting</option>
+                        <option value="eight_bit">8-bit</option>
+                        <option value="dither">Low-color</option>
+                        {% if request.user.is_authenticated() %}
+                            <option value="jpeg">Downsample</option>
+                        {% endif %}
+                        <option value="posterize">Posterize</option>
+                        <option value="solarize">Solarize</option>
+                    </select>
+                    <button>Apply Filter</button>
+                </div>
+            </div>
+
+            <div class="popout draw_popout">
+                <button class="brush tool">
+                    <div class="icon"></div>
+                    brush
+                </button>
+                <button class="eraser tool">
+                    <div class="icon"></div>
+                    erase
+                </button>
+                <button class="fill tool">
+                    <div class="icon"></div>
+                    fill
+                </button>
+                <button class="shape tool">
+                    <div class="icon"></div>
+                    shape
+                </button>
+                <button class="clone tool">
+                    <div class="icon"></div>
+                    clone
+                </button>
+            </div>
+            <div class="popout text_prompt_popout">
+                <input type="text" placeholder="Type text here"></input><button class="advance_button">insert</button>
+            </div>
+            <div class="popout images_popout">
+                <header>
+                    <nav>
+                        <a class="popular">Popular</a>
+                        <a class="new">New</a>
+                        <div class="input_wrapper search">
+                            <label for="imagepopoutsearch" class="default">Search</label>
+                            <input id="imagepopoutsearch" type="text">
+                            <div class="search_icon"></div>
+                        </div>
+                    </nav>
+                    <div class="upload_link">
+                        <span>Add an image:</span>
+                        <button class='start_upload'>+</button>
+                    </div>
+                </header>
+                <div class="image_upload">
+                    {% include "content/image_chooser.html" %}
+                    <div class="upload_error"></div>
+                </div>
+                <div class="section_template">
+                    <section>
+                        <h1></h1>
+                        <ul class="results"></ul>
+                        <div class="pagination">
+                            <span class="prev">« Prev page</span> | <span class="next">Next Page »</span>
+                        </div>
+                    </section>
+                </div>
+                <div class="image_results">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="canvas_container" data-fit-to-width="700" data-fit-to-height="1000">
+        <canvas class="output"></canvas>
+        <canvas id="brush-canvas" class="brush_canvas"></canvas>
+        <img class="clone_crosshair" src="/static/img/remix-ui/clone-crosshair.png" />
+    </div>
+    <div class="right_bar">
+        <div class="close">
+            <a class="cancel_remix tooltipped" title="Cancel remix">×</a>
+        </div>
+        <div class="help">
+            <a class="tooltipped" title="Keyboard shortcuts">?</a>
+        </div>
+    </div>
+    <div class="loading"></div>
+    <div class="uploading">
+        <div class="progress_wrapper">
+            <h1>Your remix is uploading!</h1>
+            <div class="progress_bar">
+                <div class="empty">
+                    <div class="fill">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

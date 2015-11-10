@@ -1,0 +1,29 @@
+<li class="activity_item {{ activity.type }}_activity {{ "unread" if not activity.has_read(viewer) }} {% block extra_activity_classes %}{% endblock %}" data-timestamp="{{ activity.timestamp|to_json }}" data-id="{{ activity.id }}">
+    <a {% if activity.details_url %}href="{{ activity.details_url }}"{% endif %}>
+        {% block activity_item %}
+            {% block icon %}
+                <div class="icon" style="background-image:url({% block icon_src %}{% endblock %});"></div>
+            {% endblock %}
+            {% block button %}{% endblock %}
+            <img class="thumbnail" src="{% block thumbnail_url %}{{ activity.thumbnail_url if activity.thumbnail_url else "/static/img/text-post.png" }}{% endblock %}">
+            <p class="message">
+                {% if activity.is_actor_anonymous %}
+                    Someone
+                {% else %}
+                    <strong>{{ activity.actor.username }}</strong>
+                {% endif %}
+                {% block message %}{% endblock %}
+            </p>
+            <p class="timestamp">
+                {{ relative_timestamp(activity.ts) }}
+            </p>
+            {% if activity.personal_message %}
+                <div class="clear"></div>
+                <div class="personal_message ugc_text">
+                    <p>{{ activity.personal_message|escape }}</p>
+                </div>
+            {% endif %}
+        {% endblock %}
+    </a>
+</li>
+

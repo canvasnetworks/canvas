@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+import sys; sys.path += ['/var/canvas/common', '../../common']
+
+import ec2
+from boto.ec2.cloudwatch import CloudWatchConnection
+from configuration import aws
+
+def main(name, unit, command):
+    instance_id = ec2.get_instance_id()
+    metric_value = ec2.check_output(command)
+    
+    print "%s: %s" % (instance_id, metric_value)
+    
+    CloudWatchConnection(*aws).put_metric_data("canvas", name, metric_value, unit=unit, dimensions={'InstanceId': instance_id})
+
+if __name__ == "__main__":
+    name, unit, command = sys.argv[1:]
+    main(name, unit, command)

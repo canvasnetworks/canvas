@@ -1,0 +1,46 @@
+{% extends "post_thread/popup_base.html" %}
+
+{% block content %}
+    {{ post_thread_form(show_start_options=False) }}
+{% endblock %}
+
+{% block extra_javascript %}
+    <script>
+        $(function () {
+            var draw_from_scratch_content = canvas.storeContent({{ draw_from_scratch_content|to_json }});
+
+            post_thread.post_submit_callback = function (post, response) {
+                canvas.record_metric('posted_thread', {
+                    'remix_method': 'popup',
+                    'anonymous': $('#postwidget .pw_anonymous').is(':checked'),
+                    'group': $('#postwidget #category_select_input').val(),
+                });
+                canvas.record_metric('posted_thread_from_popup');
+                window.location = '/post_thread/popup/posted?comment=' + (new canvas.Comment(response.comment)).id;
+                return false;
+            };
+
+            $('#pw_existed_start_over').hide();
+
+            post_thread.wire();
+            post_thread.pw.upload_url({{ upload_url|to_json }});
+
+            $('#pw_existed_remix').click(function (event) {
+                window.open(post_thread.pw.existing_url + '#remix_reposted', '_blank', 'resizable=yes,toolbar=yes,location=yes,scrollbars=yes,menubar=yes,status=yes');
+                event.preventDefault();
+                event.stopPropagation();
+                window.close();
+            });
+
+            var pw = $('.widget');
+            pw.resize(function () {
+                window.resizeTo(pw.width() + 90, $('body').height() + 25);
+            });
+
+            $('#pw_existed_link').attr('target', '_blank').click(function () {
+                window.close();
+            });
+        });
+    </script>
+{% endblock %}
+

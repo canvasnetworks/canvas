@@ -1,0 +1,179 @@
+@-webkit-keyframes canvas_clock {
+    /* Duplicated opacity(X)s to give it a hard edge instead of an interpolation */
+    0%   { @include opacity(1); }
+    49%  { @include opacity(1); }
+    50%  { @include opacity(0); }
+    100%  { @include opacity(0); }
+}
+
+$sticker_widget_width:152px;
+
+#sticker_pack {
+    width:$sticker_widget_width + 2px;
+
+    .minimized {
+        display:none;
+        cursor:pointer;
+
+        header {
+            height:30px;
+            line-height:30px;
+
+            &:hover {
+                height:35px;
+            }
+        }
+    }
+
+    .wrapper {
+        border:1px solid #aaa;
+        background:#fff;
+
+        > h1 {
+            margin:0;
+        }
+
+        section {
+            position:relative;
+            padding-bottom:6px;
+
+            &:not(:first-of-type) {
+                border-top:1px solid #ccc;
+                padding-top:6px;
+            }
+        }
+    }
+
+    .title {
+        position:absolute;
+        left:6px;
+        top:-4px;
+        font-size:0.8em;
+        font-weight:bold;
+        color:#999;
+        background-color: white;
+        @include text-shadow((2px 1px 0 #fff, -2px -1px 0 #fff));
+
+        .timer.out_of_time {
+            font-weight: bolder;
+            color: red;
+            @include animation((canvas_clock 1s infinite));
+        }
+    }
+
+    .fixed_wrapper {
+        z-index:1;
+    }
+
+    .seasonal_message {
+        position:relative;
+        top:1.8em;
+        font-size:1.2em;
+        font-weight:bold;
+        color:#800;
+
+        a {
+            color:$canvas_blue;
+
+            &:hover {
+                color:$canvas_blue_hover;
+                text-decoration:none;
+            }
+        }
+    }
+
+    .stickers_inventory {
+        &.empty_inventory {
+            display: none;
+        }
+
+        .inventory_sticker_wrapper {
+            width:48%;
+            display: inline-block;
+            position: relative;
+        }
+
+        .sticker_remaining_count {
+            position:absolute;
+            top:30px;
+            left:47px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #999999;
+
+            .sticker_remaining_number {
+                font-size:1.2em;
+            }
+        }
+
+        .shopping_actions {
+            display:none;
+        }
+    }
+
+    h1 {
+        font-size:1.2em;
+        color:#777;
+        margin-bottom:0.5em;
+        padding:0.1em;
+        text-align:center;
+    }
+
+    header,
+    footer {
+        text-align:center;
+        border:1px solid #C48B38;
+        background:#feeb83;
+        font-size:1.2em;
+        font-weight:bold;
+        color:#562904;
+        @include text-shadow(lighter);
+        @include bg-linear-gradient((-30deg, #feeb83, #fee26f 20%, #fef2a0 35%, #fcd861 55%, #feeb83));
+        padding-top:2px;
+        padding-bottom:3px;
+
+        span {
+            position: relative;
+            top: 1px;
+        }
+
+        button {
+            margin-left: 5px;
+            color: #562904;
+            padding: 3px;
+            font-size: 9px;
+            font-weight: bold;
+            background: #feeb83;
+            border-color: #b29638;
+            @include border-radius(3px);
+            @include bg-linear-gradient((top, #fedf4f, #feda41, #fdee7f, #fbca26 65%, #fedf4f));
+            @include box-shadow(none);
+            @include text-shadow(lighter);
+
+            &:active {
+                @include box-shadow(inset 1px 1px 1px rgba(#000, 0.3));
+            }
+        }
+
+        .close {
+            display:inline-block;
+            font-size:1.4em;
+            font-weight:bold;
+            cursor:pointer;
+
+            &:hover {
+                color:red;
+            }
+        }
+    }
+
+    header {
+        @include border-radius(7 7 0 0);
+        border-bottom:0;
+    }
+
+    footer {
+        @include border-radius(0 0 7 7);
+        border-top:0;
+    }
+}

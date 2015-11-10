@@ -1,0 +1,78 @@
+<div class="remix_wrapper">
+    <div class="remix_hint_cover"></div>
+    {% include "comment/reply_widget.html" %}
+</div>
+<div class="post_header">
+    {% if title %}
+    <h1 id="title" class="ugc_text">{{ title|striptags }}</h1>
+    {% endif %}
+    <div class="post_details">
+        {% if main_comment.comment.thread.reply_count %}
+            <span class="reply_num">{{ main_comment.comment.thread.reply_count }}</span>
+        {% else %}
+            no
+        {% endif %}
+        {{ main_comment.comment.thread.reply_count|pluralize("reply,replies") }}
+        {% if main_comment.comment.category %}
+        • <a href="{{ main_comment.comment.category_url }}">#{{ main_comment.comment.category }}</a>
+        {% endif %}
+    </div>
+    <div class="share_links">
+        <a onClick="sticker_actions.share_comment(2001, {{ main_comment.comment.id }}, true);"><img src="/static/img/share_facebook_large.png"></a>
+        <a onClick="sticker_actions.share_comment(2002, {{ main_comment.comment.id }}, true);"><img src="/static/img/share_twitter_large.png"></a>
+        <a onClick="sticker_actions.share_comment(2006, {{ main_comment.comment.id }}, true);"><img src="/static/img/share_email_large.png"></a>
+    </div>
+</div>
+<div class="main_column">
+    <div class="remix_hint" onClick="view_thread.remix(view_thread.main_comment.reply_content_id);">
+        <img src="/static/img/remix_ui_hint.png">
+    </div>
+    {{ jinja_giant_image_tile(main_comment) }}
+    <div class="replies">
+        {% if responses %}
+            <div class="replies_header section_title">
+                Replies:
+            </div>
+            <hr>
+            <div class="more">
+                <a>Show all replies</a>
+            </div>
+            <div>
+                {% for reply in responses %}
+                    <div>
+                        {{ jinja_thread_reply(reply) }}
+                        <hr>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="section_title">
+            Add your reply:
+        </div>
+        <div class="add_reply">
+            <textarea name="comment" class="comment" rows="3" placeholder="Write a comment"></textarea>
+        </div>
+    </div>
+</div>
+<div class="sidebar">
+    <h2>Remixes:</h2>
+    <div class="sidebar_remixes">
+        <div class="preloaded_tiles">
+            {% for remix in remixes %}
+                {{ jinja_thread_page_tile(remix) }}
+            {% endfor %}
+        </div>
+        <div class="wrapper">
+            <div class="remix_column column_1">
+                <div class="remix_button" onClick="view_thread.remix(view_thread.main_comment.reply_content_id);"></div>
+            </div>
+            <div class="remix_column column_2"></div>
+            <div class="remix_column column_3"></div>
+        </div>
+        <div class="more"><a>Show more remixes</a></div>
+    </div>
+
+    <div class="sidebar_conversation">
+    </div>
+</div>
+

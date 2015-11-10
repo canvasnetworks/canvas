@@ -1,0 +1,17 @@
+{% extends "base.django.html" %}
+
+{% block content %}
+<iframe src="http://127.0.0.1:9005" width="800" height="600"></iframe>
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+jQuery(document).ready(function () {
+    (function(){
+        throw "test error inside $.ready";
+    })();
+});
+throw "test error outside $.ready";
+</script>
+{% endblock %}
+

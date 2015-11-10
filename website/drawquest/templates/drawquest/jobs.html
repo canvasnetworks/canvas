@@ -1,0 +1,29 @@
+{% extends "drawquest/dqbase.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/drawquest/jobs_page.css">
+{% endblock %}
+
+{% block viewport_meta %}<meta name="viewport" content="width=1000, initial-scale=0.75">{% endblock %}
+
+{% block body %}
+    <div class="main">
+        <div class="fixed_width_wrapper">
+            <img src="/static/img/drawquest/jobs.jpg">
+            <div class="left_column">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+        <div class="fixed_width_wrapper">
+            <p>
+                We'd love to hear from you! If you're interested and want to learn more,<br>send an e-mail with your
+                resum&eacute; and a link to your portfolio or GitHub profile to:
+            </p>
+            <p><a href="mailto:jobs@example.com">jobs@example.com</a></p>
+        </div>
+    </footer>
+{% endblock %}

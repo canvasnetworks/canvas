@@ -1,0 +1,303 @@
+@import "vars", "mixins", "form_mixins";
+
+$width:475px;
+$border_width:1px;
+$padding:3px;
+$signup_width:375px;
+
+$signup_width_thin:250px;
+
+body,
+#page {
+    background: transparent;
+}
+
+header {
+    display:none;
+}
+
+.login_prompt {
+    position:relative;
+    width:$width;
+    border:$border_width solid #aaa;
+    background:#fff;
+    padding:$padding;
+    text-align:left;
+    @include box-shadow(2px 2px 6px 2px rgba(0,0,0,0.3));
+    @include border-radius();
+    
+    > div {
+        width:$width - ($border_width + $padding)*2;
+        padding:30px 20px 10px;
+        border:1px solid #adf;
+        @include border-radius(6px);
+        @include clearfix();
+    }
+    
+    .close {
+        position:absolute;
+        right:7px;
+        top:7px;
+        width:17px;
+        height:17px;
+        padding-top:1px;
+        background: $warning_color;
+        color:#fff;
+        font-size:1.3em;
+        font-weight:bold;
+        text-align:center;
+        cursor:pointer;
+        @include border-radius(8px);
+        
+        &:after {
+            content:"✕";
+        }
+        
+        &:hover {
+            background:red;
+        }
+    }
+    
+    h1 {
+        width:300px;
+        padding:5px 20px;
+        margin:0 auto 10px auto;
+        font-size:2.2em;
+        color:#000;
+        background:url(/static/img/footer-textures/smiley.png);
+        text-align:center;
+        @include opacity(0.8);
+        @include text-shadow(light);
+        @include border-radius(17px);
+        @include box-shadow(inset 1px 1px 1px 0px rgba(black, 0.4));
+    }
+    
+    p {
+        width:$signup_width;
+        font-size:1.4em;
+        color:$default_text_color;
+        margin:0 auto;
+        margin-bottom:1em;
+        padding:0;
+        
+        a {
+            color:$canvas_red;
+            font-weight:bold;
+            text-decoration:underline;
+            
+            &:hover {
+                color:$canvas_red_hover;
+            }
+        }
+    }
+    
+    .bottom_links {
+        padding:0.5em 0 0;
+        @include clearfix();
+        
+        a {
+            color:$canvas_blue;
+            font-weight:bold;
+            
+            &:hover {
+                color:$canvas_blue_hover;
+            }
+        }
+        
+        .help {
+            float:left;
+            font-size:1.2em;
+            
+            span {
+                display:inline-block;
+                width:15px;
+                height:15px;
+                background:$canvas_blue;
+                color:#fff;
+                text-align:center;
+                vertical-align:bottom;
+                @include border-radius();
+                
+                &:hover {
+                    background:$canvas_blue_hover;
+                    color:#fff;
+                }
+            }
+        }
+        
+        .login_link {
+            float:right;
+            font-size:1.2em;
+        }
+    }
+
+    #inline_signup_form {
+        display:block;
+        position:relative;
+        margin:0 auto;
+        width:$signup_width;
+        padding-bottom:1.5em;
+        
+        .ie_warning_wrapper {
+            position:absolute;
+            width:410px;
+            height:300px;
+            background:$bg_color;
+            z-index:5;
+            padding-top:50px;
+            
+            .ie_warning {
+                display:inline-block;
+                background:#F05;
+                color:#fff;
+                font-size:1.2em;
+                padding:20px;
+                
+                a {
+                    color:#fff;
+                    font-weight:bold;
+                    text-decoration:underline;
+                }
+            }
+        }
+        
+        .input_wrapper {
+            display:block;
+            width:$signup_width;
+            height:35px;
+            margin:0 auto;
+            margin-top:10px;
+            background:white;
+            border:1px solid #ccc;
+            text-align:left;
+            @include box-shadow(inset 1px 1px 2px #aaaaaa);
+            @include border-radius(4px);
+            
+            label {
+                display:block;
+                position:absolute;
+                z-index:1;
+                font-size:2.4em;
+                color:#aaa;
+                padding:4px 10px;
+                font-weight:normal;
+                cursor:text; /* because this label is on top of the input, so the input doesn't change the cursor. */
+                
+                &.active {
+                    color:#ddd;
+                }
+            }
+            
+            input[type=text],
+            input[type=password] {
+                width:$signup_width;
+                background:transparent;
+                color:#29ABE2;
+                font-size:2.4em;
+                outline:0;
+                border:0;
+                padding:4px 10px;
+                
+                &.valid {
+                    color:#6b9;
+                    background:transparent url("/static/img/valid-input.png") 340px center no-repeat;
+                }
+                
+                &.invalid {
+                    color:#f00;
+                }
+            }
+            
+            input[type=password] {
+                width:$signup_width - 20px; /* Fix box sizing above */
+            }
+        }
+        
+        .error_alert {
+            display:none;
+            width:$signup_width;
+            margin:0 auto;
+            padding:0.5em 1em;
+            background:#f05;
+            @include border-radius(0 0 7 7);
+            
+            span {
+                color:#fff;
+                font-size:1.2em;
+                @include text-shadow(0 -1px 0 #601);
+            }
+        }
+        
+        .feedback_message {
+            width:$signup_width;
+            background:#f05;
+            padding:5px 10px;
+            margin:20px 0 0 0;
+            font-size:1.4em;
+            color:#eee;
+            @include opacity(0);
+            @include border-radius();
+            @include text-shadow(0 -1px 0 #601);
+            
+            a {
+                color:#fff;
+                font-weight:bold;
+                
+                &:hover {
+                    color:#ff0;
+                    text-decoration:none;
+                }
+            }
+        }
+        
+        input[type=submit] {
+            @include wide_submit($signup_width);
+        }
+    }
+
+    &.post_pending {
+        p,
+        #inline_signup_form,
+        .input_wrapper,
+        input[type=submit],
+        input[type=text],
+        .feedback_message,
+        .error_alert
+        {
+            width:$signup_width_thin !important;
+        }
+
+        input[type=password] {
+            width:$signup_width_thin - 20px !important;
+        }
+
+        .post_thumbnail {
+            float:left;
+            width:150px;
+            margin-right:20px;
+        }
+
+        .signup_form {
+            float:left;
+        }
+    }
+
+    &.share_prompt {
+        margin:0 auto;
+        width:350px;
+
+        & > div {
+            width:342px;
+        }
+
+        .share {
+            text-align:center;
+            margin-bottom:10px;
+        }
+
+        button.advance {
+            float:right;
+            font-size:1.4em;
+        }
+    }
+}

@@ -1,0 +1,7 @@
+{% extends "email/_notification.html" %}
+{% set replied_comment = notification.comment.parent_comment %}
+{% set replied_content = notification.comment.parent_comment.reply_content %}
+{% block headline %}
+    <span><strong>Your thread</strong> received a <strong>reply</strong> from
+{% endblock %}
+{% block email_type %}thread reply notifications{% endblock %}

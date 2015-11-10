@@ -1,0 +1,37 @@
+{% macro linked_image(quest, size) %}
+    <img src="{{ quest.content.get_absolute_url_for_image_type("archive") }}">
+{% endmacro %}
+
+<div class="thread_preview" data-op_id="{{ quest_preview.quest.id }}" data-scheduled_quest_id="{{ quest_preview.scheduled_quest_id }}" data-already_saved="{{ already_saved|to_json }}">
+    {% if admin_view %}
+        <div class="ordinal">
+            <input type="number" name="sort_order-{{ quest_preview.quest.id }}" value="{{ quest_preview.sort }}" placeholder="ordinal"> day(s) from now
+            <div class="actions">
+                <a class="remove">remove from schedule</a>
+                {% if already_saved %}| <a class="quest_of_the_day">make quest of the day</a>{% endif %}
+                <a class="add hidden">add to schedule</a>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if show_curation_info %}
+        <div class="details">
+            <span>
+                {% if quest_preview.curator %}
+                    Selected by: {{ quest_preview.curator }}
+                {% endif %}
+                {% if quest_preview.timestamp %}
+                    {{ relative_timestamp(quest_preview.timestamp) }}
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+
+    <div class="main_thumbnail">
+        {{ linked_image(quest_preview.quest, "homepage_featured") }}
+    </div>
+    <hgroup>
+        <h1><a href="{{ quest_preview.quest.url }}" class="ugc_text">{{ quest_preview.quest.title }}</a></h1>
+    </hgroup>
+</div>
+

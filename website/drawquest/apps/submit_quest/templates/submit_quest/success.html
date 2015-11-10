@@ -1,0 +1,15 @@
+{% extends "drawquest/about.html" %}
+
+{% block extra_javascript %}
+<script>
+if (top.location != self.location) {
+  top.location = self.location;
+}
+</script>
+{% endblock %}
+
+{% block about_page_main %}
+<h1>Success!</h1>
+<p>Thanks for submitting your quest idea. We'll take a look soon and if all goes well, we'll queue it up for a future DrawQuest daily challenge.</p>
+{% endblock %}
+

@@ -1,0 +1,240 @@
+@import "vars", "mixins";
+
+#page {
+    width:920px;
+    margin:40px auto;
+    text-align:center;
+    padding:0 10px;
+    padding-bottom:30px;
+    
+    p a {
+        color:#29ABE2;
+        
+        &:hover {
+            text-decoration:underline;
+        }
+    }
+    
+    .canvas_info {
+        float:left;
+        width:500px;
+        padding-left:50px;
+        text-align:left;
+        
+        img {
+            display:block;
+            margin:0 auto;
+            margin-bottom:1em;
+        }
+        
+        h1 {
+            font-size:1.6em;
+            color:#444;
+        }
+        
+        p {
+            font-size:1.6em;
+            color:#777;
+            text-align:left;
+            margin-bottom:1em;
+            
+            strong {
+                color:#555;
+            }
+        }
+    }
+    
+    form.signup {
+        display:block;
+        position:relative;
+        float:left;
+        width:400px;
+    }
+    
+    .logo {
+        position:relative;
+        left:-10px;
+        margin:30px 0 20px;
+    }
+    
+    .custom_greeting {
+        text-align:left;
+        
+        h1 {
+            font-size:1.6em;
+            color:#444;
+        }
+        
+        hr {
+            margin:0.25em 0;
+        }
+        
+        p {
+            font-size:1.4em;
+            margin-bottom:1em;
+            color:#555;
+        }
+    }
+    
+    .loading_spinner {
+        position:absolute;
+        left:-1px;
+        width:402px;
+        height:400px;
+        background:#fcffff url("/static/img/loading.gif") center center no-repeat;
+        z-index:5;
+    }
+    
+    .ie_warning_wrapper {
+        position:absolute;
+        width:410px;
+        height:400px;
+        background:#fcffff;
+        z-index:5;
+        padding-top:50px;
+        
+        .ie_warning {
+            display:inline-block;
+            background:#F05;
+            color:#fff;
+            font-size:1.4em;
+            padding:20px;
+            
+            a {
+                color:#fff;
+                font-weight:bold;
+                text-decoration:underline;
+            }
+        }
+    }
+    
+    .input_wrapper {
+        display:block;
+        width:400px;
+        height:50px;
+        margin:0 auto;
+        margin-top:10px;
+        background:white;
+        border:1px solid #ccc;
+        text-align:left;
+        @include border-radius(4px);
+        @include box-shadow(inset 1px 1px 2px #aaa);
+        
+        label {
+            display:block;
+            position:absolute;
+            z-index:1;
+            font-size:3.2em;
+            color:#aaa;
+            padding:5px 10px;
+            font-weight:normal;
+            cursor:text; /* because this label is on top of the input, so the input doesn't change the cursor. */
+            
+            &.active {
+                color:#ddd;
+            }
+        }
+        
+        input[type=text],
+        input[type=password] {
+            width:400px;
+            background:transparent;
+            color:#29ABE2;
+            font-size:3.2em;
+            outline:0;
+            border:0;
+            padding:5px 10px;
+            @include box-shadow(none);
+        }
+        
+        [type=password] {
+            width:380px; /* I need to go through and fix the box model for password fields */
+        }
+        
+        input {
+            &.valid {
+                color:#6b9;
+                background:transparent url("/static/img/valid-input.png") 360px center no-repeat;
+            }
+            
+            &.invalid {
+                color:#f00;
+            }
+        }
+    }
+    
+    input[type=submit] {
+        display:block;
+        width:400px;
+        margin:10px auto 0;
+        font-size:3.2em;
+        @include border-radius(0 0 7 7);
+    }
+    
+    input.facebook_themed {
+        padding:5px 20px 5px 70px;
+        background: #29477c url("/static/img/fb_button_bg.jpg")no-repeat;
+        background-position:0 bottom;
+        color:#fff;
+        @include text-shadow(0 1px 0 #29477C);
+        @include box-shadow((0 0 2px #8c8c8c, 2px 2px 2px #829ABF inset, -1px -1px 1px #29477C inset));
+        
+        &:hover {
+            background-position:-500px bottom;
+        }
+        
+        &:active {
+            padding:6px 20px 4px 70px;
+            background-position:-1000px bottom;
+            @include text-shadow(0 -2px 0 #29477c);
+            @include box-shadow((0 0 2px #8c8c8c, 2px 2px 2px #29477C inset, -1px -1px 1px #829ABF inset));
+        }
+        
+        &[disabled],
+        &[disabled]:hover,
+        &[disabled]:active {
+            padding:5px 20px 5px 70px;
+            background-position:0 bottom;
+            cursor:default;
+            @include opacity(0.5);
+            @include text-shadow(0 1px 0 #29477C);
+            @include box-shadow((0 0 2px #8c8c8c, 2px 2px 2px #829ABF inset, -1px -1px 1px #29477C inset));
+        }
+    }
+    
+    .error_alert {
+        display:none;
+        width:400px;
+        margin:0 auto;
+        padding:0.5em 0.25em;
+        background:#f05;
+        @include border-radius(0 0 7 7);
+        
+        span {
+            color:#fff;
+            font-size:1.4em;
+            @include text-shadow(0 -1px 0 #601);
+        }
+    }
+    
+    .feedback_message {
+        background:#f05;
+        padding:5px 10px;
+        font-size:1.4em;
+        color:#eee;
+        margin:20px 0;
+        @include opacity(0);
+        @include border-radius();
+        @include text-shadow(0 -1px 0 #601);
+        
+        a {
+            color:#fff;
+            font-weight:bold;
+            
+            &:hover {
+                color:#ff0;
+                text-decoration:none;
+            }
+        }
+    }
+}

@@ -1,0 +1,49 @@
+{% extends "mobile/base.html" %}
+
+
+{% macro pagination() -%}
+    {% if page_last > 1 %}
+        <div class="pagination">
+            <button type="button" class="prev" onClick="window.location='/p/{{short_id}}/{{page_current - 1}}'"{% if page_current <= 1 %} disabled{% endif %}>&lt; prev</button>
+            <button type="button" class="next" onClick="window.location='/p/{{short_id}}/{{page_current + 1}}'"{% if page_current >= page_last %} disabled{% endif %}>next &gt;</button>
+            page
+            {# show page numbers, links if not the current page #}
+            <span class="page_numbers">
+            {% for num in pages %}
+                {% if num == page_current %}
+                    <span class="current_page">{{num}}</span>
+                {% else %}
+                    {% if page_current != page_penultimate and num == page_last %}
+                        <a href="/p/{{short_id}}/current">{{num}}</a>
+                    {% else %}
+                        <a href="/p/{{short_id}}/{{num}}">{{num}}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {# show the (most recent), a link if not already there #}
+            {% if page == "current" %}
+                </span><span class="current_page">(most recent)</span>
+            {% else %}
+                </span><a href="/p/{{short_id}}/current">(most recent)</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{%- endmacro %}
+
+{% block body %}
+    <div class="thread_section">Original:</div>
+    {{ mobile_tile(op_comment) }}
+
+    {{ pagination() }}
+
+    {% if replies %}
+        <div class="thread_section">Replies:</div>
+        {% for tile in replies %}
+            {{ mobile_tile(tile) }}
+        {% endfor %}
+    {% endif %}
+
+    {{ pagination() }}
+
+{% endblock %}

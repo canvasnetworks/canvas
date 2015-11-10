@@ -1,0 +1,878 @@
+@import "sticker_pack", "sticker_shop", "epic_sticker_dialog";
+
+/* For stickerable things */
+.drop_target_border {
+    @extend .fullsize;
+    z-index:-1;
+    text-align:center;
+
+    &.highlight {
+        opacity:0;
+        z-index:1;
+    }
+
+    p {
+        margin-top:1em;
+        font-size:1.4em;
+        color:$canvas_red_hover;
+        @include text-shadow(white);
+    }
+}
+
+/* Message for things you can't sticker */
+body.dragging {
+    .my_post,
+    .stickered_by_viewer {
+        @include transition(opacity 0.3s ease-in-out);
+        @include opacity(0.4);
+
+        .sticker_message_overlay {
+            display:block;
+            @include opacity(1);
+            background:rgba(#fff, 0.9);
+
+            &:after {
+                content:"You've already stickered this.";
+                color:#000;
+            }
+        }
+    }
+    .my_post .sticker_message_overlay:after {
+        content:"This is your post.";
+    }
+}
+
+.sticker_container {
+    display:inline-block;
+    width:50px;
+    height:50px;
+    vertical-align:top;
+    z-index:3;
+    background-size:auto 300%;
+    background-position:0 -100%;
+
+    .sticker_remaining {
+        position:relative;
+    }
+
+    .sticker_remaining_count {
+        position:relative;
+        top:40px;
+        left:38px;
+        font-weight:bold;
+        color:#999;
+    }
+
+    &.none_remaining {
+        @include opacity(0.5);
+
+        .sticker_remaining_count {
+            color:#444;
+        }
+    }
+
+    &.dragging,
+    &.absolute {
+        position:absolute;
+        z-index:9009000;
+
+        .sticker_remaining {
+            display:none;
+        }
+    }
+
+    &.shadow {
+        background-position:0 0;
+    }
+
+    &.backing {
+        background-position:0 -200%;
+    }
+
+    &.small,
+    .image_tile .sticker_overlay & {
+        width:25px;
+        height:25px;
+    }
+
+    &.medium {
+        width:35px;
+        height:35px;
+    }
+}
+
+.stickerable {
+    position: relative;
+}
+
+/* Permanent stickers */
+.sticker_container {
+    /* Default 9 */
+    &.smiley { background-image:url(/static/img/stickers/smiley.png); }
+    &.frowny { background-image:url(/static/img/stickers/frowny.png); }
+    &.monocle { background-image:url(/static/img/stickers/monocle.png); }
+    &.lol { background-image:url(//example.com/static/img/stickers/lol.png); }
+    &.wow { background-image:url(/static/img/stickers/wow.png); }
+    &.wtf { background-image:url(/static/img/stickers/wtf.png); }
+    &.wow-tired { background-image:url(/static/img/stickers/wow-tired.png); }
+    &.question { background-image:url(/static/img/stickers/question.png); }
+    &.question2 { background-image:url(/static/img/stickers/question.png); }
+    &.num1 { background-image:url(/static/img/stickers/num1.png); }
+    &.cookie { background-image:url(/static/img/stickers/cookie.png); }
+    &.heart { background-image:url(/static/img/stickers/heart.png); }
+
+    /* Seasonal */
+    &.note { background-image:url(/static/img/stickers/note.png); }
+    &.texas { background-image:url(/static/img/stickers/texas.png); }
+    &.sxsw { background-image:url(/static/img/stickers/sxsw.png); }
+    &.monocle-hungover { background-image:url(/static/img/stickers/monocle-hungover.png); }
+    &.selleck2 { background-image:url(//example.com/static/img/stickers/selleck.png); }
+    &.trololol { background-image:url(//example.com/static/img/stickers/trololol.png); }
+    &.wow_old { background-image:url(//example.com/static/img/stickers/wow_old.png); }
+    &.monocle-sombrero { background-image:url(/static/img/stickers/monocle-sombrero.png); }
+    &.monocle-maracas { background-image:url(/static/img/stickers/monocle-maracas.png); }
+    &.monocle-margarita { background-image:url(/static/img/stickers/monocle-margarita.png); }
+    &.wookie { background-image:url(/static/img/stickers/wookie.png); }
+    &.win { background-image:url(/static/img/stickers/win.png); }
+    &.zalgo-black { background-image:url(/static/img/stickers/zalgo-black.png); }
+    &.andrewwk { background-image:url(/static/img/stickers/andrewwk.png); }
+    &.america { background-image:url(/static/img/stickers/america.png); }
+    &.skull { background-image:url(/static/img/stickers/skull.png); }
+    &.cthulhu { background-image:url(/static/img/stickers/cthulhu.png); }
+    &.jack-o-lantern { background-image:url(/static/img/stickers/jack-o-lantern.png); }
+    &.turkey { background-image:url(/static/img/stickers/turkey.png); }
+    &.cornucopia { background-image:url(/static/img/stickers/cornucopia.png); }
+    &.pumpkin-pie { background-image:url(/static/img/stickers/pumpkin-pie.png); }
+    &.gift { background-image:url(/static/img/stickers/gift.png); }
+    &.snowflake { background-image:url(/static/img/stickers/snowflake.png); }
+    &.rudolph { background-image:url(/static/img/stickers/rudolph.png); }
+    &.twothousandtwelve { background-image:url(/static/img/stickers/twothousandtwelve.png); }
+    &.champagne { background-image:url(/static/img/stickers/champagne.png); }
+    &.mayan { background-image:url(/static/img/stickers/mayan.png); }
+    &.sopa { background-image:url(/static/img/stickers/sopa.png); }
+    &.lantern { background-image:url(/static/img/stickers/lantern.png); }
+    &.cupcake { background-image:url(/static/img/stickers/cupcake.png); }
+    &.groundhog { background-image:url(/static/img/stickers/groundhog.png); }
+    &.teddy { background-image:url(/static/img/stickers/teddy.png); }
+    &.valentine { background-image:url(/static/img/stickers/valentine.png); }
+    &.forever-alone-seasonal,
+    &.forever-alone { background-image:url(/static/img/stickers/forever-alone.png); }
+    &.clover { background-image:url(/static/img/stickers/clover.png); }
+    &.green-beer { background-image:url(/static/img/stickers/green-beer.png); }
+    &.pot-o-gold { background-image:url(/static/img/stickers/pot-o-gold.png); }
+    &.bill-fools1 { background-image:url(/static/img/stickers/bill-fools1.png); }
+    &.bill-fools2 { background-image:url(/static/img/stickers/bill-fools2.png); }
+    &.bill-fools3 { background-image:url(/static/img/stickers/bill-fools3.png); }
+    &.bill-fools4 { background-image:url(/static/img/stickers/bill-fools4.png); }
+    &.bill-fools5 { background-image:url(/static/img/stickers/bill-fools5.png); }
+    &.bill-fools6 { background-image:url(/static/img/stickers/bill-fools6.png); }
+    &.lobster { background-image:url(/static/img/stickers/lobster.png); }
+    &.dave { background-image:url(/static/img/stickers/dave.png); }
+    &.egg-pink { background-image:url(/static/img/stickers/egg-pink.png); }
+    &.egg-blue { background-image:url(/static/img/stickers/egg-blue.png); }
+    &.egg-chocolate { background-image:url(/static/img/stickers/egg-chocolate.png); }
+    &.jason { background-image:url(/static/img/stickers/jason.png); }
+    &.weed { background-image:url(/static/img/stickers/weed.png); }
+    &.bloodshot { background-image:url(/static/img/stickers/bloodshot.png); }
+    &.joint { background-image:url(/static/img/stickers/joint.png); }
+    &.donut-strawberry { background-image:url(/static/img/stickers/donut-strawberry.png); }
+    &.donut-chocolate { background-image:url(/static/img/stickers/donut-chocolate.png); }
+    &.donut-glazed { background-image:url(/static/img/stickers/donut-glazed.png); }
+    &.usa-pin { background-image:url(/static/img/stickers/usa-pin.png); }
+    &.usa-hat { background-image:url(/static/img/stickers/usa-hat.png); }
+    &.usa-eagle { background-image:url(/static/img/stickers/usa-eagle.png); }
+    &.medal-gold { background-image:url(/static/img/stickers/medal-gold.png); }
+    &.medal-silver { background-image:url(/static/img/stickers/medal-silver.png); }
+    &.medal-copper { background-image:url(/static/img/stickers/medal-copper.png); }
+    &.hurricane-sandy { background-image:url(/static/img/stickers/hurricane-sandy.png); }
+    &.slowpoke-pumpkin { background-image:url(/static/img/stickers/slowpoke-pumpkin.png); }
+    &.slowpoke-ghost { background-image:url(/static/img/stickers/slowpoke-ghost.png); }
+
+    /* Shop stickers */
+    &.nyancat { background-image:url(/static/img/stickers/nyancat.png); }
+    &.banana { background-image:url(/static/img/stickers/banana.png); }
+    &.fuckyeah { background-image:url(/static/img/stickers/fuckyeah.png); }
+    &.number-oneocle { background-image:url(/static/img/stickers/number-oneocle.png); }
+    &.cool { background-image:url(/static/img/stickers/cool.png); }
+    &.hipster { background-image:url(/static/img/stickers/hipster.png); }
+    &.kawaii { background-image:url(/static/img/stickers/kawaii.png); }
+    &.glove { background-image:url(/static/img/stickers/glove.png); }
+    &.tacnayn { background-image:url(/static/img/stickers/tacnayn.png); }
+    &.super-lol { background-image:url(/static/img/stickers/super-lol.png); }
+
+    /* Super special stickers */
+    &.partyhard { background-image:url(/static/img/stickers/partyhard.png); }
+}
+
+/* Seasonal changes to pre-existing stickers */
+body.seasonal_halloween .sticker_container {
+    $dir:"seasonal/halloween";
+    &.smiley { background-image:url(/static/img/stickers/#{$dir}/smiley.png); }
+    &.frowny { background-image:url(/static/img/stickers/#{$dir}/frowny.png); }
+    &.monocle { background-image:url(/static/img/stickers/#{$dir}/monocle.png); }
+    &.lol { background-image:url(/static/img/stickers/#{$dir}/lol.png); }
+    &.wow { background-image:url(/static/img/stickers/#{$dir}/wow.png); }
+    &.question { background-image:url(/static/img/stickers/#{$dir}/question.png); }
+    &.num1 { background-image:url(/static/img/stickers/#{$dir}/num1.png); }
+    &.cookie { background-image:url(/static/img/stickers/#{$dir}/cookie.png); }
+    &.heart { background-image:url(/static/img/stickers/#{$dir}/heart.png); }
+}
+
+body.seasonal_halloween2 .sticker_container {
+    $dir:"seasonal/halloween2";
+    &.smiley { background-image:url(/static/img/stickers/#{$dir}/smiley.png); }
+    &.frowny { background-image:url(/static/img/stickers/#{$dir}/frowny.png); }
+    &.monocle { background-image:url(/static/img/stickers/#{$dir}/monocle.png); }
+    &.lol { background-image:url(/static/img/stickers/#{$dir}/lol.png); }
+    &.wow { background-image:url(/static/img/stickers/#{$dir}/wow.png); }
+    &.question { background-image:url(/static/img/stickers/#{$dir}/question.png); }
+    &.num1 { background-image:url(/static/img/stickers/#{$dir}/num1.png); }
+    &.cookie { background-image:url(/static/img/stickers/#{$dir}/cookie.png); }
+    &.heart { background-image:url(/static/img/stickers/#{$dir}/heart.png); }
+}
+
+body.seasonal_christmas .sticker_container {
+    $dir:"seasonal/christmas";
+    &.smiley { background-image:url(/static/img/stickers/#{$dir}/smiley.png); }
+    &.frowny { background-image:url(/static/img/stickers/#{$dir}/frowny.png); }
+    &.monocle { background-image:url(/static/img/stickers/#{$dir}/monocle.png); }
+    &.lol { background-image:url(/static/img/stickers/#{$dir}/lol.png); }
+    &.wow { background-image:url(/static/img/stickers/#{$dir}/wow.png); }
+    &.question { background-image:url(/static/img/stickers/#{$dir}/question.png); }
+    &.num1 { background-image:url(/static/img/stickers/#{$dir}/num1.png); }
+    &.cookie { background-image:url(/static/img/stickers/#{$dir}/cookie.png); }
+    &.heart { background-image:url(/static/img/stickers/#{$dir}/heart.png); }
+}
+
+body.seasonal_aprilfools .sticker_container {
+    $dir:"seasonal/aprilfools";
+    &.smiley { background-image:url(/static/img/stickers/#{$dir}/smiley.png); }
+    &.frowny { background-image:url(/static/img/stickers/#{$dir}/frowny.png); }
+    &.monocle { background-image:url(/static/img/stickers/#{$dir}/monocle.png); }
+    &.lol { background-image:url(/static/img/stickers/#{$dir}/lol.png); }
+    &.wow { background-image:url(/static/img/stickers/#{$dir}/wow.png); }
+    &.question { background-image:url(/static/img/stickers/#{$dir}/question.png); }
+    &.num1 { background-image:url(/static/img/stickers/#{$dir}/num1.png); }
+    &.cookie { background-image:url(/static/img/stickers/#{$dir}/cookie.png); }
+    &.heart { background-image:url(/static/img/stickers/#{$dir}/heart.png); }
+}
+
+body.seasonal_photocopier {
+    .sticker_container {
+        $dir:"seasonal/photocopier";
+        &.smiley { background-image:url(/static/img/stickers/#{$dir}/smiley.png); }
+        &.frowny { background-image:url(/static/img/stickers/#{$dir}/frowny.png); }
+        &.monocle { background-image:url(/static/img/stickers/#{$dir}/monocle.png); }
+        &.lol { background-image:url(/static/img/stickers/#{$dir}/lol.png); }
+        &.wow { background-image:url(/static/img/stickers/#{$dir}/wow.png); }
+        &.question { background-image:url(/static/img/stickers/#{$dir}/question.png); }
+        &.num1 { background-image:url(/static/img/stickers/#{$dir}/num1.png); }
+        &.cookie { background-image:url(/static/img/stickers/#{$dir}/cookie.png); }
+        &.heart { background-image:url(/static/img/stickers/#{$dir}/heart.png); }
+    }
+
+    .sticker_container,
+    .sticker_themed {
+        -webkit-filter:grayscale(100%);
+    }
+}
+
+/* Group changes to pre-existing stickers */
+body.group_minecraft .sticker_container {
+    $dir: "groups/minecraft";
+    &.smiley { background-image:url(/static/img/stickers/#{$dir}/smiley.png); }
+    &.frowny { background-image:url(/static/img/stickers/#{$dir}/frowny.png); }
+    &.monocle { background-image:url(/static/img/stickers/#{$dir}/monocle.png); }
+    &.lol { background-image:url(/static/img/stickers/#{$dir}/lol.png); }
+    &.wow { background-image:url(/static/img/stickers/#{$dir}/wow.png); }
+    &.question { background-image:url(/static/img/stickers/#{$dir}/question.png); }
+    &.num1 { background-image:url(/static/img/stickers/#{$dir}/num1.png); }
+    &.cookie { background-image:url(/static/img/stickers/#{$dir}/cookie.png); }
+    &.heart { background-image:url(/static/img/stickers/#{$dir}/heart.png); }
+}
+
+body.group_cats .sticker_container {
+    $dir: "groups/cats";
+    &.smiley { background-image:url(/static/img/stickers/#{$dir}/smiley.png); }
+    &.frowny { background-image:url(/static/img/stickers/#{$dir}/frowny.png); }
+    &.monocle { background-image:url(/static/img/stickers/#{$dir}/monocle.png); }
+    &.lol { background-image:url(/static/img/stickers/#{$dir}/lol.png); }
+    &.wow { background-image:url(/static/img/stickers/#{$dir}/wow.png); }
+    &.question { background-image:url(/static/img/stickers/#{$dir}/question.png); }
+    &.num1 { background-image:url(/static/img/stickers/#{$dir}/num1.png); }
+    &.cookie { background-image:url(/static/img/stickers/#{$dir}/cookie.png); }
+    &.heart { background-image:url(/static/img/stickers/#{$dir}/heart.png); }
+}
+
+body.group_abstract .sticker_container {
+    $dir: "groups/abstract";
+    &.smiley { background-image:url(/static/img/stickers/#{$dir}/smiley.png); }
+    &.frowny { background-image:url(/static/img/stickers/#{$dir}/frowny.png); }
+    &.monocle { background-image:url(/static/img/stickers/#{$dir}/monocle.png); }
+    &.lol { background-image:url(/static/img/stickers/#{$dir}/lol.png); }
+    &.wow { background-image:url(/static/img/stickers/#{$dir}/wow.png); }
+    &.question { background-image:url(/static/img/stickers/#{$dir}/question.png); }
+    &.num1 { background-image:url(/static/img/stickers/#{$dir}/num1.png); }
+    &.cookie { background-image:url(/static/img/stickers/#{$dir}/cookie.png); }
+    &.heart { background-image:url(/static/img/stickers/#{$dir}/heart.png); }
+}
+
+/* Old thread temp stuff */
+.reply .sticker_themed {
+    background:#C4CECC url(/static/img/footer-textures/default.png);
+    color:#222;
+    @inlude text-shadow(lighter);
+    @include box-shadow(0 1px 0 #919191);
+}
+
+/* Sticker Footer themes */
+.sticker_themed {
+    background:none;
+    color:#333;
+    @inlude text-shadow(none);
+    @include box-shadow(0 1px 0 #919191);
+
+    a {
+        font-weight:bold;
+        color:#fff;
+        @include text-shadow(1px 1px 0 rgba(#000, 0.5));
+
+        &:hover {
+            color:#fff;
+        }
+    }
+
+    .op,
+    .indented {
+        background:rgba(#fff, 0.25);
+        @include box-shadow((inset 1px 1px 0 rgba(#000, 0.5), 1px 1px 0 rgba(#fff, 0.5)));
+    }
+
+    &.smiley {
+        background:#34B5E8 url(/static/img/footer-textures/smiley.png);
+        @include box-shadow(0 1px 0 #0087bd);
+
+        *::selection {
+            background:rgba(#ff0, 0.5);
+            text-shadow:none;
+        }
+    }
+
+    &.frowny {
+        background:#FF0086 url(/static/img/footer-textures/frowny.png);
+        @include box-shadow(0 1px 0 #991d59);
+    }
+
+    &.monocle,
+    &.monocle-hungover,
+    &.monocle-sombrero,
+    &.monocle-maracas,
+    &.monocle-margarita {
+        background:#6d2312 url(/static/img/footer-textures/monocle.jpg);
+        color:#E2D2CF;
+        @include text-shadow(-1px -1px 0 #000);
+        @include box-shadow(0 1px 0 #362308);
+
+        .op,
+        .indented {
+            background:rgba(255,255,255,0.15);
+            @include box-shadow((inset 1px 1px 0 rgba(#000, 0.5), 1px 1px 0 rgba(#fff, 0.3)));
+        }
+
+        a {
+            font-weight:bold;
+            color:#ffc;
+            @include text-shadow(0 1px 1px #000);
+        }
+    }
+
+    &.monocle-sombrero,
+    &.monocle-maracas,
+    &.monocle-margarita {
+        background:#6d2312 url("/static/img/footer-textures/cinco-de-monocle.jpg");
+
+        .op,
+        .indented {
+            background:rgba(0,0,0,0.15);
+            @include box-shadow((inset 1px 1px 0 rgba(#000, 0.5), 1px 1px 0 rgba(#fff, 0.3)));
+        }
+    }
+
+    &.lol {
+        background:#65D6A8 url(/static/img/footer-textures/lol.png);
+        @include box-shadow(0 1px 0 #33966d);
+
+        .op {
+            background:rgba(#fff, 0.15);
+        }
+    }
+
+    &.wtf,
+    &.wow,
+    &.wow-tired {
+        background:#C16EE0 url(/static/img/footer-textures/wtf.png);
+        @include box-shadow(0 1px 0 #923db3);
+        @include text-shadow(0 1px 0 rgba(#fff,0.3));
+    }
+
+    &.question {
+        background:#807C87 url(/static/img/footer-textures/question.png);
+        @include box-shadow(0 1px 0 #504c57);
+    }
+
+    &.num1 {
+        color:#3F200B;
+        background:#F4E158;
+        @include bg-linear-gradient((35deg, #E8B621 28%, #FAEB7B 60%, #FAEC6E 63%, #FAFAA8 71%, #FFFFA1 82%, #FAFAA8 96%));
+        @include box-shadow(0 1px 0 #825108);
+
+        a {
+            @include text-shadow(outline, #C69B2E);
+
+            &:hover {
+                @include text-shadow(outline, #A07827);
+
+            }
+        }
+
+        &.qt {
+            background: url(/static/img/footer-textures/num1.jpg) repeat-y;
+            background-size:100% auto;
+        }
+    }
+
+    &.cookie {
+        background:#EDC154 url(/static/img/footer-textures/cookie.png);
+        @include box-shadow(0 1px 0 #b5903a);
+    }
+
+    &.heart {
+        background:#fc7ba3 url(/static/img/footer-textures/heart.png);
+        @include box-shadow(0 1px 0 #ed5180);
+    }
+
+    &.note {
+        background:#315C99;
+    }
+
+    &.texas {
+        background:#8FBDBF;
+    }
+
+    &.sxsw {
+        background:#93c16d;
+    }
+
+    &.banana {
+        background: #e6ca4a url(/static/img/footer-textures/banana.jpg);
+        color:#814a2f;
+    }
+
+    &.zalgo-black {
+        background:black;
+        @include text-shadow(1px 1px 0 #A00);
+    }
+
+    &.nyancat {
+        background:#113762 url(/static/img/footer-textures/nyancat-space.png);
+        color:#eef;
+        @include text-shadow(outline, rgba(#000, 0.8));
+        @include box-shadow(0 1px 0 #00203f);
+
+        .image_tile &,
+        .reply.expanded &.reply_body,
+        #op &.reply_body,
+        .reply.expanded:not(.new_design) &,
+        #op .reply:not(.new_design) & {
+            background:url(/static/img/footer-textures/nyancat-rainbow.png) top right no-repeat, url(/static/img/footer-textures/nyancat-space.png), #113762 ;
+        }
+
+        a {
+            color:#003466;
+            @include text-shadow(outline);
+        }
+    }
+
+    &.tacnayn {
+        background:#840810 url(/static/img/footer-textures/tacnayn-space.png);
+        color:#eef;
+        @include text-shadow(darker);
+        @include box-shadow(0 1px 0 #00203f);
+
+        .image_tile &,
+        .reply.expanded &.reply_body,
+        #op &.reply_body,
+        .reply.expanded:not(.new_design) &,
+        #op .reply:not(.new_design) & {
+            background:url(/static/img/footer-textures/tacnayn-rainbow.png) top right no-repeat, url(/static/img/footer-textures/tacnayn-space.png), #113762 ;
+        }
+
+        a {
+            color:#003466;
+            @include text-shadow(outline);
+        }
+    }
+
+    &.fuckyeah {
+        color:#333;
+        background:#7eddaa url(/static/img/footer-textures/fuckyeah-metal.gif);
+        @include box-shadow(0 1px 0 #00203f);
+
+        .image_tile &,
+        .reply.expanded &.reply_body,
+        #op &.reply_body,
+        .reply.expanded:not(.new_design) &,
+        #op .reply:not(.new_design) &  {
+            background:url(/static/img/footer-textures/fuckyeah-ink.png) right top no-repeat, url(/static/img/footer-textures/fuckyeah-metal.gif), #7eddaa ;
+        }
+    }
+
+    &.number-oneocle {
+        background:#e9bd4a url(/static/img/footer-textures/number-oneocle.jpg);
+        color:#490f01;
+    }
+
+    &.partyhard,
+    &.andrewwk {
+        background:#968f90 url(/static/img/footer-textures/partyhard-metal.jpg) 0 -520px;
+        @include box-shadow(0 1px 0 #4e6c71);
+        @include text-shadow(outline, rgba(#fff, 0.8));
+
+        .image_tile &,
+        .reply.expanded &.reply_body,
+        #op &.reply_body,
+        .reply.expanded:not(.new_design) &,
+        #op .reply:not(.new_design) & {
+            background:url(/static/img/footer-textures/partyhard-blood.png) right top no-repeat, url(/static/img/footer-textures/partyhard-metal.jpg) 0 -100px, #968f90;
+        }
+    }
+
+    &.cool {
+        background:#6c717c url(/static/img/footer-textures/cool.png);
+        @include text-shadow(0 1px 0 rgba(#fff, 0.15));
+    }
+
+    &.hipster {
+        background:#f5f8f9;
+        color:#344781;
+        text-shadow:none;
+        @include box-shadow((0px 1px 0px  #c40000, inset 0 1px 0 #c40000));
+
+        a {
+            color:#fff;
+            @include text-shadow(outline, #c40000);
+        }
+
+        #thread_column &:not(.reply_body),
+        #thread_column .reply.expanded & {
+            background:#f5f8f9 url(/static/img/footer-textures/hipster.png) bottom repeat-x;
+        }
+
+        #thread_column #replied_comment & {
+            background-image:none;
+        }
+    }
+
+    &.kawaii {
+        background:#75bacf url(/static/img/footer-textures/kawaii.gif);
+        @include box-shadow(0 1px 0 #448a9f);
+    }
+
+    &.glove {
+        background:#4c5555 url(/static/img/footer-textures/glove.png) -44px -44px;
+        color:#fff;
+        @include text-shadow(0 1px 0 rgba(#000, 0.8));
+        @include box-shadow(0 1px 0  #222);
+
+        a {
+            color:$canvas_blue;
+        }
+    }
+
+    &.super-lol {
+        background:#56d6af url(/static/img/footer-textures/super-lol.png);
+    }
+
+    &.trololol {
+        background:#56d6af url(/static/img/footer-textures/super-lol.png);
+    }
+
+    &.america {
+        color:#3F200B;
+        background: #ff0000;
+        @include bg-linear-gradient((left bottom, right top, #f00 0%, #fff 50%, #0400ff 100%));
+        @include box-shadow(0 1px 0 #9E531B);
+    }
+
+    &.skull {
+        background: #d0c18f url(/static/img/footer-textures/skull.png);
+    }
+
+    &.cthulhu {
+        background: #c6dbc7 url(/static/img/footer-textures/cthulhu.png);
+    }
+
+    &.jack-o-lantern {
+        background: #ff9900 url(/static/img/footer-textures/jack-o-lantern.jpg);
+    }
+
+    &.turkey {
+        background: #ffbe80 url(/static/img/footer-textures/turkey.png);
+    }
+
+    &.cornucopia {
+        background: #ff9900 url(/static/img/footer-textures/jack-o-lantern.jpg);
+    }
+
+    &.pumpkin-pie {
+        background: #eba052 url(/static/img/footer-textures/pumpkin-pie.png);
+    }
+
+    &.gift {
+        background: #beffdd url(/static/img/footer-textures/gift.png);
+
+        a {
+            color:$canvas_red;
+            @include text-shadow(light);
+        }
+    }
+
+    &.snowflake {
+        background: #71CBFF url(/static/img/footer-textures/snowflake.png);
+
+        a {
+            color:#333;
+            @include text-shadow(light);
+        }
+    }
+
+    &.rudolph {
+        color:#fff;
+        @include text-shadow(darker);
+        background: #586d41 url(/static/img/footer-textures/rudolph.png);
+
+        a {
+            color:#485913;
+            @include text-shadow(outline);
+        }
+    }
+
+    &.twothousandtwelve {
+        color:#ffe;
+        @include text-shadow(darker);
+        background: #aa8834 url(/static/img/footer-textures/twothousandtwelve.jpg);
+    }
+
+    &.champagne {
+        background: #e4d881 url(/static/img/footer-textures/champagne.jpg);
+
+        a {
+            color:#96832d;
+            @include text-shadow(none);
+        }
+    }
+
+    &.mayan {
+        color:#fff;
+        @include text-shadow(black);
+        background: #ba9758 url(/static/img/footer-textures/mayan.jpg) center -260px;
+
+        a {
+            color:$canvas_light_green;
+            @include text-shadow(outline, #333);
+        }
+    }
+
+    &.lobster {
+        color: #fff;
+        @include text-shadow(black);
+        background: #ba9758 url(/static/img/footer-textures/shrimp.jpg) center -260px;
+
+        a {
+            color:$canvas_light_green;
+            @include text-shadow(outline, #333);
+        }
+    }
+
+    &.sopa {
+        background:#555;
+        @include text-shadow(none);
+
+        .ugc_text {
+            background:black;
+            @include text-shadow(none);
+        }
+    }
+
+    &.lantern {
+        background:#eb8a5f url(/static/img/footer-textures/lantern.jpg) center;
+    }
+
+    &.cupcake {
+        color:#444;
+        background:$canvas_green url(/static/img/footer-textures/cupcake.png);
+
+        #thread_column .reply.has_content &:not(.reply_bg),
+        #thread_column .image_tile &:not(.theme_bg) {
+            background:url(/static/img/footer-textures/cupcake_border_top.png) right top no-repeat, url(/static/img/footer-textures/cupcake_border_bottom.png) right bottom repeat-x, url(/static/img/footer-textures/cupcake.png), $canvas_green;
+        }
+
+        a {
+            color:$canvas_blue;
+            @include text-shadow(none);
+
+            &:hover {
+                color:$canvas_blue_hover;
+            }
+        }
+    }
+
+    &.groundhog {
+        color:#000;
+        background:#e4a274 url(/static/img/footer-textures/groundhog.jpg);
+    }
+
+    &.teddy {
+        background:#efa2ad url(/static/img/footer-textures/teddy.png);
+    }
+
+    &.valentine {
+        background:#ed77a6 url(/static/img/footer-textures/valentine.png);
+    }
+
+    &.forever-alone,
+    &.forever-alone-seasonal {
+        background:#aec0c8 url(/static/img/footer-textures/forever-alone.png);
+    }
+
+    &.clover,
+    &.green-beer {
+        background:#65cc56 url(/static/img/footer-textures/clover.png);
+    }
+
+    &.pot-o-gold {
+        background:#dccf65 url(/static/img/footer-textures/golden_clovers.jpg);
+    }
+
+    &.egg-pink,
+    &.egg-blue,
+    &.egg-chocolate {
+        background:url(/static/img/footer-textures/easter.png);
+    }
+
+    &.egg-blue {
+        background-image:url(/static/img/footer-textures/easter-blue.png), url(/static/img/footer-textures/easter.png);
+    }
+
+    &.egg-chocolate {
+        background-image:url(/static/img/footer-textures/easter-chocolate.png), url(/static/img/footer-textures/easter.png);
+    }
+
+    &.jason {
+        background:#800 url(/static/img/footer-textures/jason.png);
+        color:#fff;
+        @include text-shadow(darker);
+    }
+
+    &.weed,
+    &.bloodshot,
+    &.joint {
+        background:#1C3 url(/static/img/footer-textures/weed.png);
+    }
+
+    &.donut-strawberry,
+    &.donut-chocolate,
+    &.donut-glazed {
+        background:#d69c62 url(/static/img/footer-textures/donut.jpg);
+    }
+
+    &.donut-strawberry {
+        background-image:url(/static/img/footer-textures/donut-strawberry.png), url(/static/img/footer-textures/donut.jpg);
+    }
+
+    &.donut-chocolate {
+        background-image:url(/static/img/footer-textures/donut-chocolate.png), url(/static/img/footer-textures/donut.jpg);
+    }
+
+    &.usa-pin,
+    &.usa-hat,
+    &.usa-eagle {
+        color:#3F200B;
+        @include bg-linear-gradient((25deg, #f00 0%, #fff 50%, #0400ff 100%));
+        @include bg-image-over-linear-gradient(url(/static/img/footer-textures/fireworks.png), (25deg, #f00 0%, #fff 50%, #0400ff 100%));
+        @include box-shadow(0 1px 0 #9E531B);
+
+        a {
+            color:#00F;
+            @include text-shadow(outline);
+        }
+    }
+
+    &.medal-gold {
+        $gradient_opacity:0.5;
+        color:#3F200B;
+        background:#F4E158;
+        background-image:url(/static/img/footer-textures/medal-gold.png);
+        @include bg-linear-gradient-over-image((35deg,
+            rgba(#E8B621, $gradient_opacity) 28%,
+            rgba(#FAEB7B, $gradient_opacity) 60%,
+            rgba(#FAEC6E, $gradient_opacity) 63%,
+            rgba(#FAFAA8, $gradient_opacity) 71%,
+            rgba(#FFFFA1, $gradient_opacity) 82%,
+            rgba(#FAFAA8, $gradient_opacity) 96%
+        ), url(/static/img/footer-textures/medal-gold.png));
+    }
+
+    &.medal-silver {
+        $gradient_opacity:0.5;
+        background-image:url(/static/img/footer-textures/medal-silver.png);
+        @include bg-linear-gradient-over-image((35deg,
+            rgba(#b8bac6, $gradient_opacity) 0%,
+            rgba(#dadcea, $gradient_opacity) 11%,
+            rgba(#dbdce2, $gradient_opacity) 21%,
+            rgba(#f5f6f6, $gradient_opacity) 38%,
+            rgba(#dddfe3, $gradient_opacity) 80%,
+            rgba(#f5f6f6, $gradient_opacity) 100%
+        ), url(/static/img/footer-textures/medal-silver.png));
+    }
+
+    &.medal-copper {
+        $gradient_opacity:0.5;
+        background-image:url(/static/img/footer-textures/medal-copper.png);
+        @include bg-linear-gradient-over-image((35deg,
+            rgba(#6f5443, $gradient_opacity) 0%,
+            rgba(#eea960, $gradient_opacity) 70%,
+            rgba(#e1994d, $gradient_opacity) 100%
+        ), url(/static/img/footer-textures/medal-copper.png));
+    }
+
+    &.hurricane-sandy {
+        background:#807C87 url(/static/img/footer-textures/question.png);
+        @include box-shadow(0 1px 0 #504c57);
+    }
+
+    &.slowpoke-pumpkin {
+        background: #eba052 url(/static/img/footer-textures/pumpkin-pie.png);
+    }
+
+    &.slowpoke-ghost {
+        background: #ff9900 url(/static/img/footer-textures/jack-o-lantern.jpg);
+    }
+}
+
+#image_tile.qt_footer_tile .sticker_themed {
+    &.usa-pin,
+    &.usa-hat,
+    &.usa-eagle {
+        color:#3F200B;
+        background:#00F;
+        background-image:url(static/img/footer-textures/fake_usa.png);
+        @include box-shadow(0 1px 0 #9E531B);
+        @include text-shadow(light);
+
+        a {
+            color:#00F;
+            @include text-shadow(outline);
+        }
+    }
+}

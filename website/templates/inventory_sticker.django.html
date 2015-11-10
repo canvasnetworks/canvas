@@ -1,0 +1,8 @@
+<div class="inventory_sticker_wrapper">
+    <span class="sticker_container {{sticker.name}}{% if sticker.is_animated %} animated{% endif %}{% if sticker.user_remaining <= 0 %} none_remaining{% else %} drag{% endif %}" data-remaining="{{sticker.user_remaining}}" data-is_limited="True" data-type_id="{{sticker.type_id}}" data-name="{{sticker.name}}"></span>
+    <span class="sticker_remaining"><span class="sticker_remaining_count">x<span class="sticker_remaining_number">{{sticker.user_remaining}}</span></span></span>
+    <div class="shopping_actions">
+        <div class="buy_sticker">+</div>
+        <div class="sell_sticker">-</div>
+    </div>
+</div>

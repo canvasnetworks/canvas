@@ -1,0 +1,176 @@
+{% if comment.is_viewable() %}
+<li
+    class="thread_comment dismissable {{ "animated" if comment.reply_content and comment.is_animated() }}{{ "remix" if comment.is_remix() }} {{ "has_content" if has_content else "text_only" }} {{ comment.get_mod_classes() }}"
+    data-comment_id="{{ comment.id }}"
+>
+    <a class="goto_anchor" name="{{ comment.id }}"></a>
+    {% if is_current %}<a class="goto_anchor" name="current"></a>{% endif %}
+    {% if is_first_reply_with_content %}<a class="goto_anchor" name="first"></a>{% endif %}
+    {% if is_last_reply_with_content %}<a class="goto_anchor" name="last"></a>{% endif %}
+
+    <div class="user">
+        {% if comment.get_user_url() %}
+            <a class="user_link" href="{{ comment.get_user_url() }}">
+            {% if has_content and comment.author_profile_url %}
+                {{ small_avatar(comment.author_name) }}
+            {% endif %}
+        {% endif %}
+            <p class="username">
+                {% if comment.get_user_url() %}
+                    {% if comment.staff %}
+                        <img src="/static/img/founder_badge.png" width="16" height="15" title="Canvas Staff">
+                    {% endif %}
+                    {{ comment.author_name }}
+                {% else %}
+                    <span class="anon">Anonymous</span>
+                {% endif %}
+            </p>
+        {% if comment.author_profile_url %}
+            </a>
+        {% endif %}
+
+        <p class="timestamp"><a href="{{ comment.url }}" class="js_check_for_local_link">{{ relative_timestamp(comment.timestamp) }}</a></p>
+
+        {% if comment.parent_comment %}
+            <p style="font-size:12px;margin-top:1em"><a href="{{ quest_comment_share_page_url(comment) }}">View share page</a></p>
+        {% endif %}
+
+        <div class="hidden">
+        {{ share_comment(comment) if has_content }}
+        </div>
+    </div>
+
+    <div class="post">
+        {% if comment.is_op() %}
+            <hgroup>
+                <button class="follow_thread_toggle hidden" data-thread_id="{{ comment.id }}" data-initial_state="{% if viewer_following_thread %}true{% else %}false{% endif %}"></button>
+                <button class="share dismiss hidden">
+                    <div class="icon"></div>Invite
+                </button>
+                <h1><a href="{{ comment.url }}">{{ comment.thread.title }}</a></h1>
+                {% set author_count = comment.thread.author_count %}
+                {% if author_count %}
+                    <h2><strong>{{ author_count }}</strong> {{ author_count|pluralize("person,people") }} remixing</h2>
+                {% endif %}
+                <p class="tags">
+                    {% for tag in comment.tags %}
+                        <a href="{{ tag.get_absolute_url() }}" class="tag_link">{{ tag.name }}</a>
+                    {% endfor %}
+                    {% if can_edit_tags %}
+                        <a href="#" class="edit_tags_link">Edit</a>
+                    {% endif %}
+                </p>
+                {% if can_edit_tags %}
+                    <div class="edit_tags input_wrapper" style="display: none;">
+                        <input id="tag_select_input" type="text" class="tag_free_select" value="{{ comment.tags|join(',', attribute='name') }}" />
+                        <a href="#" class="save_tags_link" data-comment_id="{{ comment.id }}">Save</a>
+                    </div>
+                {% endif %}
+                <div class="hidden">
+                {% include "threads_new/_share_thread.html" %}
+                </div>
+            </hgroup>
+        {% endif %}
+        <div
+            class="wrapper {{ "stickered" if sticker_name }} {% if stickered_by_viewer %}stickered_by_viewer{% elif my_post %}my_post{% else %}stickerable{% endif %}"
+            data-comment_id="{{ comment.id }}"
+            data-details="{{ comment|to_escaped_comment_details_json }}"
+        >
+            <p class="collapsed_text">{{ comment.get_collapsed_text() }}</p>
+            <div class="sticker_bg sticker_themed {{ sticker_name }}"></div>
+            <div class="close_options">
+                ×
+                <div class="close_dialog">
+                    <div class="hover_buffer"></div>
+                    <ul>
+                        <li><a class="hide_offensive">Flag post</a></li>
+                        <li><a class="hide_comment">Hide post</a></li>
+                    </ul>
+                    {% if request.user.is_staff and has_content %}
+                        <ul>
+                            <li><a class="sticky_post">Sticky post</a></li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="inner_wrapper">
+                {% if has_content %}
+                    {% set footered_url = comment.reply_content.footer.name if comment.reply_content.footer else comment.reply_content.ugc_original.name %}
+                    <div class="content_wrapper">
+                        <div class="image_container" data-content_id="{{ comment.reply_content.id }}">
+                            {% set lazy_value = False if comment_to_expand or ignore_lazy_load else lazy_content %}
+                            {% if comment.is_remix() and not hide_slider %}
+                                <div class="remix_parent">
+                                    {% if lazy_value %}
+                                        <img class="ugc_img lazy" src="/static/img/0.gif" alt="" data-original="{{ comment.reply_content.remix_of_giant_url }}">
+                                    {% else %}
+                                        <img class="ugc_img" src="{{ comment.reply_content.remix_of_giant_url }}">
+                                    {% endif %}
+                                </div>
+                                <div class="slider_handle draggable"></div>
+                            {% endif %}
+                            {% if comment.is_animated() %}
+                                <div class="animated_hint" onClick="canvas.animateGif('{{ comment.reply_content_id }}', $(this).parents('.content_wrapper'), 'giant');return false;"></div>
+                            {% endif %}
+                            <a class="image_link" href="{{ comment.reply_content.ugc_original.name }}" target="_blank" data-footer_url="{{ footered_url }}">{{ content(comment, "homepage_featured", lazy=lazy_value) }}</a>
+                        </div>
+                    </div>
+                {% endif %}
+
+
+                {% if has_content %}
+                    <div class="response_actions hidden">
+                        <a title="Remix this image!" class="remix_link logged_in tooltipped" href="{{ comment.get_new_remix_link() }}"><div class="remix_icon">Remix</div></a>
+                        <a title="Remix this image!" class="remix_link logged_out tooltipped" href="javascript:canvas.encourage_signup('remix');"><div class="remix_icon">Remix</div></a>
+                        <a title="Reply to this post" class="reply_link logged_in tooltipped" href="javascript:action.reply({{ comment.id }});"><div class="reply_icon">Reply</div></a>
+                        <a title="Reply to this post" class="reply_link logged_out tooltipped" href="javascript:canvas.encourage_signup('reply_link');"><div class="reply_icon">Reply</div></a>
+                    </div>
+                {% endif %}
+
+                {% if comment.reply_text or comment.replied_comment %}
+                    <p class="caption">
+                        {% if comment.replied_comment %}
+                            <a class="replied_link js_check_for_local_link" href="{{ comment.replied_comment.url }}">{{ comment.get_replied_text() }}</a>
+                        {% endif %}
+                        {% if comment.reply_text %}
+                            {{ ugc_text(comment.reply_text, 2000, not comment.reply_content_id) }}
+                        {% endif %}
+                    </p>
+                {% endif %}
+
+                {% if not has_content %}
+                    <div class="response_actions">
+                        <a title="Reply to this post" class="reply_link logged_in tooltipped" href="javascript:action.reply({{ comment.id }});"><div class="reply_icon">Reply</div></a>
+                        <a title="Reply to this post" class="reply_link logged_out tooltipped" href="javascript:canvas.encourage_signup('reply_link');"><div class="reply_icon">Reply</div></a>
+                    </div>
+                {% endif %}
+
+                <div class="sticker_message_overlay"></div>
+                <div class="sticker_flavor sticker_themed {{ sticker_name }}">
+                    {% if sticker_name %}
+                        {{ sticker_image(sticker_name, 'large', "shadow") }}
+                        {% if comment.sorted_sticker_counts()[0].count > 1 %}
+                            <span class="sticker_count">
+                                <span>{{ comment.sorted_sticker_counts()[0].count }}</span>
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                    <div class="sticker_target"></div>
+                    <div class="top_stickers">
+                        {% for stick in comment.sorted_sticker_counts() %}
+                            {% if loop.index > 1 %}
+                                <span>
+                                    {{ sticker_image(stick.type_id, "medium", "shadow") }}
+                                    <span class="sticker_count">
+                                        <span>{{ stick.count }}</span>
+                                    </span>
+                                </span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+{% endif %}

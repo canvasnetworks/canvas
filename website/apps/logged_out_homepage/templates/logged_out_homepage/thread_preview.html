@@ -1,0 +1,51 @@
+{% macro linked_image(post, size) %}
+    {% set img = post.reply_content.column %}
+    <a href="{{ post.url }}">
+        {{ content(post, size) }}
+    </a>
+{% endmacro %}
+
+<div class="thread_preview" data-op_id="{{ thread.op.id }}">
+    {% if admin_view %}
+        <div class="ordinal">
+            <input type="number" name="sort_order-{{ thread.op.id }}" value="{{ thread.sort }}" placeholder="ordinal">
+            <a class="remove">remove from homepage</a>
+            <a class="add">add to homepage</a>
+        </div>
+    {% endif %}
+
+    {% if show_curation_info %}
+        <div class="details">
+            <span>
+                {% if thread.curator %}
+                    Selected by: {{ thread.curator }}
+                {% endif %}
+                {% if thread.timestamp %}
+                    {{ relative_timestamp(thread.timestamp) }}
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+
+    <div class="main_thumbnail">
+        {{ linked_image(thread.main_post, "medium_square") }}
+    </div>
+    <hgroup>
+        <h1><a href="{{ thread.op.url }}" class="ugc_text">{{ thread.op.title }}</a></h1>
+        <h2>
+            <img src="/static/img/remix_icon.png">
+            {{ thread.op.reply_count }} Remixes &nbsp;
+            {% if thread.main_post.category %}
+                <a href="{{ thread.op.category_url }}">#{{ thread.op.category }}</a>
+            {% endif %}
+        </h2>
+    </hgroup>
+    <ul class="thumbnails">
+        {% for post in thread.more_posts %}
+            <li>
+                {{ linked_image(post, "square") }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+

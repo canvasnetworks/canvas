@@ -1,0 +1,78 @@
+@import "follow_users";
+
+#page.onboarding {
+    .onboarding {
+        width: 940px;
+        margin: 15px auto;
+        padding-top:1em;
+        text-align:left;
+        @extend .clearfix;
+
+        .guide {
+            float:left;
+
+            h1, p {
+                width:500px;
+                color:#333;
+            }
+
+            h1 {
+                font-size:2.4em;
+                margin-bottom:0.5em;
+            }
+
+            p {
+                font-size:1.4em;
+            }
+        }
+
+        .advancement {
+            float:right;
+            @extend .clearfix;
+
+            button {
+                position:relative;
+                float:right;
+            }
+
+            .button_overlay {
+                position:absolute;
+                width:100%;
+                height:100%;
+                left:-1px;
+                top:-1px;
+                border:1px solid #ddd;
+                background:#ddd;
+                line-height:2em;
+                color:#333;
+                text-align:center;
+                @extend .box_sizing_content;
+                @extend .rounded_0_35em;
+            }
+
+            a {
+                float:right;
+                clear:right;
+                display:block;
+                padding:0.5em 1em;
+                color:#999;
+
+                &:hover {
+                    color:#666;
+                }
+            }
+        }
+    }
+
+    .onboarding_finish {
+        #footer {
+            display:none;
+        }
+    }
+
+    .primary_finish_button {
+        margin-top:1em;
+        padding:1em 4em;
+        font-size:20px;
+    }
+}

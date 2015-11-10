@@ -1,0 +1,7 @@
+{% extends "email/_notification.html" %}
+{% set replied_comment = notification.comment.reply_content.remix_of.first_caption %}
+{% set replied_content = notification.comment.reply_content.remix_of %}
+{% block headline %}
+    <span><strong>Your post</strong> was <strong>remixed</strong> by
+{% endblock %}
+{% block email_type %}remix notifications{% endblock %}

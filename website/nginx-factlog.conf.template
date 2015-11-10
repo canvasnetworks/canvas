@@ -1,0 +1,44 @@
+# http://wiki.nginx.org/CoreModule
+
+worker_processes 1;
+
+{% if project == "canvas" %}
+pid /var/canvas/website/run/nginx-factlog.pid;
+error_log /var/canvas/website/run/nginx-factlog.error.log;
+{% else %}
+pid /var/canvas/website/drawquest/run/nginx-factlog.pid;
+error_log /var/canvas/website/drawquest/run/nginx-factlog.error.log;
+{% endif %}
+
+events {
+    worker_connections 1024;
+    accept_mutex off;
+}
+
+http {
+    include /var/canvas/website/mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+    send_timeout 600;
+
+    log_format factlog $http_x_fact_log;
+    {% if project == "canvas" %}
+    access_log /var/canvas/website/run/facts.log factlog buffer=32k;
+    {% else %}
+    access_log /var/canvas/website/drawquest/run/facts.log factlog buffer=32k;
+    {% endif %}
+    client_header_buffer_size 16k;
+    
+    server {
+        
+        listen 9999 default;
+        client_max_body_size 4G;
+        server_name _;
+        
+        location / {
+            # http://serverfault.com/questions/196929/reply-with-200-from-nginx-config-without-serving-a-file
+            return 204;
+        }
+
+    }
+}

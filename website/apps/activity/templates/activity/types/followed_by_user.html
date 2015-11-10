@@ -1,0 +1,14 @@
+{% extends "activity/types/base_activity_item.html" %}
+
+{% block icon %}{% endblock %}
+
+{% block thumbnail_url %}{{ avatar_url(activity.actor_user) }}{% endblock %}
+
+{% block button %}
+    <button class="follow_user_toggle" data-user_id="{{ activity.actor_user.id }}" data-initial_state="{% if activity.followee_is_following_actor() %}true{% else %}false{% endif %}"></button>
+{% endblock %}
+
+{% block message %}
+    followed you
+{% endblock %}
+

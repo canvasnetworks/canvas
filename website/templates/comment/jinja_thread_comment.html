@@ -1,0 +1,168 @@
+<div class="reply new_design stickerable dismissable
+            post_{{ comment.id }}
+            {{ comment.get_mod_classes() }}
+            {{ "op" if comment.is_op() }}
+            {{ "expanded" if fullsize }}
+            {{ "has_content" if comment.reply_content_id else "text_only" }}
+            "
+        data-comment_id="{{ comment.id }}"
+>
+    <div class="inappropriate_post">{{ comment.get_collapsed_text() }}</div>
+
+    {% if comment.is_viewable() %}
+        <div class="sticker_message_overlay"></div>
+        <div class="drop_target_border"></div>
+        <div class="reply_bg sticker_themed"></div>
+
+        {% if comment.reply_content_id %}
+            <div class="reply_content">
+                <div class="close_options">
+                    ×
+                    <div class="close_dialog">
+                        <div class="hover_buffer"></div>
+                        <ul>
+                            <li><a class="hide_offensive">Flag post</a></li>
+                            <li><a class="hide_comment">Hide post</a></li>
+                        </ul>
+                        {% if request.user.is_staff %}
+                        <ul>
+                            <li><a class="sticky_post">Sticky post</a></li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if fullsize %}
+                    <a class="content_link" href="{{ comment.reply_content.ugc_original.name }}" data-footer-url="{{ comment.get_footer_absolute_url() }}">
+                {% else %}
+                    <a href="{{ comment.reply_content.ugc_original.name }}" class="content_expand {{ "audio_remix" if comment.external_content }}" {% if comment.external_content %} onClick="event.preventDefault();canvas.play_audio_remix({{ comment.id }});"{% endif %}>
+                {% endif %}
+                    <div id="{{ comment.reply_content.id }}" class="image_container content_{{ comment.reply_content.id }}">
+                        {% if comment.external_content %}
+                            <div class="audio_hint"></div>
+                            <div class="audio_embed" id="audio_embed_{{ comment.id }}"></div>
+                        {% else %}
+                            {% if comment.is_animated() %}
+                                <div class="animated_hint {{ "pause" if comment.autoplay }}" onClick="canvas.animateGif('{{ comment.reply_content.id }}', $(this).parent(), 'giant');return false;"></div>
+                            {% endif %}
+                        {% endif %}
+                        {{ comment.get_img_tag(fullsize) }}
+                        {% if comment.is_remix() and not hide_slider %}
+                            <div class="remix_parent">
+                                <img src="{{ comment.reply_content.remix_of_giant_url }}">
+                            </div>
+                            <div class="slider_handle draggable"></div>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            {% if fullsize %}
+                <div class="reply_content">
+
+                    <div class="text_container">
+                        <p>{{ ugc_text(comment.reply_text, 2000) }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="post_wrapper">
+            <div class="reply_body sticker_themed">
+                <div class="reply_header">
+                    <div class="username">
+                        <span>
+                            {% if comment.get_user_url() %}
+                                {{ "posted by " if not comment.reply_text }}
+                                {% if comment.staff %}
+                                    <img src="/static/img/founder_badge.png" width="16" height="15" title="Canvas Staff">
+                                {% endif %}
+                                <a href="{{ comment.get_user_url() }}">{{ comment.author_name }}</a>
+                            {% else %}
+                                posted anonymously
+                            {% endif %}
+                            {% if fullsize and not show_tags and comment.category %}
+                                in <a href="/x/{{ comment.category }}">#{{ comment.category }}</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="timestamp">
+                        <a href="{{ comment.timestamp_link_url() }}">{{ relative_timestamp(comment.timestamp) }}</a>
+                        <a class="new_thread_link" href="{{ comment.url }}"><div class="icon_new_thread"></div></a>
+                    </div>
+                    <a class="reply_link logged_in" href="javascript:action.reply({{ comment.id }});"><div class="icon_reply"></div></a>
+                    <a class="reply_link logged_out" href="javascript:canvas.encourage_signup('reply_link');"><div class="icon_reply"></div></a>
+                </div>
+                {% if (not fullsize and (comment.reply_text or comment.replied_comment)) or (fullsize and comment.reply_content_id and comment.reply_text) %}
+                    {% if not comment.reply_content_id %}
+                        <div class="close_options text_close">
+                            ×
+                            <div class="close_dialog">
+                                <div class="hover_buffer"></div>
+                                <ul>
+                                    <li><a class="hide_offensive">Flag post</a></li>
+                                    <li><a class="hide_comment">Hide post</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <p class="reply_text">
+                        {% if comment.replied_comment %}
+                            <a class="replied_link">{{ comment.get_replied_text() }}</a>
+                        {% endif %}
+                        {% if comment.reply_text %}
+                            {{ ugc_text(comment.reply_text, 2000, not comment.reply_content_id) }}
+                        {% endif %}
+                    </p>
+                {% endif %}
+
+            </div>
+            <div class="clear"></div>
+            <div class="post_footer_new_design sticker_themed">
+                <div class="image_stickers_wrapper">
+                    <div class="image_stickers">
+                        <div class="image_sticker_details invisible">
+                            <div class="sticker_overlay"></div>
+                        </div>
+                        <div class="top_sticker"></div>
+                        <div class="sticker_target"></div>
+                    </div>
+                </div>
+
+                {% if comment.reply_content_id %}
+                    <a class="remix_link sticker_themed logged_in" href="{{ comment.get_remix_link() }}"><div class="icon_remix"></div></a>
+                    <a class="remix_link sticker_themed logged_out" href="javascript:canvas.encourage_signup('remix');"><div class="icon_remix"></div></a>
+                {% endif %}
+
+                <div class="reply_sharing">
+                    <a class="facebook_share" href="" onClick="sticker_actions.share_comment(2001, {{ comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'thread');return false;">
+                        <img class="tooltipped" src="/static/img/share_facebook.png" title="Share this post on Facebook!"></a>
+                    <a class="twitter_share" href="" onClick="sticker_actions.share_comment(2002, {{ comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'thread');return false;">
+                        <img class="tooltipped" src="/static/img/share_twitter.png" title="Share this post on Twitter!"></a>
+                    <a class="tumblr_share" href="" onClick="sticker_actions.share_comment(2004, {{ comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'thread');return false;">
+                        <img class="tooltipped" src="/static/img/share_tumblr.png" title="Share this post on Tumblr!"></a>
+                    <div class="extra_options">
+                        <h1>More sharing options</h1>
+                        <a class="reddit_share" href="" onClick="sticker_actions.share_comment(2005, {{ comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'thread');return false;">
+                            <img src="/static/img/share_reddit.png"><span>Reddit</span></a>
+                        <a class="stumbleupon_share" href="" onClick="sticker_actions.share_comment(2003, {{ comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'thread');return false;">
+                            <img src="/static/img/share_stumbleupon.png"><span>Stumbleupon</span></a>
+                        <a class="email_share" href="" onClick="sticker_actions.share_comment(2006, {{ comment.id }}, (function(that) { thread.reply_is_expanded(that); })(this), 'thread');return false;">
+                            <img src="/static/img/share_email.png"><span>Email</span></a>
+                    </div>
+                    <a class="more_share" href="" onClick="canvas.toggle_share_options(this);return false;">
+                        <span class="less">-&nbsp;less</span><span class="more">+&nbsp;more</span></a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    {% endif %}
+</div>
+{% if fullsize and show_tags %}
+    <div class="op_tags">
+        <span>Tagged:</span>
+        {% for tag in comment.tags %}
+            <a href="{{ tag.get_absolute_url() }}" class="tag_link">{{ tag.name }}</a>
+        {% endfor %}
+    </div>
+{% endif %}
+

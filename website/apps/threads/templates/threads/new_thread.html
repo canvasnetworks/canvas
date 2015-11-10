@@ -1,0 +1,61 @@
+<div class="thread_column">
+    <div class="thread_info">
+        <div class="fixed_wrapper">
+            <div class="op_thumbnail_wrapper">
+                <a href="{{ op_comment.url }}/reply/{{ op_comment.id }}" class="js_check_for_local_link">
+                    {{ content(op_comment, "thumbnail") }}
+                </a>
+            </div>
+            <h1 class="ugc_text">
+                {{ title|striptags }}
+            </h1>
+
+            <div class="reply_sharing">
+                <div class="share_links">
+                    <a onClick="sticker_actions.share_comment(2001, {{ op_comment.id }}, true);"><img src="/static/img/share_facebook_large.png"></a>
+                    <a onClick="sticker_actions.share_comment(2002, {{ op_comment.id }}, true);"><img src="/static/img/share_twitter_large.png"></a>
+                    <a onClick="sticker_actions.share_comment(2006, {{ op_comment.id }}, true);"><img src="/static/img/share_email_large.png"></a>
+                </div>
+            </div>
+            <p>
+                <strong>{{ op_comment.thread.reply_count }}</strong> replies
+                <a href="/x/{{ op_comment.category }}">{{ op_comment.category_pretty_name }}</a>
+            </p>
+            <div class="clear"></div>
+            <hr>
+            <div class="thread_details"></div>
+        </div>
+    </div>
+    <ul class="posts">
+        {% macro thread_reply(reply) -%}
+            <li class="post {% if not reply.reply_content %}text_only{% endif %} {% if reply.id == comment_to_expand.id %}expanded_li{% endif %}" data-comment_id="{{ reply.id }}">
+                {% if reply == first_comment_with_content %}<a name="first"></a>{% endif %}
+                {% if reply == last_comment_with_content %}<a name="last"></a>{% endif %}
+
+                {{ jinja_thread_reply(reply, "threads/new_reply.html", (reply.id == comment_to_expand.id)) }}
+            </li>
+        {%- endmacro %}
+
+        {% if page_current == 1 %}
+            {{ thread_reply(op_comment) }}
+        {% endif %}
+
+        {% for reply in replies %}
+            {{ thread_reply(reply) }}
+        {% endfor %}
+    </ul>
+    {% if page_last > 1 %}
+        <div class="pagination">
+            {{ thread_pagination() }}
+        </div>
+    {% endif %}
+    <div class="reply_widget">
+        <h2>Add your reply:</h2>
+        <button class="dismiss" onClick="canvas.record_fact('flow_click_remix');canvas.encourage_signup('remix');">Make a remix</button>
+        <div class="input_wrapper">
+            <label class="default" onClick="canvas.record_fact('logged_out_thread_reply_input_clicked');canvas.encourage_signup('reply');">Write a comment</label>
+            <textarea onClick="canvas.record_fact('logged_out_thread_reply_input_clicked');canvas.encourage_signup('reply');$(this).blur();"></textarea>
+        </div>
+    </div>
+</div>
+

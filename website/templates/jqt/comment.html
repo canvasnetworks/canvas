@@ -1,0 +1,157 @@
+<script type="text/html" id="comment_template">
+    <div class="reply new_design dismissable {{if options.image_type == 'giant'}}op expanded {{/if}}{{if comment.reply_content_id}}has_content{{else}}text_only{{/if}} stickerable post_${comment.id}${comment.getModClasses()}"
+    data-comment_id="${ comment.id }"
+    >
+        <div class="inappropriate_post">${ comment.collapsedText() }</div>
+
+        {{if !comment.isUnviewable()}}
+
+            <div class="drop_target_border"></div>
+            <div class="reply_bg sticker_themed"></div>
+
+            {{if comment.reply_content_id}}
+                <div class="reply_content">
+                    <div class="close_options">
+                        ×
+                        <div class="close_dialog">
+                            <div class="hover_buffer"></div>
+                            <ul>
+                                <li><a class="hide_offensive">Flag post</a></li>
+                                <li><a class="hide_comment">Hide post</a></li>
+                            </ul>
+                            {{if current.userinfo.is_staff}}
+                            <ul>
+                                <li><a class="sticky_post">Sticky post</a></li>
+                            </ul>
+                            {{/if}}
+                        </div>
+                    </div>
+                    {{if options.image_type == "giant"}}
+                    <a class="content_link" href="${ comment.getContent().original.url }">
+                    {{else}}
+                    <a href="${ comment.getContent().original.url }" class="content_expand{{if comment.external_content.length}} audio_remix{{/if}}"{{if comment.external_content.length}} onClick="event.preventDefault();canvas.play_audio_remix({{ comment.id }});"{{/if}}>
+                    {{/if}}
+                        <div id="${comment.reply_content.id}" class="image_container content_${comment.getContent().id}">
+                            {{if comment.external_content.length}}
+                                <div class="audio_hint"></div>
+                                <div class="audio_embed" id="audio_embed_${comment.id}"></div>
+                            {{else}}
+                                {{if comment.reply_content.original.animated}}
+                                    {{if options.image_type == 'giant'}}
+                                        <div class="animated_hint pause" onClick="canvas.animateGif('${comment.reply_content.id}', $(this).parent(), 'giant');return false;"></div>
+                                    {{else}}
+                                        <div class="animated_hint"></div>
+                                    {{/if}}
+                                {{/if}}
+                            {{/if}}
+                            <img id="${comment.reply_content.id}" class="comment-image" src="/static/img/0.gif">
+                            {{if comment.reply_content.remix_of_giant_url}}
+                                <div class="remix_parent">
+                                    <img src="${comment.reply_content.remix_of_giant_url}">
+                                </div>
+                                <div class="slider_handle draggable"></div>
+                            {{/if}}
+                        </div>
+                    </a>
+                </div>
+            {{else}}
+                {{if options.image_type == "giant"}}
+                    <div class="reply_content">
+                        <div class="text_container">
+                            <p>{{html tmpl.ugc_text(comment.reply_text, 2000)}}</p>
+                        </div>
+                    </div>
+                {{/if}}
+            {{/if}}
+
+            <div class="post_wrapper">
+                <div class="reply_body sticker_themed">
+                    <div class="reply_header">
+                        <div class="username">
+                            <span>
+                                {{if comment.getUserURL()}}
+                                    {{if !comment.reply_text}}posted by {{/if}}
+                                    {{if comment.staff}}
+                                        <img src="/static/img/founder_badge.png" width="16" height="15" title="Canvas Staff">
+                                    {{/if}}
+                                    <a href="${ comment.getUserURL() }">${comment.author_name}</a>
+                                    {{if options.image_type == 'giant'}}
+                                        {{if comment.category}}in <a href="/x/${comment.category.name}">#${comment.category.name}</a>{{/if}}
+                                    {{/if}}
+                                {{else}}
+                                    posted anonymously
+                                {{/if}}
+                            </span>
+                        </div>
+                        <div class="timestamp">
+                            <span class="orig-timestamp hidden">${ comment.timestamp }</span>
+                            <a href="${ comment.getCommentURL() }">{{html tmpl.relative_timestamp(comment.timestamp) }}</a>
+                            <a class="new_thread_link" href="${comment.url}"><div class="icon_new_thread"></div></a>
+                        </div>
+                        <a class="reply_link logged_in" href="javascript:action.reply(${comment.id});"><div class="icon_reply"></div></a>
+                        <a class="reply_link logged_out" href="javascript:canvas.encourage_signup('reply_link');"><div class="icon_reply"></div></a>
+                    </div>
+                    {{if ((comment.reply_text || comment.replied_comment) && options.image_type !== 'giant') || (options.image_type === "giant" && comment.reply_content_id && comment.reply_text)}}
+                        {{if !comment.reply_content_id}}
+                            <div class="close_options text_close">
+                                ×
+                                <div class="close_dialog">
+                                    <div class="hover_buffer"></div>
+                                    <ul>
+                                        <li><a class="hide_offensive">Flag post</a></li>
+                                        <li><a class="hide_comment">Hide post</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {{/if}}
+                        <p class="reply_text">
+                            {{if comment.replied_comment}}
+                                <a class="replied_link">${comment.getRepliedText()}</a>
+                            {{/if}}
+                            {{if comment.reply_text}}
+                                {{html tmpl.ugc_text(comment.reply_text, 2000, !comment.reply_content_id)}}
+                            {{/if}}
+                        </p>
+                    {{/if}}
+                </div>
+                <div class="clear"></div>
+                <div class="post_footer_new_design sticker_themed">
+                    <div class="image_stickers_wrapper">
+                        <div class="image_stickers">
+                            <div class="image_sticker_details invisible">
+                                <div class="sticker_overlay"></div>
+                            </div>
+                            <div class="top_sticker"></div>
+                            <div class="sticker_target"></div>
+                        </div>
+                    </div>
+                    {{if comment.reply_content_id}}
+                        <a class="remix_link sticker_themed logged_in" href="${tmpl.remix_js_link(comment)}"><div class="icon_remix"></div></a>
+                        <a class="remix_link sticker_themed logged_out" href="javascript:canvas.encourage_signup('remix');"><div class="icon_remix"></div></a>
+                    {{/if}}
+                    
+                    <div class="reply_sharing">
+                        <a class="facebook_share" href="" onClick="sticker_actions.share_comment(2001, ${comment.id}, (function(that) { thread.reply_is_expanded(that); })(this));return false;">
+                            <img class="tooltipped" src="/static/img/share_facebook.png" title="Share this post on Facebook!"></a>
+                        <a class="twitter_share" href="" onClick="sticker_actions.share_comment(2002, ${comment.id}, (function(that) { thread.reply_is_expanded(that); })(this));return false;">
+                            <img class="tooltipped" src="/static/img/share_twitter.png" title="Share this post on Twitter!"></a>
+                        <a class="tumblr_share" href="" onClick="sticker_actions.share_comment(2004, ${comment.id}, (function(that) { thread.reply_is_expanded(that); })(this));return false;">
+                            <img class="tooltipped" src="/static/img/share_tumblr.png" title="Share this post on Tumblr!"></a>
+                        <div class="extra_options">
+                            <h1>More sharing options</h1>
+                            <a class="reddit_share" href="" onClick="sticker_actions.share_comment(2005, ${comment.id}, (function(that) { thread.reply_is_expanded(that); })(this));return false;">
+                                <img src="/static/img/share_reddit.png"><span>Reddit</span></a>
+                            <a class="stumbleupon_share" href="" onClick="sticker_actions.share_comment(2003, ${comment.id}, (function(that) { thread.reply_is_expanded(that); })(this));return false;">
+                                <img src="/static/img/share_stumbleupon.png"><span>Stumbleupon</span></a>
+                            <a class="email_share" href="" onClick="sticker_actions.share_comment(2006, ${comment.id}, (function(that) { thread.reply_is_expanded(that); })(this));return false;">
+                                <img src="/static/img/share_email.png"><span>Email</span></a>
+                        </div>
+                        <a class="more_share" href="" onClick="canvas.toggle_share_options(this);return false;">
+                            <span class="less">-&nbsp;less</span><span class="more">+&nbsp;more</span></a>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        {{/if}}
+    </div>
+</script>
