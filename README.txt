@@ -6,7 +6,7 @@ This is the entire Canvas repo, including application code and configuration, wi
 
 As for the bits of DrawQuest in this repo: for a while we ran both sites out of the same repo (the DrawQuest backend requirements were happily similar to what we'd already built with Canvas); once that became a burden, we stopped forking in code and forked in git instead.
 
-The instructions below are also untouched. They won't help as-is but may be a helpful guide to piece things back together.
+## The instructions below are also untouched. They won't help as-is but may be a helpful guide to piece things back together.
 
 If you have any questions feel free to reach out to TimothyFitz@gmail.com
 
