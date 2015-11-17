@@ -21,7 +21,7 @@ Note: Use of the registered "CANVAS" trademark is not conferred by the LICENSE. 
 OS X
 ----
 # MANUALLY: Install XCode via thumb drive or App Store
-# MANUALLY: Install
+xcode-select --install
 java # type this, press enter, will prompt you to install Java
 ruby -e "$(curl -fsSLk https://gist.github.com/raw/323731/install_homebrew.rb)"
 brew install git ack redis nginx pil solr wget memcached # requires installed XCode
